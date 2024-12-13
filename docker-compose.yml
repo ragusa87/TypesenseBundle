@@ -1,0 +1,25 @@
+services:
+  php:
+    build: .
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    stdin_open: true
+    tty: true
+    environment:
+      - PHP_IDE_CONFIG=serverName=typesensebundle
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - default
+#  typesense:
+#      image: typesense/typesense:27.1
+#      restart: on-failure
+#      ports:
+#        - 8983
+#        - "9908:8108"
+#      volumes:
+#        - searchdata:/data
+#      command: '--data-dir /data --api-key=xyz --enable-cors'
+volumes:
+  searchdata:

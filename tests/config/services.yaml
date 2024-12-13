@@ -1,0 +1,13 @@
+services:
+
+  Psr\Log\LoggerInterface:
+    class: Psr\Log\NullLogger
+
+  Biblioteca\TypesenseBundle\Tests\Mapper\MyMapper:
+    autowire: true
+    public: true
+    tags: ['biblioteca_typesense.mapper']
+
+  Biblioteca\TypesenseBundle\Tests\Client\ServiceWithClient:
+    autowire: true
+    public: true

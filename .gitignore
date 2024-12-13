@@ -1,0 +1,11 @@
+vendor/
+composer.lock
+phpunit.xml
+.php-cs-fixer.php
+.php-cs-fixer.cache
+.phpunit.result.cache
+tests/coverage
+!tests/coverage/.gitkeep
+.phpunit.cache
+tests/kernel
+!tests/kernel/.gitkeep

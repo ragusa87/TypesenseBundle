@@ -1,0 +1,12 @@
+parameters:
+    tipsOfTheDay: false
+    level: max
+    paths:
+        - src/
+        - tests/
+    ignoreErrors:
+        -
+           message: '#(.*)#'
+           path: src/AbstractBibliotecaTypesenseBundle.php
+includes:
+	- phpstan-baseline.neon

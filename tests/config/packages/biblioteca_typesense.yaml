@@ -1,0 +1,11 @@
+parameters:
+  env(TYPESENSE_URL): 'http://typesense:8108'
+  env(TYPESENSE_KEY): 'mykey'
+biblioteca_typesense:
+  typesense:
+    uri: '%env(TYPESENSE_URL)%'
+    key: '%env(TYPESENSE_KEY)%'
+  collections:
+    books:
+      entity: 'App\Entity\Book'
+      name: 'books'

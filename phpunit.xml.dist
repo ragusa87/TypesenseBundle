@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- http://phpunit.de/manual/4.1/en/appendixes.configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd" bootstrap="./tests/bootstrap.php" backupGlobals="false" colors="true" cacheDirectory=".phpunit.cache">
+  <testsuites>
+    <testsuite name="TypesenseBundle">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <coverage pathCoverage="false"
+            ignoreDeprecatedCodeUnits="true"
+            disableCodeCoverageIgnore="true">
+    <report>
+      <html outputDirectory="tests/coverage/html-coverage" lowUpperBound="50" highLowerBound="90"/>
+      <text outputFile="tests/coverage/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
+      <clover outputFile="tests/coverage/clover.xml" />
+    </report>
+
+  </coverage>
+  <php>
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="ignoreFile=./tests/baseline-ignore"/>
+  </php>
+
+  <logging>
+    <junit outputFile="tests/coverage/junit.xml"/>
+    <testdoxHtml outputFile="tests/coverage/testdox.html"/>
+    <testdoxText outputFile="tests/coverage/testdox.txt"/>
+  </logging>
+  <source>
+    <exclude>
+      <directory suffix=".php">vendor</directory>
+    </exclude>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </source>
+</phpunit>

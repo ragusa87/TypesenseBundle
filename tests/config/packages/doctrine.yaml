@@ -1,0 +1,12 @@
+doctrine:
+  dbal:
+    url:                  mysql://db_user:db_password@127.0.0.1:3306/db_name
+    charset:              utf8mb4
+    logging:              '%kernel.debug%'
+  orm:
+    auto_generate_proxy_classes: true
+    enable_lazy_ghost_objects: true
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+    controller_resolver:
+        auto_mapping: false
+

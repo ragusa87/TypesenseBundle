@@ -1,0 +1,5 @@
+services:
+  Biblioteca\TypesenseBundle\Tests\Mapper\MyInvalidMapper:
+    autowire: true
+    autoconfigure: true
+    tags: ['biblioteca_typesense.mapper']
