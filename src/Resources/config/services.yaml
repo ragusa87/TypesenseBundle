@@ -1,0 +1,43 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Biblioteca\TypesenseBundle\Client\ClientFactory:
+    arguments:
+      $uri: '%biblioteca_typesense.config.uri%'
+      $apiKey: '%biblioteca_typesense.config.key%'
+      $connectionTimeoutSeconds: '%biblioteca_typesense.config.connection_timeout_seconds%'
+
+  Biblioteca\TypesenseBundle\Client\ClientInterface:
+    factory: '@Biblioteca\TypesenseBundle\Client\ClientFactory'
+
+  Biblioteca\TypesenseBundle\Populate\PopulateService: ~
+
+  Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator:
+    public: true
+    arguments:
+      $mappers: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\Mapper\MapperInterface::TAG_NAME, default_index_method: getName }
+
+  Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface: '@Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator'
+
+  Biblioteca\TypesenseBundle\CollectionName\AliasName: ~
+
+  Biblioteca\TypesenseBundle\Command\:
+    resource: '../../Command/'
+    tags: ['console.command']
+
+  biblioteca_typesense.collection.abstract:
+    class: Biblioteca\TypesenseBundle\Search\SearchCollection
+    abstract: true
+
+  Biblioteca\TypesenseBundle\Search\ExecuteSearchQuery:
+    public: true
+
+  Biblioteca\TypesenseBundle\Search\Search: ~
+
+  Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResult:
+    autowire: true
+
+  Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResultInterface: "@Biblioteca\\TypesenseBundle\\Search\\Hydrate\\HydrateSearchResult"

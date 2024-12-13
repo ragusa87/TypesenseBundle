@@ -1,0 +1,79 @@
+{
+  "name": "biblioteca/typesense-bundle",
+  "description": "This bundle provides integration with Typesense in Symfony",
+  "type": "symfony-bundle",
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=8.2",
+    "symfony/framework-bundle": "^6.4|^7.0",
+    "symfony/http-client": "*",
+    "symfony/http-kernel": "^6.4|^7.0",
+    "typesense/typesense-php": "^4.9"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "dev-master",
+    "phpstan/phpstan": "^2.0",
+    "phpunit/phpunit": "^11.5",
+    "rector/rector": "^2.0"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Biblioteca\\TypesenseBundle\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+    }
+  },
+  "scripts": {
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd"
+    },
+
+    "phpstan": [
+      "Composer\\Config::disableProcessTimeout",
+      "env XDEBUG_MODE=off ./vendor/bin/phpstan analyse --memory-limit=-1"
+    ],
+    "phpcs": [
+      "Composer\\Config::disableProcessTimeout",
+      "env XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run --verbose -vv"
+    ],
+    "test-rector": [
+      "Composer\\Config::disableProcessTimeout",
+      "env XDEBUG_MODE=off ./vendor/bin/rector --dry-run"
+    ],
+    "rector": [
+      "Composer\\Config::disableProcessTimeout",
+      "env XDEBUG_MODE=off ./vendor/bin/rector"
+    ],
+    "test-phpunit": [
+      "Composer\\Config::disableProcessTimeout",
+      "env XDEBUG_MODE=off php -d memory_limit=-1 ./vendor/bin/phpunit --colors=always"
+    ],
+    "test-phpunit-coverage": [
+      "Composer\\Config::disableProcessTimeout",
+      "env XDEBUG_MODE=coverage php -d memory_limit=-1 ./vendor/bin/phpunit --colors=always --coverage-html=tests/coverage"
+    ],
+    "test-phpunit-xdebug": [
+      "Composer\\Config::disableProcessTimeout",
+      "env XDEBUG_MODE=debug XDEBUG_TRIGGER=1 php -d memory_limit=-1 ./vendor/bin/phpunit --colors=always"
+    ],
+    "lint": [
+      "@rector",
+      "@phpcs",
+      "@phpstan"
+    ],
+    "test": [
+      "@test-phpcs",
+      "@test-phpstan",
+      "@test-rector",
+      "@test-phpunit"
+    ]
+  }
+}
