@@ -5,6 +5,7 @@ namespace Biblioteca\TypesenseBundle\Utils;
 /**
  * @template TKey
  * @template TValue
+ *
  * @implements \ArrayAccess<TKey, TValue>
  */
 trait ArrayAccessTrait
@@ -23,7 +24,6 @@ trait ArrayAccessTrait
 
     /**
      * @param TKey $offset
-     * @return bool
      */
     public function offsetExists(mixed $offset): bool
     {
@@ -32,6 +32,7 @@ trait ArrayAccessTrait
 
     /**
      * @param TKey $offset
+     *
      * @return TValue|null
      */
     public function offsetGet(mixed $offset): mixed
@@ -41,7 +42,6 @@ trait ArrayAccessTrait
 
     /**
      * @param TKey $offset
-     * @return TValue|null $value
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {

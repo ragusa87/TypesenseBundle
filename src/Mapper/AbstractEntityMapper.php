@@ -3,16 +3,19 @@
 namespace Biblioteca\TypesenseBundle\Mapper;
 
 use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ObjectRepository;
 
 /**
  * @template T of Object
  */
-abstract class AbstractEntityMapper implements MapperInterface
+abstract readonly class AbstractEntityMapper implements MapperInterface
 {
+    /**
+     * @param EntityRepository<T> $repository
+     */
     public function __construct(
-        private readonly ObjectRepository $repository,
+        private EntityRepository $repository,
     ) {
     }
 
@@ -46,6 +49,7 @@ abstract class AbstractEntityMapper implements MapperInterface
 
     /**
      * @param object&T $data
+     *
      * @return array<string, mixed>
      */
     abstract public function transform(object $data): array;

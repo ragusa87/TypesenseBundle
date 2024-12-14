@@ -1,0 +1,8 @@
+services:
+
+  Psr\Log\LoggerInterface:
+    class: Psr\Log\NullLogger
+
+  Biblioteca\TypesenseBundle\Tests\ServiceWithClient:
+    autowire: true
+    public: true

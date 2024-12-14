@@ -6,6 +6,10 @@ trait SearchCountTrait
 {
     public function count(): int
     {
-        return count($this->data['hits'] ?? []);
+        if (!$this->offsetExists('hits')) {
+            return 0;
+        }
+
+        return count((array) $this->data['hits']);
     }
 }

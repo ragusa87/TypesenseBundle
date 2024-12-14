@@ -4,8 +4,10 @@ namespace Biblioteca\TypesenseBundle\Mapper\Options;
 
 class CollectionOptions implements CollectionOptionsInterface
 {
-    /** @param string[]|null $tokenSeparators */
-    /** @param string[]|null $symbolsToIndex */
+    /**
+     * @param list<string>[]|null $tokenSeparators
+     * @param list<string>[]|null $symbolsToIndex
+     **/
     public function __construct(
         public ?array $tokenSeparators = null,
         public ?array $symbolsToIndex = null,

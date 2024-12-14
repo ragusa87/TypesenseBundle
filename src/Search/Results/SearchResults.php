@@ -9,9 +9,13 @@ use Biblioteca\TypesenseBundle\Utils\ArrayAccessTrait;
 
 /**
  * @implements \ArrayAccess<string, mixed>
+ * @implements \IteratorAggregate<string, mixed>
  */
 class SearchResults implements \ArrayAccess, \IteratorAggregate, \Countable
 {
+    /**
+     * @use ArrayAccessTrait<string, mixed>
+     */
     use ArrayAccessTrait;
     use SearchFacetTrait;
     use SearchCountTrait;
@@ -26,7 +30,7 @@ class SearchResults implements \ArrayAccess, \IteratorAggregate, \Countable
     }
 
     /**
-     * @return \Traversable<int, array>
+     * @return \Traversable<string, array<string,mixed>>
      */
     public function getIterator(): \Traversable
     {

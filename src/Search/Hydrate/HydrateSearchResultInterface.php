@@ -12,6 +12,7 @@ interface HydrateSearchResultInterface
 {
     /**
      * @param class-string<T> $class
+     *
      * @return SearchResultsHydrated<T>
      */
     public function hydrate(string $class, SearchResults $results): SearchResultsHydrated;

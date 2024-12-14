@@ -6,6 +6,11 @@ use Biblioteca\TypesenseBundle\Search\Results\SearchResults;
 use Biblioteca\TypesenseBundle\Search\Results\SearchResultsHydrated;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @template T of object
+ *
+ * @implements HydrateSearchResultInterface<T>
+ */
 class HydrateSearchResult implements HydrateSearchResultInterface
 {
     private ?string $primaryKeyOverride = null;
@@ -15,6 +20,10 @@ class HydrateSearchResult implements HydrateSearchResultInterface
     }
 
     /**
+     * @param class-string<T> $class
+     *
+     * @return SearchResultsHydrated<T>
+     *
      * @throws \Exception
      */
     public function hydrate(string $class, SearchResults $results): SearchResultsHydrated
@@ -26,7 +35,7 @@ class HydrateSearchResult implements HydrateSearchResultInterface
         $primaryKeyName = ($this->primaryKeyOverride ?? $primaryKey?->getName()) ?? 'id';
 
         $hits = $results['hits'] ?? [];
-        $ids = array_map(fn ($result): mixed => $result['document'][$primaryKeyName] ?? null, $hits);
+        $ids = array_map(fn ($result): mixed => (int) $result['document'][$primaryKeyName] ?? null, $hits);
         $ids = array_filter($ids);
 
         if ($ids === []) {
@@ -35,7 +44,10 @@ class HydrateSearchResult implements HydrateSearchResultInterface
 
         $repository = $this->entityManager->getRepository($class);
         if ($repository instanceof HydrateRepositoryInterface) {
-            return $repository->findByIds($ids);
+            /** @var array<int,T> $collectionData */
+            $collectionData = $repository->findByIds($ids)->toArray();
+
+            return new SearchResultsHydrated($results, $collectionData);
         }
 
         // Build a basic query to fetch the entities by their primary key
@@ -44,12 +56,16 @@ class HydrateSearchResult implements HydrateSearchResultInterface
             ->indexBy('e', 'e.'.$primaryKeyName)
             ->setParameter('ids', $ids)
             ->getQuery();
+        /** @var array<int,T> $hydratedResults */
         $hydratedResults = (array) $query->getResult();
 
         // TODO Handle pagination ?
         return new SearchResultsHydrated($results, $hydratedResults);
     }
 
+    /**
+     * @return HydrateSearchResult<T>
+     */
     public function setPrimaryKeyOverride(?string $primaryKeyOverride): self
     {
         $this->primaryKeyOverride = $primaryKeyOverride;

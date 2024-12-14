@@ -6,9 +6,12 @@ use Biblioteca\TypesenseBundle\Mapper\MapperInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
-class MapperLocator implements MapperLocatorInterface
+readonly class MapperLocator implements MapperLocatorInterface
 {
-    public function __construct(private readonly ServiceLocator $mappers)
+    /**
+     * @param ServiceLocator<mixed> $mappers
+     */
+    public function __construct(private ServiceLocator $mappers)
     {
     }
 
@@ -40,7 +43,11 @@ class MapperLocator implements MapperLocatorInterface
         $mappers = [];
         foreach (array_keys($this->mappers->getProvidedServices()) as $name) {
             try {
-                $mappers[$name] = $this->mappers->get($name);
+                $service = $this->mappers->get($name);
+                if (!$service instanceof MapperInterface) {
+                    throw new \InvalidArgumentException(sprintf('The mapper "%s" must implement "%s".', $name, MapperInterface::class));
+                }
+                $mappers[$name] = $service;
             } catch (ContainerExceptionInterface) {
                 continue;
             }

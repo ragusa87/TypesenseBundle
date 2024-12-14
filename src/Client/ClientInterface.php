@@ -4,6 +4,7 @@ namespace Biblioteca\TypesenseBundle\Client;
 
 use Typesense\Aliases;
 use Typesense\Analytics;
+use Typesense\Collection;
 use Typesense\Collections;
 use Typesense\Debug;
 use Typesense\Health;
@@ -15,6 +16,8 @@ use Typesense\Presets;
 
 interface ClientInterface
 {
+    public function getCollection(string $name): Collection;
+
     public function getCollections(): Collections;
 
     public function getAliases(): Aliases;

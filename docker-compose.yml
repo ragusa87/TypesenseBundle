@@ -6,6 +6,10 @@ services:
       - .:/var/www/html
     stdin_open: true
     tty: true
+    environment:
+      - PHP_IDE_CONFIG=serverName=typesensebundle
+    extra_hosts:
+      - host.docker.internal:host-gateway
     networks:
       - default
 #  typesense:

@@ -7,20 +7,15 @@ use Biblioteca\TypesenseBundle\Type\InfixEnum;
 class SearchQuery implements SearchQueryInterface
 {
     private readonly ?string $infix;
-    /**
-     * @var bool[]|null
-     */
-    private readonly ?array $prefix;
+    private readonly ?string $prefix;
+
+    private readonly ?string $stopwords;
 
     /**
-     * @var string[]|null
-     */
-    private readonly ?array $stopwords;
-
-    /**
-     * @param string|InfixEnum[]|null $infix
-     * @param bool|bool[]|null $prefix
-     * @param string[]|null $stopwords
+     * @param string|InfixEnum[]|null  $infix
+     * @param bool|bool[]|null         $prefix
+     * @param string[]|null            $stopwords
+     * @param array<string,mixed>|null $hiddenHits
      */
     public function __construct(
         private readonly string $q,
@@ -56,8 +51,13 @@ class SearchQuery implements SearchQueryInterface
         private readonly ?VoiceQueryInterface $voiceQuery = null,
     ) {
         $this->infix = $this->convertArray($infix, fn ($infix) => $infix instanceof InfixEnum ? $infix->value : $infix, InfixEnum::class);
-        $this->prefix = $prefix === [] || $prefix
-        === null ? null : implode(',', array_map(fn (bool $value): string => $value ? 'true' : 'false', $prefix));
+
+        if (is_bool($prefix)) {
+            $prefix = (array) $prefix;
+        }
+
+        $this->prefix = $prefix === [] || $prefix === null ? null :
+            implode(',', array_map(fn (bool $value): string => $value ? 'true' : 'false', $prefix));
         $this->stopwords = $stopwords === null || $stopwords === [] ? null : implode(',', $stopwords);
 
         // Check incompatible combinations
@@ -69,7 +69,18 @@ class SearchQuery implements SearchQueryInterface
     private function convertArray(mixed $values, callable $convert, ?string $className = null): ?string
     {
         if (!is_array($values)) {
-            return $values === null ? null : $convert($values);
+            if ($values === null) {
+                return null;
+            }
+            $values = $convert($values);
+            if ($values === null) {
+                return null;
+            }
+            if (!is_scalar($values)) {
+                throw new \InvalidArgumentException('Expected scalar value');
+            }
+
+            return (string) $values;
         }
         foreach ($values as $value) {
             if ($className !== null && !$value instanceof $className) {
