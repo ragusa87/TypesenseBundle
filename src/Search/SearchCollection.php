@@ -7,8 +7,17 @@ use Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResultInterface;
 use Biblioteca\TypesenseBundle\Search\Results\SearchResults;
 use Biblioteca\TypesenseBundle\Search\Results\SearchResultsHydrated;
 
+/**
+ * @template T
+ *
+ * @implements SearchCollectionInterface<T>
+ */
 class SearchCollection implements SearchCollectionInterface
 {
+    /**
+     * @param class-string<T>                 $entityClass
+     * @param HydrateSearchResultInterface<T> $hydrateSearchResult
+     */
     public function __construct(
         private readonly string $collectionName,
         private readonly string $entityClass,

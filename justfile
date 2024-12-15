@@ -1,16 +1,39 @@
-set shell := ["docker", "compose", "run", "-it", "--user=1000", "--rm", "php", "/usr/bin/composer"]
-composer *args:
-    {{args}}
+set shell := ["docker", "compose", "run", "--entrypoint", "/bin/sh", "-it", "--user=1000", "--rm", "php", "-c"]
+composer *args="":
+    /usr/bin/composer {{args}}
+
+sh *args="":
+    sh {{args}}
+
+php *args="":
+    php {{args}}
 
 install:
-     install
+    composer install
 
 tests:
-     test
-update:
-    update
+    composer run test
+
+update *args="":
+    composer update {{args}}
+
 lint:
-     lint
+    composer run lint
 
 rector:
-     rector
+    rector
+
+test-phpcs:
+    composer run test-phpcs
+
+phpcs:
+    composer run phpcs
+
+phpunit *args="":
+    env XDEBUG_MODE=coverage composer run phpunit -- {{args}}
+
+phpunit-xdebug *args="":
+    composer phpunit-xdebug -- {{args}}
+
+phpstan *args="":
+    composer phpstan -- {{args}}

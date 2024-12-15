@@ -1,0 +1,67 @@
+
+name: "Coding Standards"
+permissions:
+  checks: write
+  pull-requests: write
+on:
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  coding-standards:
+    name: "Coding Standards"
+    runs-on: ${{ matrix.operating-system }} 
+    strategy:
+      fail-fast: true
+      matrix:
+        php-version:
+          - "8.3"
+          - "8.4"
+        operating-system: [ubuntu-24.04]
+        composer-versions:
+          - lowest
+          - highest 
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "xdebug"
+          php-version: "#{{ matrix.php-version }}"
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@v3"
+        with:
+          dependency-versions: "${{ matrix.composer-versions}}"
+      - name: "Run PHPCS"
+        run: |
+          composer run test-phpcs
+
+      - name: "Run rector"
+        run: |
+          composer run test-rector
+
+      - name: "Run phpstan"
+        run: |
+          composer run phpstan
+
+      - name: "Run phpunit"
+        run: |
+          composer run phpunit
+
+      - name: Coverage as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          overwrite: true
+          name: coverage-report-${{ matrix.php-version }}-${{ matrix.composer-versions }}-${{ matrix.operating-system }}
+          path: tests/coverage/
+
+      - name: Coverage Report as Comment (Clover)
+        uses: lucassabreu/comment-coverage-clover@main
+        if: github.event_name == 'pull_request' && matrix.composer-versions == 'highest' && matrix.php-version == '8.4'
+        with:
+          file: tests/coverage/clover.xml

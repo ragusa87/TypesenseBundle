@@ -2,6 +2,9 @@
 
 namespace Biblioteca\TypesenseBundle\Populate;
 
+/**
+ * @template T
+ */
 class BatchGenerator
 {
     private readonly int $batchSize;
@@ -9,8 +12,9 @@ class BatchGenerator
     /**
      * Constructor to initialize the iterable and batch size.
      *
-     * @param iterable $iterable the data source to process
-     * @param int $batchSize the number of elements in each batch
+     * @param iterable<T> $iterable  the data source to process
+     * @param int         $batchSize the number of elements in each batch
+     *
      * @throws \InvalidArgumentException if batch size is not greater than 0
      */
     public function __construct(private readonly iterable $iterable, int $batchSize)
@@ -24,7 +28,7 @@ class BatchGenerator
     /**
      * Generate batches of elements from the iterable.
      *
-     * @return \Generator yields an array of elements in each batch
+     * @return \Generator<array<T>> yields an array of elements in each batch
      */
     public function generate(): \Generator
     {

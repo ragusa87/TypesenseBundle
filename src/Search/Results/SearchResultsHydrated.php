@@ -9,29 +9,38 @@ use Biblioteca\TypesenseBundle\Utils\ArrayAccessTrait;
 
 /**
  * @template T
+ *
  * @implements \ArrayAccess<string, mixed>
+ * @implements \IteratorAggregate<int, T>
  */
 class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAccess
 {
+    /**
+     * @use ArrayAccessTrait<string, mixed>
+     */
     use ArrayAccessTrait;
     use FoundCountTrait;
     use SearchCountTrait;
     use SearchFacetTrait;
 
     /**
-     * @param $hydratedResults iterable<int, T>
+     * @param array<int, T>    $hydratedResults
+     * @param SearchResults<T> $results
+     *
      * @throws \Exception
      */
-    public function __construct(SearchResults $results, iterable $hydratedResults = [])
+    public function __construct(SearchResults $results, array $hydratedResults = [])
     {
         $this->data = $results->toArray();
         $this->setHydratedResults($hydratedResults);
     }
 
     /**
-     * @param iterable<int, T> $data
+     * @param array<int, T> $data
+     *
+     * @return SearchResultsHydrated<T>
      */
-    public function setHydratedResults(iterable $data): self
+    public function setHydratedResults(array $data): self
     {
         $this->data['hydrated'] = $data;
 
@@ -39,10 +48,14 @@ class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAcc
     }
 
     /**
-     * @return \Traversable<int, T>
+     * @return \Traversable<int|string, T>
      */
     public function getIterator(): \Traversable
     {
-        return new \ArrayIterator($this->data['hydrated'] ?? []);
+        if (!$this->offsetExists('hydrated')) {
+            return new \ArrayIterator([]);
+        }
+
+        return new \ArrayIterator((array) $this->data['hydrated']);
     }
 }

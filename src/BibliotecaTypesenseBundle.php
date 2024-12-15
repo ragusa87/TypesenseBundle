@@ -4,66 +4,23 @@ namespace Biblioteca\TypesenseBundle;
 
 use Biblioteca\TypesenseBundle\Mapper\MapperInterface;
 use Biblioteca\TypesenseBundle\Search\SearchCollectionInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class BibliotecaTypesenseBundle extends AbstractBundle
+class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
 {
-    public function configure(DefinitionConfigurator $definition): void
-    {
-        $definition->rootNode()
-            ->children()
-            ->arrayNode('typesense')
-                ->info('Typesense server configuration')
-                ->isRequired()
-                ->children()
-                    ->scalarNode('uri')
-                        ->info('The URL of the Typesense server')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->scalarNode('key')
-                        ->info('The API key for accessing the Typesense server')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->scalarNode('connection_timeout_seconds')
-                        ->defaultValue(5)
-                        ->cannotBeEmpty()
-                    ->end()
-                ->end()
-            ->end()
-            ->end();
-
-        $this->addCollectionsConfig($definition->rootNode());
-    }
-
-    private function addCollectionsConfig(ArrayNodeDefinition $definition): void
-    {
-        $definition->children()->arrayNode('collections')
-            ->info('Collection definition')
-            ->useAttributeAsKey('name')
-            ->arrayPrototype()
-                ->children()
-                    ->scalarNode('entity')->isRequired()->end()
-                    ->scalarNode('name')->end()
-                ->end()
-            ->end()
-            ->end()
-            ->end()
-        ;
-    }
-
+    /**
+     * @param array{typesense: array{uri: string, key: string, connection_timeout_seconds: int}, collections: array<string, array{entity: string, name?: string}>} $config
+     */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $builder->registerForAutoconfiguration(MapperInterface::class)
             ->addTag(MapperInterface::TAG_NAME);
 
-        foreach ($config['typesense'] as $key => $value) {
+        /** @var iterable<string,mixed> $typesenseConfig */
+        $typesenseConfig = $config['typesense'];
+        foreach ($typesenseConfig as $key => $value) {
             $container->parameters()->set('biblioteca_typesense.config.'.$key, $value);
         }
 
@@ -72,6 +29,9 @@ class BibliotecaTypesenseBundle extends AbstractBundle
         $this->loadCollection($config['collections'], $container, $builder);
     }
 
+    /**
+     * @param array<string, array{entity: string, name?: string}> $collections
+     */
     public function loadCollection(array $collections, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         foreach ($collections as $name => $collection) {

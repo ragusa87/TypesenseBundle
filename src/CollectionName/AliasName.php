@@ -3,6 +3,9 @@
 namespace Biblioteca\TypesenseBundle\CollectionName;
 
 use Biblioteca\TypesenseBundle\Client\ClientInterface;
+use Biblioteca\TypesenseBundle\Exception\AliasException;
+use Http\Client\Exception;
+use Typesense\Exceptions\TypesenseClientError;
 
 class AliasName implements NameInterface
 {
@@ -28,18 +31,41 @@ class AliasName implements NameInterface
         return true;
     }
 
+    /**
+     * @throws AliasException
+     */
     public function switch(string $shortName, string $longName): void
     {
         if (!$this->isAliasEnabled()) {
             return;
         }
 
-        // If alias was previously a collection, we delete it (to make sure we can create the alias)
-        if ($this->client->getCollections()->__get($shortName)->exists()) {
-            $this->client->getCollections()->__get($shortName)->delete();
-        }
+        try {
+            // If alias was previously a collection, we delete it (to make sure we can create the alias)
+            $collection = $this->client->getCollection($shortName);
 
-        // Point the alias to the new collection (Note that the old collection is deleted automatically!)
-        $this->client->getAliases()->upsert($shortName, ['collection_name' => $longName]);
+            if ($this->collectionExists($shortName)) {
+                $collection->delete();
+            }
+
+            // Point the alias to the new collection (Note that the old collection is deleted automatically!)
+            $this->client->getAliases()->upsert($shortName, ['collection_name' => $longName]);
+        } catch (TypesenseClientError|Exception $e) {
+            throw new AliasException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Collection->exists() method is not available in typesense-php 4.x.
+     */
+    private function collectionExists(string $name): bool
+    {
+        try {
+            $this->client->getCollection($name)->retrieve();
+
+            return true;
+        } catch (TypesenseClientError|Exception) {
+            return false;
+        }
     }
 }

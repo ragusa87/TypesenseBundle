@@ -2,19 +2,31 @@
   "name": "biblioteca/typesense-bundle",
   "description": "This bundle provides integration with Typesense in Symfony",
   "type": "symfony-bundle",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "require": {
     "php": ">=8.2",
+    "php-http/discovery": "^1.20",
+    "psr/http-client": "^1.0",
+    "psr/http-client-implementation": "*",
+    "psr/log": "^1.1",
     "symfony/framework-bundle": "^6.4|^7.0",
-    "symfony/http-client": "*",
+    "symfony/http-client": "^7.2",
     "symfony/http-kernel": "^6.4|^7.0",
     "typesense/typesense-php": "^4.9"
   },
   "require-dev": {
+    "doctrine/doctrine-bundle": "^2.0",
+    "doctrine/orm": "^3.0",
     "friendsofphp/php-cs-fixer": "dev-master",
     "phpstan/phpstan": "^2.0",
+    "phpstan/phpstan-symfony": "^2.0",
     "phpunit/phpunit": "^11.5",
-    "rector/rector": "^2.0"
+    "rector/rector": "^2.0",
+    "symfony/phpunit-bridge": "^7.0",
+    "symfony/yaml": "^7.0"
+  },
+  "conflict": {
+    "php-http/httplug": "<1.5"
   },
   "config": {
     "sort-packages": true,
@@ -29,6 +41,7 @@
   },
   "autoload-dev": {
     "psr-4": {
+      "Biblioteca\\TypesenseBundle\\Tests\\": "tests"
     }
   },
   "scripts": {
@@ -38,31 +51,35 @@
 
     "phpstan": [
       "Composer\\Config::disableProcessTimeout",
-      "env XDEBUG_MODE=off ./vendor/bin/phpstan analyse --memory-limit=-1"
+      "./vendor/bin/phpstan analyse --memory-limit=-1"
+    ],
+    "test-phpcs": [
+      "Composer\\Config::disableProcessTimeout",
+      "./vendor/bin/php-cs-fixer fix --dry-run --verbose -vv"
     ],
     "phpcs": [
       "Composer\\Config::disableProcessTimeout",
-      "env XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run --verbose -vv"
+      "./vendor/bin/php-cs-fixer fi --verbose -vv"
     ],
     "test-rector": [
       "Composer\\Config::disableProcessTimeout",
-      "env XDEBUG_MODE=off ./vendor/bin/rector --dry-run"
+      "./vendor/bin/rector --dry-run"
     ],
     "rector": [
       "Composer\\Config::disableProcessTimeout",
-      "env XDEBUG_MODE=off ./vendor/bin/rector"
+      "./vendor/bin/rector"
     ],
-    "test-phpunit": [
+    "phpunit": [
       "Composer\\Config::disableProcessTimeout",
-      "env XDEBUG_MODE=off php -d memory_limit=-1 ./vendor/bin/phpunit --colors=always"
+      "php -d memory_limit=-1 ./vendor/bin/phpunit --colors=always"
     ],
-    "test-phpunit-coverage": [
+    "phpunit-coverage": [
       "Composer\\Config::disableProcessTimeout",
       "env XDEBUG_MODE=coverage php -d memory_limit=-1 ./vendor/bin/phpunit --colors=always --coverage-html=tests/coverage"
     ],
-    "test-phpunit-xdebug": [
+    "phpunit-xdebug": [
       "Composer\\Config::disableProcessTimeout",
-      "env XDEBUG_MODE=debug XDEBUG_TRIGGER=1 php -d memory_limit=-1 ./vendor/bin/phpunit --colors=always"
+      "env XDEBUG_MODE=debug,coverage XDEBUG_TRIGGER=1 php -d memory_limit=-1 ./vendor/bin/phpunit --colors=always"
     ],
     "lint": [
       "@rector",
@@ -71,9 +88,9 @@
     ],
     "test": [
       "@test-phpcs",
-      "@test-phpstan",
+      "@phpstan",
       "@test-rector",
-      "@test-phpunit"
+      "@phpunit"
     ]
   }
 }

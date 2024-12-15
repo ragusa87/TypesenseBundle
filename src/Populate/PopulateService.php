@@ -19,7 +19,7 @@ class PopulateService
 
     public function deleteCollection(string $name): void
     {
-        $this->client->getCollections()->__get($name)->delete();
+        $this->client->getCollection($name)->delete();
     }
 
     public function createCollection(string $collectionName, MapperInterface $mapper): Collection
@@ -29,14 +29,14 @@ class PopulateService
         $payload = array_filter([
             'name' => $collectionName,
             'fields' => array_map(fn (FieldMappingInterface $mapping): array => $mapping->toArray(), $mapping->getFields()),
-            'metadata' => $mapping->getMetadata() ? $mapping->getMetadata()?->toArray() : null,
+            'metadata' => $mapping->getMetadata()?->toArray(),
             ...$mapping->getCollectionOptions()?->toArray() ?? [],
         ], fn ($value): bool => !is_null($value));
 
         try {
             $this->client->getCollections()->create($payload);
 
-            return $this->client->getCollections()->__get($collectionName);
+            return $this->client->getCollection($collectionName);
         } catch (Exception|TypesenseClientError $e) {
             throw new \RuntimeException('Unable to create collection', 0, $e);
         }
@@ -44,7 +44,7 @@ class PopulateService
 
     public function fillCollection(string $name, MapperInterface $mapper): \Generator
     {
-        $collection = $this->client->getCollections()->offsetGet($name);
+        $collection = $this->client->getCollection($name);
         $data = $mapper->getData();
         foreach ((new BatchGenerator($data, $this->batchSize))->generate() as $items) {
             $collection->documents->import($items);

@@ -5,6 +5,7 @@ namespace Biblioteca\TypesenseBundle\Client;
 use Typesense\Aliases;
 use Typesense\Analytics;
 use Typesense\Client;
+use Typesense\Collection;
 use Typesense\Collections;
 use Typesense\Debug;
 use Typesense\Health;
@@ -21,7 +22,7 @@ class ClientAdapter implements ClientInterface
     ) {
     }
 
-    public function __call($name, $arguments)
+    public function __call(mixed $name, mixed $arguments): mixed
     {
         return $this->client->$name(...$arguments);
     }
@@ -74,5 +75,10 @@ class ClientAdapter implements ClientInterface
     public function getAnalytics(): Analytics
     {
         return $this->client->getAnalytics();
+    }
+
+    public function getCollection(string $name): Collection
+    {
+        return $this->client->getCollections()[$name];
     }
 }

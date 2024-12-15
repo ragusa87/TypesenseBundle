@@ -6,6 +6,10 @@ trait FoundCountTrait
 {
     public function found(): int
     {
-        return intval($this->data['found'] ?? 0);
+        if (!$this->offsetExists('found') || !is_scalar($this->data['found'])) {
+            return 0;
+        }
+
+        return intval($this->data['found']);
     }
 }
