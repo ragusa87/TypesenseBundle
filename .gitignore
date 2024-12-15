@@ -7,3 +7,5 @@ phpunit.xml
 tests/coverage
 !tests/coverage/.gitkeep
 .phpunit.cache
+tests/kernel
+!tests/kernel/.gitkeep

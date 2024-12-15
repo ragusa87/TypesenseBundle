@@ -3,44 +3,13 @@
 namespace Biblioteca\TypesenseBundle\Tests;
 
 use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Biblioteca\TypesenseBundle\Tests\Client\ServiceWithClient;
+use Typesense\Aliases;
+use Typesense\Collection;
+use Typesense\Debug;
 
 class ContainerTest extends KernelTestCase
 {
-    public const CONFIG_KEY = 'biblioteca_typesense';
-
-    /**
-     * @return class-string<KernelInterface>
-     */
-    protected static function getKernelClass(): string
-    {
-        return TestKernel::class;
-    }
-
-    /**
-     * @param array{'bundles'?: class-string<BundleInterface>, 'configs'?: array<string|int,string>, 'environment'?: string, 'debug'?:bool} $options
-     */
-    protected static function createKernel(array $options = []): KernelInterface
-    {
-        static::$class ??= static::getKernelClass();
-
-        if (false === in_array(self::CONFIG_KEY, array_keys($options['configs'] ?? []))) {
-            $options['configs'][self::CONFIG_KEY] = __DIR__.'/config/packages/biblioteca_typesense.yaml';
-        }
-        $env = $options['environment'] ?? $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'test';
-        $debug = $options['debug'] ?? $_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? true;
-
-        $kernel = new static::$class($env, $debug, $options);
-        if (!$kernel instanceof KernelInterface) {
-            throw new \InvalidArgumentException('Kernel must be an instance of '.KernelInterface::class);
-        }
-
-        return $kernel;
-    }
-
     public function testMapperLocatorExists(): void
     {
         $kernel = self::bootKernel();
@@ -58,6 +27,12 @@ class ContainerTest extends KernelTestCase
 
         $service = $container->get(ServiceWithClient::class);
         $this->assertInstanceOf(ServiceWithClient::class, $service);
+
+        $client = $service->getClient();
+        $this->assertInstanceOf(Collection::class, $client->getCollection('books'));
+        $this->assertInstanceOf(Collection::class, $client->getCollections()['books']);
+        $this->assertInstanceOf(Debug::class, $client->getDebug());
+        $this->assertInstanceOf(Aliases::class, $client->getAliases());
     }
 
     public function testClientFactoryInvalidUrl(): void
@@ -72,10 +47,5 @@ class ContainerTest extends KernelTestCase
 
         $service = $container->get(ServiceWithClient::class);
         $this->assertInstanceOf(ServiceWithClient::class, $service);
-    }
-
-    protected function assertContainerHas(ContainerInterface $container, string $serviceId): void
-    {
-        $this->assertTrue($container->has($serviceId), sprintf('The service "%s" should be in the container.', $serviceId));
     }
 }

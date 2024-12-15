@@ -33,9 +33,9 @@ class Mapping implements MappingInterface
         return $this;
     }
 
-    public function add(string $name, DataTypeEnum $dataTypeEnum, ?bool $facet = null, ?bool $optional = null): self
+    public function add(string $name, string|DataTypeEnum $type, ?bool $facet = null, ?bool $optional = null): self
     {
-        $this->addField(new FieldMapping(name: $name, type: $dataTypeEnum, facet: $facet, optional: $optional));
+        $this->addField(new FieldMapping(name: $name, type: $type, facet: $facet, optional: $optional));
 
         return $this;
     }

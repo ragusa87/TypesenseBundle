@@ -20,6 +20,9 @@ readonly class MapperLocator implements MapperLocatorInterface
         return $this->serviceLocator->has($name);
     }
 
+    /**
+     * @throws InvalidTypeMapperException
+     */
     public function get(string $name): MapperInterface
     {
         try {
@@ -29,7 +32,7 @@ readonly class MapperLocator implements MapperLocatorInterface
         }
 
         if (!$service instanceof MapperInterface) {
-            throw new \InvalidArgumentException(sprintf('The mapper "%s" must implement "%s".', $name, MapperInterface::class));
+            throw new InvalidTypeMapperException(sprintf('The mapper "%s" must implement "%s".', $name, MapperInterface::class));
         }
 
         return $service;
@@ -45,7 +48,7 @@ readonly class MapperLocator implements MapperLocatorInterface
             try {
                 $service = $this->serviceLocator->get($name);
                 if (!$service instanceof MapperInterface) {
-                    throw new \InvalidArgumentException(sprintf('The mapper "%s" must implement "%s".', $name, MapperInterface::class));
+                    throw new InvalidTypeMapperException(sprintf('The mapper "%s" must implement "%s".', $name, MapperInterface::class));
                 }
                 $mappers[$name] = $service;
             } catch (ContainerExceptionInterface) {

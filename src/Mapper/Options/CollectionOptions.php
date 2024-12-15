@@ -5,8 +5,8 @@ namespace Biblioteca\TypesenseBundle\Mapper\Options;
 class CollectionOptions implements CollectionOptionsInterface
 {
     /**
-     * @param list<string>[]|null $tokenSeparators
-     * @param list<string>[]|null $symbolsToIndex
+     * @param list<string>|null $tokenSeparators
+     * @param list<string>|null $symbolsToIndex
      **/
     public function __construct(
         public ?array $tokenSeparators = null,
@@ -17,10 +17,11 @@ class CollectionOptions implements CollectionOptionsInterface
 
     public function toArray(): array
     {
-        return [
-            'token_separators' => $this->tokenSeparators,
-            'symbols_to_index' => $this->symbolsToIndex,
-            'default_sorting_field' => $this->defaultSortingField,
-        ];
+        return array_filter(
+            [
+                'token_separators' => $this->tokenSeparators,
+                'symbols_to_index' => $this->symbolsToIndex,
+                'default_sorting_field' => $this->defaultSortingField,
+            ], fn ($value) => $value !== null);
     }
 }

@@ -46,7 +46,7 @@ class FieldMapping implements FieldMappingInterface
             'range_index' => $this->rangeIndex,
             'drop' => $this->drop,
             'stem' => $this->stem,
-        ]);
+        ], fn ($value) => $value !== null);
     }
 
     public function getType(): string

@@ -1,19 +1,24 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests;
+namespace Biblioteca\TypesenseBundle\Tests\Client;
 
 use Biblioteca\TypesenseBundle\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 
-class ServiceWithClient
+readonly class ServiceWithClient
 {
     public function __construct(
-        ClientInterface $client,
-        LoggerInterface $logger,
+        private ClientInterface $client,
+        public LoggerInterface $logger,
     ) {
         $logger->debug(
             'ServiceWithClient::__construct',
             ['client' => $client]
         );
+    }
+
+    public function getClient(): ClientInterface
+    {
+        return $this->client;
     }
 }

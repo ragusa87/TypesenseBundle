@@ -21,7 +21,7 @@ lint:
     composer run lint
 
 rector:
-    rector
+    composer rector
 
 test-phpcs:
     composer run test-phpcs

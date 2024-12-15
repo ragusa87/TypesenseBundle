@@ -57,12 +57,12 @@ class TestKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return realpath(sys_get_temp_dir()).'/TypesenseTests/cache';
+        return $this->getProjectDir().'/cache';
     }
 
     public function getLogDir(): string
     {
-        return realpath(sys_get_temp_dir()).'/TypesenseTests/log';
+        return $this->getProjectDir().'/logs';
     }
 
     public function getProjectDir(): string
