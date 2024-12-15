@@ -26,32 +26,44 @@ class HydrateSearchResult implements HydrateSearchResultInterface
      *
      * @throws \Exception
      */
-    public function hydrate(string $class, SearchResults $results): SearchResultsHydrated
+    public function hydrate(string $class, SearchResults $searchResults): SearchResultsHydrated
     {
         // Fetch the primary key of the entity
-        $metadata = $this->entityManager->getClassMetadata($class);
+        $classMetadata = $this->entityManager->getClassMetadata($class);
         // TODO Support of composed primary keys ?
-        $primaryKey = $metadata->isIdentifierComposite ? null : $metadata->getSingleIdReflectionProperty();
+        $primaryKey = $classMetadata->isIdentifierComposite ? null : $classMetadata->getSingleIdReflectionProperty();
         $primaryKeyName = ($this->primaryKeyOverride ?? $primaryKey?->getName()) ?? 'id';
 
-        $hits = $results['hits'] ?? [];
-        $ids = array_map(fn ($result): mixed => (int) $result['document'][$primaryKeyName] ?? null, $hits);
+        $hits = $searchResults['hits'] ?? [];
+        $ids = array_map(function (mixed $result) use ($primaryKeyName): ?int {
+            if (!is_array($result) || !is_array($result['document']) || !is_scalar($result['document'][$primaryKeyName] ?? null)) {
+                return null;
+            }
+
+            return (int) $result['document'];
+        }, is_array($hits) ? $hits : []);
         $ids = array_filter($ids);
 
         if ($ids === []) {
-            return new SearchResultsHydrated($results, []);
+            /** @var SearchResultsHydrated<T> $result */
+            $result = new SearchResultsHydrated($searchResults, []);
+
+            return $result;
         }
 
-        $repository = $this->entityManager->getRepository($class);
-        if ($repository instanceof HydrateRepositoryInterface) {
+        $entityRepository = $this->entityManager->getRepository($class);
+        if ($entityRepository instanceof HydrateRepositoryInterface) {
             /** @var array<int,T> $collectionData */
-            $collectionData = $repository->findByIds($ids)->toArray();
+            $collectionData = $entityRepository->findByIds($ids)->toArray();
 
-            return new SearchResultsHydrated($results, $collectionData);
+            /** @var SearchResultsHydrated<T> $result */
+            $result = new SearchResultsHydrated($searchResults, $collectionData);
+
+            return $result;
         }
 
         // Build a basic query to fetch the entities by their primary key
-        $query = $repository->createQueryBuilder('e')
+        $query = $entityRepository->createQueryBuilder('e')
             ->where('e.'.$primaryKeyName.' IN (:ids)')
             ->indexBy('e', 'e.'.$primaryKeyName)
             ->setParameter('ids', $ids)
@@ -59,8 +71,10 @@ class HydrateSearchResult implements HydrateSearchResultInterface
         /** @var array<int,T> $hydratedResults */
         $hydratedResults = (array) $query->getResult();
 
-        // TODO Handle pagination ?
-        return new SearchResultsHydrated($results, $hydratedResults);
+        /** @var SearchResultsHydrated<T> $result */
+        $result = new SearchResultsHydrated($searchResults, $hydratedResults);
+
+        return $result;
     }
 
     /**

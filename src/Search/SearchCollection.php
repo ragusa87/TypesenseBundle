@@ -21,20 +21,20 @@ class SearchCollection implements SearchCollectionInterface
     public function __construct(
         private readonly string $collectionName,
         private readonly string $entityClass,
-        private readonly Search $executeSearchQuery,
+        private readonly Search $search,
         private readonly HydrateSearchResultInterface $hydrateSearchResult,
     ) {
     }
 
-    public function searchRaw(SearchQuery $query): SearchResults
+    public function searchRaw(SearchQuery $searchQuery): SearchResults
     {
-        return $this->executeSearchQuery->search($this->collectionName, $query);
+        return $this->search->search($this->collectionName, $searchQuery);
     }
 
-    public function search(SearchQuery $query): SearchResultsHydrated
+    public function search(SearchQuery $searchQuery): SearchResultsHydrated
     {
-        $searchResult = $this->executeSearchQuery->search($this->collectionName, $query);
+        $searchResults = $this->search->search($this->collectionName, $searchQuery);
 
-        return $this->hydrateSearchResult->hydrate($this->entityClass, $searchResult);
+        return $this->hydrateSearchResult->hydrate($this->entityClass, $searchResults);
     }
 }

@@ -13,7 +13,7 @@ class Mapping implements MappingInterface
     public function __construct(
         /** @var array<int, FieldMappingInterface> */
         private array $fields = [],
-        private readonly ?MetadataMappingInterface $metadata = null,
+        private readonly ?MetadataMappingInterface $metadataMapping = null,
         private readonly ?CollectionOptionsInterface $collectionOptions = null,
     ) {
     }
@@ -26,16 +26,16 @@ class Mapping implements MappingInterface
         return $this->fields;
     }
 
-    public function addField(FieldMappingInterface $field): self
+    public function addField(FieldMappingInterface $fieldMapping): self
     {
-        $this->fields[] = $field;
+        $this->fields[] = $fieldMapping;
 
         return $this;
     }
 
-    public function add(string $name, DataTypeEnum $type, ?bool $facet = null, ?bool $optional = null): self
+    public function add(string $name, DataTypeEnum $dataTypeEnum, ?bool $facet = null, ?bool $optional = null): self
     {
-        $this->addField(new FieldMapping(name: $name, type: $type, facet: $facet, optional: $optional));
+        $this->addField(new FieldMapping(name: $name, type: $dataTypeEnum, facet: $facet, optional: $optional));
 
         return $this;
     }
@@ -47,6 +47,6 @@ class Mapping implements MappingInterface
 
     public function getMetadata(): ?MetadataMappingInterface
     {
-        return $this->metadata;
+        return $this->metadataMapping;
     }
 }

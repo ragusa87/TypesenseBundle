@@ -28,7 +28,7 @@ class PopulateService
 
         $payload = array_filter([
             'name' => $collectionName,
-            'fields' => array_map(fn (FieldMappingInterface $mapping): array => $mapping->toArray(), $mapping->getFields()),
+            'fields' => array_map(fn (FieldMappingInterface $fieldMapping): array => $fieldMapping->toArray(), $mapping->getFields()),
             'metadata' => $mapping->getMetadata()?->toArray(),
             ...$mapping->getCollectionOptions()?->toArray() ?? [],
         ], fn ($value): bool => !is_null($value));
@@ -45,8 +45,8 @@ class PopulateService
     public function fillCollection(string $name, MapperInterface $mapper): \Generator
     {
         $collection = $this->client->getCollection($name);
-        $data = $mapper->getData();
-        foreach ((new BatchGenerator($data, $this->batchSize))->generate() as $items) {
+        $generator = $mapper->getData();
+        foreach ((new BatchGenerator($generator, $this->batchSize))->generate() as $items) {
             $collection->documents->import($items);
             yield from $items;
         }

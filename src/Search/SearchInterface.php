@@ -11,5 +11,5 @@ interface SearchInterface
     /**
      * @throws SearchException
      */
-    public function search(string $collectionName, SearchQuery $query): SearchResults;
+    public function search(string $collectionName, SearchQuery $searchQuery): SearchResults;
 }

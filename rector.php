@@ -10,6 +10,5 @@ return RectorConfig::configure()
         __DIR__ . '/src',
     ])
     ->withSets([LevelSetList::UP_TO_PHP_82])
-    ->withTypeCoverageLevel(9)
-    ->withDeadCodeLevel(0)
-    ->withCodeQualityLevel(0);
+    ->withPreparedSets(deadCode: true, codeQuality: true, privatization: true, naming: true, doctrineCodeQuality: true, symfonyCodeQuality: true)
+    ;

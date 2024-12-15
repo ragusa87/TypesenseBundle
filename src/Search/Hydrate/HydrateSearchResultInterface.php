@@ -15,5 +15,5 @@ interface HydrateSearchResultInterface
      *
      * @return SearchResultsHydrated<T>
      */
-    public function hydrate(string $class, SearchResults $results): SearchResultsHydrated;
+    public function hydrate(string $class, SearchResults $searchResults): SearchResultsHydrated;
 }

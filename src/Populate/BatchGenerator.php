@@ -43,7 +43,7 @@ class BatchGenerator
         }
 
         // Yield remaining elements if they exist
-        if (!empty($batch)) {
+        if ($batch !== []) {
             yield $batch;
         }
     }

@@ -13,30 +13,30 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
     /**
      * @param array{typesense: array{uri: string, key: string, connection_timeout_seconds: int}, collections: array<string, array{entity: string, name?: string}>} $config
      */
-    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    public function loadExtension(array $config, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
-        $builder->registerForAutoconfiguration(MapperInterface::class)
+        $containerBuilder->registerForAutoconfiguration(MapperInterface::class)
             ->addTag(MapperInterface::TAG_NAME);
 
         /** @var iterable<string,mixed> $typesenseConfig */
         $typesenseConfig = $config['typesense'];
         foreach ($typesenseConfig as $key => $value) {
-            $container->parameters()->set('biblioteca_typesense.config.'.$key, $value);
+            $containerConfigurator->parameters()->set('biblioteca_typesense.config.'.$key, $value);
         }
 
-        $container->import(__DIR__.'/Resources/config/services.yaml');
+        $containerConfigurator->import(__DIR__.'/Resources/config/services.yaml');
 
-        $this->loadCollection($config['collections'], $container, $builder);
+        $this->loadCollection($config['collections'], $containerConfigurator, $containerBuilder);
     }
 
     /**
      * @param array<string, array{entity: string, name?: string}> $collections
      */
-    public function loadCollection(array $collections, ContainerConfigurator $container, ContainerBuilder $builder): void
+    public function loadCollection(array $collections, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
         foreach ($collections as $name => $collection) {
             $id = 'biblioteca_typesense.collection.'.$name;
-            $container->services()
+            $containerConfigurator->services()
                 ->set($id)
                 ->parent('biblioteca_typesense.collection.abstract')
                 ->arg(0, $name)
@@ -46,7 +46,7 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
 
             // You can inject ExecuteCollectionSearchResultInterface in your service with the name "SearchBooks", given the collection name is "books".
             $bindingName = '$'.$this->toCamelCase('Search '.$name);
-            $container->services()->defaults()
+            $containerConfigurator->services()->defaults()
                 ->alias(SearchCollectionInterface::class.' '.$bindingName, new Reference($id));
         }
     }

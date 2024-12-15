@@ -18,7 +18,7 @@ services:
   Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator:
     public: true
     arguments:
-      $mappers: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\Mapper\MapperInterface::TAG_NAME, default_index_method: getName }
+      $serviceLocator: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\Mapper\MapperInterface::TAG_NAME, default_index_method: getName }
 
   Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface: '@Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator'
 

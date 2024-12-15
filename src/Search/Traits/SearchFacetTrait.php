@@ -13,10 +13,15 @@ trait SearchFacetTrait
      */
     public function getFacetCounts(): array
     {
-        if (!$this->offsetExists('facet_counts')) {
+        if (!$this->offsetExists('facet_counts') || !is_array($this->data['facet_counts']) || $this->data['facet_counts'] === []) {
             return [];
         }
 
-        return (array) $this->data['facet_counts'];
+        /** @var FacetCount[] $data */
+        $data = array_map(fn ($value) =>
+            /* @var FacetCount $value */
+            $value, $this->data['facet_counts']);
+
+        return $data;
     }
 }
