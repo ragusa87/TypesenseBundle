@@ -3,6 +3,7 @@
 namespace Biblioteca\TypesenseBundle\Search\Results;
 
 use Biblioteca\TypesenseBundle\Search\Traits\FoundCountTrait;
+use Biblioteca\TypesenseBundle\Search\Traits\HighlightTrait;
 use Biblioteca\TypesenseBundle\Search\Traits\SearchCountTrait;
 use Biblioteca\TypesenseBundle\Search\Traits\SearchFacetTrait;
 use Biblioteca\TypesenseBundle\Utils\ArrayAccessTrait;
@@ -22,6 +23,7 @@ class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAcc
     use FoundCountTrait;
     use SearchCountTrait;
     use SearchFacetTrait;
+    use HighlightTrait;
 
     /**
      * @param array<int, T>    $hydratedResults
