@@ -18,11 +18,14 @@ class Search implements SearchInterface
     /**
      * @throws SearchException
      */
-    public function search(string $collectionName, SearchQuery $query): SearchResults
+    public function search(string $collectionName, SearchQuery $searchQuery): SearchResults
     {
         try {
-            return new SearchResults($this->client->getCollection($collectionName)
-                ->documents->search($query->toArray()));
+            /** @var array<string, mixed> $result */
+            $result = $this->client->getCollection($collectionName)
+                ->documents->search($searchQuery->toArray());
+
+            return new SearchResults($result);
         } catch (TypesenseClientError|Exception $e) {
             throw new SearchException($e->getMessage(), $e->getCode(), $e);
         }

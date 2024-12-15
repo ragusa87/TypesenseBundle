@@ -25,13 +25,13 @@ class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAcc
 
     /**
      * @param array<int, T>    $hydratedResults
-     * @param SearchResults<T> $results
+     * @param SearchResults<T> $searchResults
      *
      * @throws \Exception
      */
-    public function __construct(SearchResults $results, array $hydratedResults = [])
+    public function __construct(SearchResults $searchResults, array $hydratedResults = [])
     {
-        $this->data = $results->toArray();
+        $this->data = $searchResults->toArray();
         $this->setHydratedResults($hydratedResults);
     }
 
@@ -48,14 +48,18 @@ class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAcc
     }
 
     /**
-     * @return \Traversable<int|string, T>
+     * @return \Traversable<int, T>
      */
     public function getIterator(): \Traversable
     {
-        if (!$this->offsetExists('hydrated')) {
+        if (!$this->offsetExists('hydrated') || !is_array($this->data['hydrated'])) {
             return new \ArrayIterator([]);
         }
+        $ids = array_keys($this->data['hydrated']);
+        $ids = array_map('intval', $ids);
+        /** @var array<int,T> $values */
+        $values = array_values($this->data['hydrated']);
 
-        return new \ArrayIterator((array) $this->data['hydrated']);
+        return new \ArrayIterator(array_combine($ids, $values));
     }
 }

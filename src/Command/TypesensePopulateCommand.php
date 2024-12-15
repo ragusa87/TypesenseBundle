@@ -33,45 +33,45 @@ class TypesensePopulateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $symfonyStyle = new SymfonyStyle($input, $output);
 
         $count = $this->mapperLocator->count();
         if ($count === 0) {
-            $io->warning('No mappers found. Declare at least one service implementing '.MapperInterface::class);
+            $symfonyStyle->warning('No mappers found. Declare at least one service implementing '.MapperInterface::class);
 
             return Command::SUCCESS;
         }
 
-        $progress = new ProgressBar($output, 0);
+        $progressBar = new ProgressBar($output, 0);
 
         foreach ($this->mapperLocator->getMappers() as $shortName => $mapper) {
             $longName = $this->aliasName->getName($shortName);
 
-            $io->writeln('Creating collection '.$longName);
+            $symfonyStyle->writeln('Creating collection '.$longName);
             $this->populateService->createCollection($longName, $mapper);
 
             try {
-                $io->writeln('Filling collection '.$longName);
-                $progress->start($mapper->getDataCount());
-                $progress->display();
+                $symfonyStyle->writeln('Filling collection '.$longName);
+                $progressBar->start($mapper->getDataCount());
+                $progressBar->display();
                 foreach ($this->populateService->fillCollection($longName, $mapper) as $_) {
-                    $progress->advance();
+                    $progressBar->advance();
                 }
-                $progress->finish();
+                $progressBar->finish();
             } catch (\Exception $e) {
-                $io->error($e->getMessage());
+                $symfonyStyle->error($e->getMessage());
                 $this->populateService->deleteCollection($longName);
             } finally {
-                $progress->clear();
+                $progressBar->clear();
             }
 
             if ($this->aliasName->isAliasEnabled()) {
-                $io->writeln(sprintf('Aliasing collection %s to <info>%s</info>', $longName, $shortName));
+                $symfonyStyle->writeln(sprintf('Aliasing collection %s to <info>%s</info>', $longName, $shortName));
                 $this->aliasName->switch($shortName, $longName);
             }
         }
 
-        $io->success('Finished');
+        $symfonyStyle->success('Finished');
 
         return Command::SUCCESS;
     }

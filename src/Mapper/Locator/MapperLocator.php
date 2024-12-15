@@ -9,21 +9,21 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 readonly class MapperLocator implements MapperLocatorInterface
 {
     /**
-     * @param ServiceLocator<mixed> $mappers
+     * @param ServiceLocator<mixed> $serviceLocator
      */
-    public function __construct(private ServiceLocator $mappers)
+    public function __construct(private ServiceLocator $serviceLocator)
     {
     }
 
     public function has(string $name): bool
     {
-        return $this->mappers->has($name);
+        return $this->serviceLocator->has($name);
     }
 
     public function get(string $name): MapperInterface
     {
         try {
-            $service = $this->mappers->get($name);
+            $service = $this->serviceLocator->get($name);
         } catch (ContainerExceptionInterface $e) {
             throw new \InvalidArgumentException(sprintf('The service "%s" is not a valid mapper.', $name), 0, $e);
         }
@@ -41,9 +41,9 @@ readonly class MapperLocator implements MapperLocatorInterface
     public function getMappers(): \Generator
     {
         $mappers = [];
-        foreach (array_keys($this->mappers->getProvidedServices()) as $name) {
+        foreach (array_keys($this->serviceLocator->getProvidedServices()) as $name) {
             try {
-                $service = $this->mappers->get($name);
+                $service = $this->serviceLocator->get($name);
                 if (!$service instanceof MapperInterface) {
                     throw new \InvalidArgumentException(sprintf('The mapper "%s" must implement "%s".', $name, MapperInterface::class));
                 }
@@ -57,6 +57,6 @@ readonly class MapperLocator implements MapperLocatorInterface
 
     public function count(): int
     {
-        return count($this->mappers);
+        return count($this->serviceLocator);
     }
 }

@@ -8,9 +8,9 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 abstract class AbstractBibliotecaTypesenseBundle extends AbstractBundle
 {
-    public function configure(DefinitionConfigurator $definition): void
+    public function configure(DefinitionConfigurator $definitionConfigurator): void
     {
-        $definition->rootNode()
+        $definitionConfigurator->rootNode()
             ->children()
             ->arrayNode('typesense')
             ->info('Typesense server configuration')
@@ -34,12 +34,12 @@ abstract class AbstractBibliotecaTypesenseBundle extends AbstractBundle
             ->end()
             ->end();
 
-        $this->addCollectionsConfig($definition->rootNode());
+        $this->addCollectionsConfig($definitionConfigurator->rootNode());
     }
 
-    private function addCollectionsConfig(ArrayNodeDefinition $definition): void
+    private function addCollectionsConfig(ArrayNodeDefinition $arrayNodeDefinition): void
     {
-        $definition->children()->arrayNode('collections')
+        $arrayNodeDefinition->children()->arrayNode('collections')
             ->info('Collection definition')
             ->useAttributeAsKey('name')
             ->arrayPrototype()

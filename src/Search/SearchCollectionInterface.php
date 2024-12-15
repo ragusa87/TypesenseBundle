@@ -17,7 +17,7 @@ interface SearchCollectionInterface
      *
      * @throws SearchException
      */
-    public function search(SearchQuery $query): SearchResultsHydrated;
+    public function search(SearchQuery $searchQuery): SearchResultsHydrated;
 
-    public function searchRaw(SearchQuery $query): SearchResults;
+    public function searchRaw(SearchQuery $searchQuery): SearchResults;
 }

@@ -61,7 +61,7 @@ class SearchQuery implements SearchQueryInterface
         $this->stopwords = $stopwords === null || $stopwords === [] ? null : implode(',', $stopwords);
 
         // Check incompatible combinations
-        if ($this->vectorQuery !== null && $this->infix !== null) {
+        if ($this->vectorQuery instanceof VectorQueryInterface && $this->infix !== null) {
             throw new \InvalidArgumentException('Cannot set both infix and vectorQuery');
         }
     }
@@ -124,7 +124,7 @@ class SearchQuery implements SearchQueryInterface
             'stopwords' => $this->stopwords,
             'vector_query' => $this->vectorQuery?->toArray(),
             'exclude_fields' => $this->excludeFields,
-            'voice_query' => $this->voiceQuery ? (string) $this->voiceQuery : null,
+            'voice_query' => $this->voiceQuery instanceof VoiceQueryInterface ? (string) $this->voiceQuery : null,
         ], fn (mixed $value): bool => !is_null($value));
     }
 }

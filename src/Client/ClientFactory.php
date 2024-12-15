@@ -16,7 +16,7 @@ readonly class ClientFactory
         private string $uri,
         #[\SensitiveParameter]
         private string $apiKey,
-        private ?HttpClient $client,
+        private ?HttpClient $httpClient,
         private int $connectionTimeoutSeconds = 5,
         private array $defaultConfig = [],
     ) {
@@ -58,6 +58,6 @@ readonly class ClientFactory
 
     public function getClient(): HttpClient
     {
-        return $this->client ?? (new Psr18ClientDiscovery())->find();
+        return $this->httpClient ?? (new Psr18ClientDiscovery())->find();
     }
 }

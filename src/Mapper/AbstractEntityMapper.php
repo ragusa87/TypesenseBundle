@@ -12,10 +12,10 @@ use Doctrine\ORM\QueryBuilder;
 abstract readonly class AbstractEntityMapper implements MapperInterface
 {
     /**
-     * @param EntityRepository<T> $repository
+     * @param EntityRepository<T> $entityRepository
      */
     public function __construct(
-        private EntityRepository $repository,
+        private EntityRepository $entityRepository,
     ) {
     }
 
@@ -23,7 +23,7 @@ abstract readonly class AbstractEntityMapper implements MapperInterface
 
     public function getData(): \Generator
     {
-        $queryBuilder = $this->repository->createQueryBuilder('entity')
+        $queryBuilder = $this->entityRepository->createQueryBuilder('entity')
             ->select('entity')
             ->orderBy('entity.id', 'ASC');
 
@@ -39,7 +39,7 @@ abstract readonly class AbstractEntityMapper implements MapperInterface
 
     public function getDataCount(): ?int
     {
-        $queryBuilder = $this->repository->createQueryBuilder('entity')
+        $queryBuilder = $this->entityRepository->createQueryBuilder('entity')
             ->select('COUNT(distinct entity.id)');
 
         $this->alterQueryBuilder($queryBuilder);
