@@ -40,7 +40,7 @@ class HydrateSearchResult implements HydrateSearchResultInterface
                 return null;
             }
 
-            return (int) $result['document'];
+            return (int) $result['document'][$primaryKeyName];
         }, is_array($hits) ? $hits : []);
         $ids = array_filter($ids);
 
