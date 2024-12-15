@@ -9,6 +9,6 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
     ])
-    ->withSets([LevelSetList::UP_TO_PHP_82])
+    ->withSets([LevelSetList::UP_TO_PHP_81])
     ->withPreparedSets(deadCode: true, codeQuality: true, privatization: true, naming: true, doctrineCodeQuality: true, symfonyCodeQuality: true)
     ;

@@ -4,7 +4,7 @@
   "type": "symfony-bundle",
   "minimum-stability": "stable",
   "require": {
-    "php": ">=8.2",
+    "php": ">=8.1",
     "php-http/discovery": "^1.20",
     "psr/http-client": "^1.0",
     "psr/http-client-implementation": "*",

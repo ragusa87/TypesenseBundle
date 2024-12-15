@@ -9,13 +9,13 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * @template T of Object
  */
-abstract readonly class AbstractEntityMapper implements MapperInterface
+abstract class AbstractEntityMapper implements MapperInterface
 {
     /**
      * @param EntityRepository<T> $entityRepository
      */
     public function __construct(
-        private EntityRepository $entityRepository,
+        private readonly EntityRepository $entityRepository,
     ) {
     }
 

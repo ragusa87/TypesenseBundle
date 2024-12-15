@@ -7,18 +7,17 @@ use Psr\Http\Client\ClientInterface as HttpClient;
 use Typesense\Client;
 use Typesense\Exceptions\ConfigError;
 
-readonly class ClientFactory
+class ClientFactory
 {
     /**
      * @param array<string, mixed> $defaultConfig
      */
     public function __construct(
-        private string $uri,
-        #[\SensitiveParameter]
-        private string $apiKey,
-        private ?HttpClient $httpClient,
-        private int $connectionTimeoutSeconds = 5,
-        private array $defaultConfig = [],
+        private readonly string $uri,
+        #[\SensitiveParameter] private readonly string $apiKey,
+        private readonly ?HttpClient $httpClient,
+        private readonly int $connectionTimeoutSeconds = 5,
+        private readonly array $defaultConfig = [],
     ) {
     }
 
