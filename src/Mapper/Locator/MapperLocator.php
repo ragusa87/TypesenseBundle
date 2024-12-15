@@ -6,12 +6,12 @@ use Biblioteca\TypesenseBundle\Mapper\MapperInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
-readonly class MapperLocator implements MapperLocatorInterface
+class MapperLocator implements MapperLocatorInterface
 {
     /**
      * @param ServiceLocator<mixed> $serviceLocator
      */
-    public function __construct(private ServiceLocator $serviceLocator)
+    public function __construct(private readonly ServiceLocator $serviceLocator)
     {
     }
 

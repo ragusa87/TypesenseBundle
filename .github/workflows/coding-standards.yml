@@ -16,8 +16,8 @@ jobs:
       fail-fast: true
       matrix:
         php-version:
-          - "8.3"
-          - "8.4"
+          - "8.1"
+          - "8.2"
         operating-system: [ubuntu-24.04]
         composer-versions:
           - lowest
