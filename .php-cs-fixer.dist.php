@@ -6,6 +6,7 @@
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__.'/src')
     ->in(__DIR__.'/tests')
+    ->exclude('kernel')
 ;
 
 return (new PhpCsFixer\Config('typesense-bundle'))

@@ -4,6 +4,8 @@ parameters:
     paths:
         - src/
         - tests/
+    excludePaths:
+        - tests/kernel/*
     ignoreErrors:
         -
            message: '#(.*)#'

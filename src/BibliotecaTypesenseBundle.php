@@ -2,7 +2,7 @@
 
 namespace Biblioteca\TypesenseBundle;
 
-use Biblioteca\TypesenseBundle\Mapper\MapperInterface;
+use Biblioteca\TypesenseBundle\Mapper\StandaloneMapperInterface;
 use Biblioteca\TypesenseBundle\Search\SearchCollectionInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -15,8 +15,8 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
      */
     public function loadExtension(array $config, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->registerForAutoconfiguration(MapperInterface::class)
-            ->addTag(MapperInterface::TAG_NAME);
+        $containerBuilder->registerForAutoconfiguration(StandaloneMapperInterface::class)
+            ->addTag(StandaloneMapperInterface::TAG_NAME);
 
         /** @var iterable<string,mixed> $typesenseConfig */
         $typesenseConfig = $config['typesense'];
@@ -30,25 +30,54 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
     }
 
     /**
-     * @param array<string, array{entity: string, name?: string}> $collections
+     * @param array<string, array{entity: string, name?: string, mapping?: array{'fields'?: array<string,mixed>}}> $collections
      */
     public function loadCollection(array $collections, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
+        $entityMapping = [];
+        $entityServiceLocator = [];
         foreach ($collections as $name => $collection) {
+            // Map the entity to the collection name
+            $entityMapping[$collection['entity']][] = $name;
+
+            // Create a service that will be used to search the specific collection
             $id = 'biblioteca_typesense.collection.'.$name;
             $containerConfigurator->services()
                 ->set($id)
                 ->parent('biblioteca_typesense.collection.abstract')
-                ->arg(0, $name)
-                ->arg(1, $collection['entity'])
+                ->bind('$collectionName', $name)
+                ->bind('$entityClass', $collection['entity'])
                 ->public()
                 ->autowire();
 
-            // You can inject ExecuteCollectionSearchResultInterface in your service with the name "SearchBooks", given the collection name is "books".
+            // You can inject ExecuteCollectionSearchResultInterface in your service
+            // with the name "SearchBooks", given the collection name is "books".
             $bindingName = '$'.$this->toCamelCase('Search '.$name);
             $containerConfigurator->services()->defaults()
                 ->alias(SearchCollectionInterface::class.' '.$bindingName, new Reference($id));
+
+            if (($collection['mapping']['fields'] ?? []) === []) {
+                continue;
+            }
+
+            // If the configuration has a mapping, create a service to do the mapping automatically
+            $id = 'biblioteca_typesense.entity_mapper.'.$name;
+            $containerConfigurator->services()
+                ->set($id)
+                ->parent('biblioteca_typesense.entity_mapper.abstract')
+                ->bind('$className', $collection['entity'])
+                ->bind('$mappingConfig', $collection['mapping'])
+                // The mapper attribute is used as index and reference the collection.
+                ->tag(StandaloneMapperInterface::TAG_NAME, ['mapper' => $name])
+                ->private()
+                ->autowire();
+
+            // Make sure the automatic mapper is available in the service locator
+            $entityServiceLocator[$name] = new Reference($id);
         }
+
+        // Set the entity mapping parameter
+        $containerConfigurator->parameters()->set('biblioteca_typesense.config.entity_mapping', $entityMapping);
     }
 
     public function toCamelCase(string $input): string

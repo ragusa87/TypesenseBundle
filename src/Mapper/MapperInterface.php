@@ -6,10 +6,6 @@ use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
 
 interface MapperInterface
 {
-    public const TAG_NAME = 'biblioteca_typesense.mapper';
-
-    public static function getName(): string;
-
     public function getMapping(): MappingInterface;
 
     /**

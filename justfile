@@ -35,5 +35,8 @@ phpunit *args="":
 phpunit-xdebug *args="":
     composer phpunit-xdebug -- {{args}}
 
+init-db *args="":
+    composer run init-db -- {{args}}
+
 phpstan *args="":
     composer phpstan -- {{args}}
