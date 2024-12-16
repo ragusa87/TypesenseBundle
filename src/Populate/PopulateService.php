@@ -51,4 +51,32 @@ class PopulateService
             yield from $items;
         }
     }
+
+    /**
+     * @param array<string,mixed> $data
+     *
+     * @return \Generator<array<string,mixed>>
+     */
+    public function fillData(string $name, array $data): \Generator
+    {
+        $collection = $this->client->getCollection($name);
+        $collection->documents->upsert($data);
+        yield $data;
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     */
+    public function deleteData(string $name, array $data, ?string $id = null): void
+    {
+        if (isset($data['id']) && $id === null) {
+            $id = $data['id'];
+        }
+
+        if ($id === null) {
+            throw new \InvalidArgumentException('Entity must be transformed with an \'id\' field');
+        }
+
+        $this->client->getCollection($name)->documents[$id]->delete();
+    }
 }

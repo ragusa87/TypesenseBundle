@@ -34,7 +34,9 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
      */
     public function loadCollection(array $collections, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
+        $entityMapping = [];
         foreach ($collections as $name => $collection) {
+            $entityMapping[$collection['entity']][] = $name;
             $id = 'biblioteca_typesense.collection.'.$name;
             $containerConfigurator->services()
                 ->set($id)
@@ -48,6 +50,9 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
             $bindingName = '$'.$this->toCamelCase('Search '.$name);
             $containerConfigurator->services()->defaults()
                 ->alias(SearchCollectionInterface::class.' '.$bindingName, new Reference($id));
+
+            // Set the entity mapping parameter
+            $containerConfigurator->parameters()->set('biblioteca_typesense.config.entity_mapping', $entityMapping);
         }
     }
 
