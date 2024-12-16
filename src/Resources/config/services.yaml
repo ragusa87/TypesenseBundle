@@ -4,25 +4,32 @@ services:
     autoconfigure: true
     public: false
 
-  Biblioteca\TypesenseBundle\Client\ClientFactory:
+  Biblioteca\TypesenseBundle\Client\ClientSingletonFactory:
     arguments:
       $uri: '%biblioteca_typesense.config.uri%'
       $apiKey: '%biblioteca_typesense.config.key%'
       $connectionTimeoutSeconds: '%biblioteca_typesense.config.connection_timeout_seconds%'
 
   Biblioteca\TypesenseBundle\Client\ClientInterface:
-    factory: '@Biblioteca\TypesenseBundle\Client\ClientFactory'
+    factory: '@Biblioteca\TypesenseBundle\Client\ClientSingletonFactory'
+    lazy: true
 
   Biblioteca\TypesenseBundle\Populate\PopulateService: ~
+
+  Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverter: ~
+  Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverterInterface: '@Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverter'
+  Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractor: ~
+  Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractorInterface: '@Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractor'
 
   Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator:
     public: true
     arguments:
-      $serviceLocator: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\Mapper\MapperInterface::TAG_NAME, default_index_method: getName }
-
+      $serviceLocator: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\Mapper\StandaloneMapperInterface::TAG_NAME, default_index_method: getName }
+      $entityMapping: '%biblioteca_typesense.config.entity_mapping%'
   Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface: '@Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator'
 
-  Biblioteca\TypesenseBundle\CollectionName\AliasName: ~
+  Biblioteca\TypesenseBundle\CollectionAlias\CollectionAlias: ~
+  Biblioteca\TypesenseBundle\CollectionAlias\CollectionAliasInterface:  '@Biblioteca\TypesenseBundle\CollectionAlias\CollectionAlias'
 
   Biblioteca\TypesenseBundle\Command\:
     resource: '../../Command/'
@@ -32,12 +39,20 @@ services:
     class: Biblioteca\TypesenseBundle\Search\SearchCollection
     abstract: true
 
-  Biblioteca\TypesenseBundle\Search\ExecuteSearchQuery:
-    public: true
+  biblioteca_typesense.entity_mapper.abstract:
+    class: Biblioteca\TypesenseBundle\Mapper\Entity\EntityMapper
+    abstract: true
+
+  Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifier: ~
+  Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface: '@Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifier'
 
   Biblioteca\TypesenseBundle\Search\Search: ~
 
   Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResult:
     autowire: true
 
-  Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResultInterface: "@Biblioteca\\TypesenseBundle\\Search\\Hydrate\\HydrateSearchResult"
+  Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResultInterface: '@Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResult'
+
+  Biblioteca\TypesenseBundle\EventSubscriber\IndexCollectionSubscriber:
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }

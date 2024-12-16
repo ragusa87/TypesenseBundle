@@ -7,18 +7,15 @@ use Psr\Http\Client\ClientInterface as HttpClient;
 use Typesense\Client;
 use Typesense\Exceptions\ConfigError;
 
-class ClientFactory
+class ClientSingletonFactory
 {
+    private ?ClientInterface $client = null;
+
     /**
      * @param array<string, mixed> $defaultConfig
      */
-    public function __construct(
-        private readonly string $uri,
-        #[\SensitiveParameter] private readonly string $apiKey,
-        private readonly ?HttpClient $httpClient,
-        private readonly int $connectionTimeoutSeconds = 5,
-        private readonly array $defaultConfig = [],
-    ) {
+    public function __construct(private readonly string $uri, #[\SensitiveParameter] private readonly string $apiKey, private readonly ?HttpClient $httpClient, private readonly int $connectionTimeoutSeconds = 5, private readonly array $defaultConfig = [])
+    {
     }
 
     /**
@@ -26,7 +23,18 @@ class ClientFactory
      */
     public function __invoke(): ClientInterface
     {
-        return new ClientAdapter(new Client($this->getConfiguration()));
+        if ($this->client instanceof ClientInterface) {
+            return $this->client;
+        }
+
+        $this->client = new ClientAdapter(new Client($this->getConfiguration()));
+
+        return $this->client;
+    }
+
+    public function reset(): void
+    {
+        $this->client = null;
     }
 
     /**
