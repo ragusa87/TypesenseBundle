@@ -3,13 +3,13 @@
 namespace Biblioteca\TypesenseBundle\Tests\Mapper\Locator;
 
 use Biblioteca;
+use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
 use Biblioteca\TypesenseBundle\Mapper\Locator\InvalidTypeMapperException;
 use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
-use Biblioteca\TypesenseBundle\Tests\Mapper\MyMapper;
+use Biblioteca\TypesenseBundle\Tests\Mapper\ProductMapper;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator
- */
+#[CoversClass(FieldMapping::class)]
 class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
 {
     public function testLocatorMyMapper(): void
@@ -21,8 +21,8 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
         $this->assertInstanceOf(MapperLocator::class, $locator);
 
         $this->assertSame(1, $locator->count(), 'The locator should have 1 service.');
-        $this->assertTrue($locator->has('myMapper'), 'The locator should have the myMapper service.');
-        $this->assertInstanceOf(MyMapper::class, $locator->get('myMapper'), 'The locator should return an instance of MyMapper.');
+        $this->assertTrue($locator->has('products'), 'The locator should have the products service.');
+        $this->assertInstanceOf(ProductMapper::class, $locator->get('products'), 'The locator should return an instance of ProductMapper.');
     }
 
     public function testLocatorUnknownService(): void
@@ -63,7 +63,7 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
         $locator = $this->get(MapperLocator::class);
         $result = iterator_to_array($locator->getMappers());
 
-        $this->assertArrayHasKey('myMapper', $result);
-        $this->assertInstanceOf(MyMapper::class, $result['myMapper']);
+        $this->assertArrayHasKey('products', $result);
+        $this->assertInstanceOf(ProductMapper::class, $result['products']);
     }
 }

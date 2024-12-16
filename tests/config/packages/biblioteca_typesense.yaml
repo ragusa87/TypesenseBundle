@@ -7,5 +7,10 @@ biblioteca_typesense:
     key: '%env(TYPESENSE_KEY)%'
   collections:
     books:
-      entity: 'App\Entity\Book'
-      name: 'books'
+      entity: 'Biblioteca\TypesenseBundle\Tests\Entity\Product'
+      name: 'products'
+services:
+  Biblioteca\TypesenseBundle\Tests\Mapper\ProductMapper:
+    autowire: true
+    public: true
+    tags: [ 'biblioteca_typesense.mapper' ]

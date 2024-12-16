@@ -4,9 +4,31 @@ namespace Biblioteca\TypesenseBundle\Mapper\Fields;
 
 use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
 
+/**
+ * @phpstan-type FieldMappingArray array{
+ *  'name'?: string,
+ *  'type'?: string,
+ *  'facet'?: bool|null,
+ *  'optional'?:bool|null,
+ *  'drop'?:bool|null,
+ *  'index'?:bool|null,
+ *  'infix'?:bool|null,
+ *  'rangeIndex'?:bool|null,
+ *  'sort'?:bool|null,
+ *  'stem'?:bool|null,
+ *  'store'?:bool|null,
+ *  'numDim'?:int|null,
+ *  'locale'?:string|null,
+ *  'reference'?:string|null,
+ *  'entity_attribute'?:string|null,
+ *  'vecDist'?:string|null
+ * }
+ */
 class FieldMapping implements FieldMappingInterface
 {
     public string $type;
+
+    public ?string $entityAttribute = null;
 
     public function __construct(
         public string $name,
@@ -57,5 +79,43 @@ class FieldMapping implements FieldMappingInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getEntityAttribute(): ?string
+    {
+        return $this->entityAttribute;
+    }
+
+    /**
+     * @param FieldMappingArray $config
+     */
+    public static function fromArray(array $config): self
+    {
+        $result = new self(
+            $config['name'] ?? throw new \InvalidArgumentException('Name is required'),
+            $config['type'] ?? throw new \InvalidArgumentException('Type is required'),
+            $config['facet'] ?? null,
+            $config['optional'] ?? null,
+            $config['drop'] ?? null,
+            $config['index'] ?? null,
+            $config['infix'] ?? null,
+            $config['rangeIndex'] ?? null,
+            $config['sort'] ?? null,
+            $config['stem'] ?? null,
+            $config['store'] ?? null,
+            $config['numDim'] ?? null,
+            $config['locale'] ?? null,
+            $config['reference'] ?? null,
+            $config['vecDist'] ?? null,
+        );
+
+        $result->entityAttribute = $config['entity_attribute'] ?? null;
+
+        return $result;
+    }
+
+    public function isOptional(): bool
+    {
+        return $this->optional ?? true;
     }
 }

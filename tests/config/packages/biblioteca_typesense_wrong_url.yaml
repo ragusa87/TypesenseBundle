@@ -4,5 +4,5 @@ biblioteca_typesense:
     key: 'mykey'
   collections:
     books:
-      entity: 'App\Entity\Book'
-      name: 'books'
+      entity: 'Biblioteca\TypesenseBundle\Tests\Entity\Product'
+      name: 'products'

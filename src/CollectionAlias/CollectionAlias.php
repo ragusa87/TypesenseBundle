@@ -1,13 +1,12 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\CollectionName;
+namespace Biblioteca\TypesenseBundle\CollectionAlias;
 
 use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\Exception\AliasException;
 use Http\Client\Exception;
 use Typesense\Exceptions\TypesenseClientError;
 
-class AliasName implements NameInterface
+class CollectionAlias implements CollectionAliasInterface
 {
     public function __construct(
         private readonly ClientInterface $client,
@@ -18,17 +17,10 @@ class AliasName implements NameInterface
     public function getName(string $name): string
     {
         $name = sprintf($this->collectionTemplate, $name);
-        if (!$this->isAliasEnabled()) {
-            return $name;
-        }
+
         $date = (new \DateTimeImmutable())->format('Y-m-d-H-i-s');
 
         return sprintf('%s-%s', $name, $date);
-    }
-
-    public function isAliasEnabled(): bool
-    {
-        return true;
     }
 
     /**
@@ -36,10 +28,6 @@ class AliasName implements NameInterface
      */
     public function switch(string $shortName, string $longName): void
     {
-        if (!$this->isAliasEnabled()) {
-            return;
-        }
-
         try {
             // If alias was previously a collection, we delete it (to make sure we can create the alias)
             $collection = $this->client->getCollection($shortName);
