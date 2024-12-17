@@ -9,8 +9,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class KernelTestCase extends BaseKernelTestCase
 {
-    public const CONFIG_KEY = 'biblioteca_typesense';
-
     /**
      * @return class-string<KernelInterface>
      */
@@ -26,9 +24,6 @@ class KernelTestCase extends BaseKernelTestCase
     {
         static::$class ??= static::getKernelClass();
 
-        if (false === in_array(self::CONFIG_KEY, array_keys($options['configs'] ?? []))) {
-            $options['configs'][self::CONFIG_KEY] = __DIR__.'/config/packages/biblioteca_typesense.yaml';
-        }
         $env = $options['environment'] ?? $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'test';
         $debug = $options['debug'] ?? $_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? true;
 
@@ -55,7 +50,7 @@ class KernelTestCase extends BaseKernelTestCase
     public function get(string $id): object
     {
         assert(self::$kernel !== null);
-        $service = self::$kernel->getContainer()->get($id);
+        $service = static::getContainer()->get($id);
         if (!$service instanceof $id) {
             throw new \InvalidArgumentException(sprintf('The service "%s" should be in the container.', $id));
         }

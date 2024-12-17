@@ -12,6 +12,7 @@ services:
 
   Biblioteca\TypesenseBundle\Client\ClientInterface:
     factory: '@Biblioteca\TypesenseBundle\Client\ClientFactory'
+    lazy: true
 
   Biblioteca\TypesenseBundle\Populate\PopulateService: ~
 
