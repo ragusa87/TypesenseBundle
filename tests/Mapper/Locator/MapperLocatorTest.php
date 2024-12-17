@@ -3,13 +3,13 @@
 namespace Biblioteca\TypesenseBundle\Tests\Mapper\Locator;
 
 use Biblioteca;
+use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
 use Biblioteca\TypesenseBundle\Mapper\Locator\InvalidTypeMapperException;
 use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
 use Biblioteca\TypesenseBundle\Tests\Mapper\MyMapper;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator
- */
+#[CoversClass(FieldMapping::class)]
 class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
 {
     public function testLocatorMyMapper(): void
