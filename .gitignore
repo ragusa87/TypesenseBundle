@@ -9,3 +9,4 @@ tests/coverage
 .phpunit.cache
 tests/kernel
 !tests/kernel/.gitkeep
+docker-compose.override.yml
