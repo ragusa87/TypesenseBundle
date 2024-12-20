@@ -8,8 +8,10 @@ use Doctrine\ORM\QueryBuilder;
 
 /**
  * @template T of Object
+ *
+ * @implements EntityMapperInterface<T>
  */
-abstract class AbstractEntityMapper implements MapperInterface
+abstract class AbstractEntityMapper implements EntityMapperInterface
 {
     /**
      * @param EntityRepository<T> $entityRepository
@@ -48,13 +50,18 @@ abstract class AbstractEntityMapper implements MapperInterface
     }
 
     /**
-     * @param object&T $data
+     * @param object&T $entity
      *
      * @return array<string, mixed>
      */
-    abstract public function transform(object $data): array;
+    abstract public function transform(object $entity): array;
 
     protected function alterQueryBuilder(QueryBuilder $queryBuilder): void
     {
+    }
+
+    public function support(object $entity): bool
+    {
+        return $entity::class === $this->entityRepository->getClassName();
     }
 }

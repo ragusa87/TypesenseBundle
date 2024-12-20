@@ -4,6 +4,8 @@ namespace Biblioteca\TypesenseBundle\Tests;
 
 use Biblioteca\TypesenseBundle\BibliotecaTypesenseBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -13,6 +15,7 @@ use Symfony\Component\HttpKernel\Kernel;
 class TestKernel extends Kernel
 {
     use MicroKernelTrait;
+    public const CONFIG_KEY = 'biblioteca_typesense';
 
     /**
      * @param array{'configs'?: array{'biblioteca_typesense'?:string}, 'bundles'?:string[]} $settings
@@ -33,6 +36,8 @@ class TestKernel extends Kernel
         $bundles = array_merge([
             DoctrineBundle::class,
             BibliotecaTypesenseBundle::class,
+            FrameworkBundle::class,
+            DoctrineFixturesBundle::class,
         ], $this->settings['bundles'] ?? []);
 
         foreach ($bundles as $bundleClass) {
@@ -48,8 +53,11 @@ class TestKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $this->settings['configs'][] = __DIR__.'/config/packages/doctrine.yaml';
+        $this->settings['configs'][] = __DIR__.'/config/packages/framework.yaml';
         $this->settings['configs'][] = __DIR__.'/config/services.yaml';
-
+        if (false === in_array(self::CONFIG_KEY, array_keys($this->settings['configs']))) {
+            $this->settings['configs'][self::CONFIG_KEY] = __DIR__.'/config/packages/biblioteca_typesense.yaml';
+        }
         foreach ($this->settings['configs'] as $config) {
             $loader->load($config);
         }

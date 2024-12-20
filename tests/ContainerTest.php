@@ -37,9 +37,8 @@ class ContainerTest extends KernelTestCase
 
     public function testClientFactoryInvalidUrl(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
         $kernel = self::bootKernel([
-            'configs' => [self::CONFIG_KEY => __DIR__.'/config/packages/biblioteca_typesense_wrong_url.yaml'],
+            'configs' => [TestKernel::CONFIG_KEY => __DIR__.'/config/packages/biblioteca_typesense_wrong_url.yaml'],
         ]);
         $container = $kernel->getContainer();
 
@@ -47,5 +46,16 @@ class ContainerTest extends KernelTestCase
 
         $service = $container->get(ServiceWithClient::class);
         $this->assertInstanceOf(ServiceWithClient::class, $service);
+
+        try {
+            // https://github.com/symfony/symfony/issues/53812 => can't use expectException yet.
+            $service->getClient()->getCollection('books');
+        } catch (\InvalidArgumentException $e) {
+            $this->assertSame('Invalid URI ./s?a=12&b=12.3.3.4:1233', $e->getMessage());
+
+            return;
+        }
+
+        $this->fail('An \InvalidArgumentException has not been raised.');
     }
 }

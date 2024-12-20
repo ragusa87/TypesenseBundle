@@ -4,11 +4,10 @@ namespace Biblioteca\TypesenseBundle\Tests\Mapper\Fields;
 
 use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
 use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping
- */
+#[CoversClass(FieldMapping::class)]
 class FieldMappingTest extends TestCase
 {
     public function testFieldMapping(): void
