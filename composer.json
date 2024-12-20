@@ -12,7 +12,7 @@
     "symfony/framework-bundle": "^6.4|^7.0",
     "symfony/http-client": "^7.2",
     "symfony/http-kernel": "^6.4|^7.0",
-    "typesense/typesense-php": "^4.9"
+    "typesense/typesense-php": "dev-http-clients"
   },
   "require-dev": {
     "doctrine/doctrine-bundle": "^2.0",
@@ -25,13 +25,11 @@
     "symfony/phpunit-bridge": "^7.0",
     "symfony/yaml": "^7.0"
   },
-  "conflict": {
-    "php-http/httplug": "<1.5"
-  },
   "config": {
     "sort-packages": true,
     "allow-plugins": {
-      "php-http/discovery": true
+      "php-http/discovery": true,
+      "symfony/runtime": true
     }
   },
   "autoload": {
@@ -44,6 +42,12 @@
       "Biblioteca\\TypesenseBundle\\Tests\\": "tests"
     }
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/tharropoulos/typesense-php"
+    }
+  ],
   "scripts": {
     "auto-scripts": {
       "cache:clear": "symfony-cmd"
