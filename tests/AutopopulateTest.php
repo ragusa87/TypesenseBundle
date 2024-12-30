@@ -11,13 +11,13 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
     private function getLastId(): int
     {
         // TODO Find a clever way to have the last ID
-        $em = $this->get(Doctrine\ORM\EntityManagerInterface::class);
-        $p = new Product();
-        $p->name = 'lastId';
-        $em->persist($p);
-        $em->flush();
+        $entityManager = $this->get(Doctrine\ORM\EntityManagerInterface::class);
+        $product = new Product();
+        $product->name = 'lastId';
+        $entityManager->persist($product);
+        $entityManager->flush();
 
-        return $p->id ?? 0;
+        return $product->id ?? 0;
     }
 
     public function setUp(): void
@@ -28,8 +28,8 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
         $this->lastId = $this->getLastId();
 
         // Each test only keep the fixtures
-        $em = $this->get(Doctrine\ORM\EntityManagerInterface::class);
-        $em->getRepository(Product::class)->createQueryBuilder('p')
+        $entityManager = $this->get(Doctrine\ORM\EntityManagerInterface::class);
+        $entityManager->getRepository(Product::class)->createQueryBuilder('p')
             ->delete()
             ->where('p.id > :max')
             ->getQuery()
@@ -37,9 +37,9 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
             ->execute();
 
         // Reset product 1's name
-        $em->getRepository(Product::class)->findOneBy(['id' => 1])
+        $entityManager->getRepository(Product::class)->findOneBy(['id' => 1])
             ?->setName('Product 1');
-        $em->flush();
+        $entityManager->flush();
 
         self::ensureKernelShutdown();
     }
@@ -59,12 +59,12 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
 
         static::getContainer()->set(PopulateService::class, $populateMock);
 
-        $n = new Product();
-        $n->name = 'test';
+        $product = new Product();
+        $product->name = 'test';
 
-        $em = $this->get(Doctrine\ORM\EntityManagerInterface::class);
-        $em->persist($n);
-        $em->flush();
+        $entityManager = $this->get(Doctrine\ORM\EntityManagerInterface::class);
+        $entityManager->persist($product);
+        $entityManager->flush();
 
         $this->assertTrue(true); // @phpstan-ignore-line The mock does the assertion, this remove a warning
     }
@@ -84,12 +84,12 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
 
         static::getContainer()->set(PopulateService::class, $populateMock);
 
-        $em = $this->get(Doctrine\ORM\EntityManagerInterface::class);
-        $product = $em->getRepository(Product::class)->findOneBy(['id' => 1]);
+        $entityManager = $this->get(Doctrine\ORM\EntityManagerInterface::class);
+        $product = $entityManager->getRepository(Product::class)->findOneBy(['id' => 1]);
         $this->assertNotNull($product);
 
         $product->name = $name;
-        $em->flush();
+        $entityManager->flush();
 
         $this->assertTrue(true); // @phpstan-ignore-line The mock does the assertion, this remove a warning
     }

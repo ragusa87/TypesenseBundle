@@ -2,7 +2,7 @@
 
 use Symfony\Component\ErrorHandler\ErrorHandler;
 
-require_once 'vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 (new Symfony\Component\Dotenv\Dotenv())->loadEnv(__DIR__.'/../.env.test');
 

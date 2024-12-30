@@ -11,16 +11,16 @@ class MapperLocatorTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $locator = $this->get(MapperLocator::class);
-        $this->assertTrue($locator->has('products'));
+        $mapperLocator = $this->get(MapperLocator::class);
+        $this->assertTrue($mapperLocator->has('products'));
     }
 
     public function testGetMappers(): void
     {
         self::bootKernel();
 
-        $locator = $this->get(MapperLocator::class);
-        $mappers = iterator_to_array($locator->getMappers());
+        $mapperLocator = $this->get(MapperLocator::class);
+        $mappers = iterator_to_array($mapperLocator->getMappers());
 
         $this->assertArrayHasKey('products', $mappers);
     }
@@ -29,17 +29,17 @@ class MapperLocatorTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $locator = $this->get(MapperLocator::class);
-        $this->assertSame(1, $locator->count());
+        $mapperLocator = $this->get(MapperLocator::class);
+        $this->assertSame(1, $mapperLocator->count());
     }
 
     public function testGetUnknown(): void
     {
         self::bootKernel();
 
-        $locator = $this->get(MapperLocator::class);
+        $mapperLocator = $this->get(MapperLocator::class);
         try {
-            $locator->get('unknown');
+            $mapperLocator->get('unknown');
         } catch (\InvalidArgumentException $e) {
             $this->assertStringStartsWith('The mapping service "unknown" is not found, do you implement ', $e->getMessage());
 
