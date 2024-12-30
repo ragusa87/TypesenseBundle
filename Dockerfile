@@ -1,4 +1,5 @@
-FROM php:8.3-cli
+ARG PHP_VERSION=8.3
+FROM php:${PHP_VERSION}-cli
 RUN apt-get update && apt-get install -y git unzip && rm -Rf /var/lib/apt/lists/*
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer

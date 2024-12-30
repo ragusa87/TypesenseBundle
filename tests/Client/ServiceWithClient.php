@@ -5,11 +5,11 @@ namespace Biblioteca\TypesenseBundle\Tests\Client;
 use Biblioteca\TypesenseBundle\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 
-readonly class ServiceWithClient
+class ServiceWithClient
 {
     public function __construct(
-        private ClientInterface $client,
-        public LoggerInterface $logger,
+        private readonly ClientInterface $client,
+        public readonly LoggerInterface $logger,
     ) {
         $logger->debug(
             'ServiceWithClient::__construct',
