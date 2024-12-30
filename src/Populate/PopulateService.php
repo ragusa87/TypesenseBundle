@@ -9,6 +9,7 @@ use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
 use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
 use Http\Client\Exception;
 use Typesense\Collection;
+use Typesense\Exceptions\ObjectNotFound;
 use Typesense\Exceptions\TypesenseClientError;
 
 class PopulateService
@@ -68,19 +69,21 @@ class PopulateService
     }
 
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>|array{'id': string} $data
+     *
+     * @throws \InvalidArgumentException The data has no id key
      */
-    public function deleteData(string $name, array $data, ?string $id = null): void
+    public function deleteData(string $name, array $data): void
     {
-        if (isset($data['id']) && $id === null) {
-            $id = $data['id'];
+        if (!isset($data['id']) || !is_string($data['id'])) {
+            throw new \InvalidArgumentException(sprintf('Object must contains an "id" as string to be deleted in collection %s', $name));
         }
 
-        if ($id === null) {
-            throw new \InvalidArgumentException('Entity must be transformed with an \'id\' field');
+        try {
+            $this->client->getCollection($name)->documents[$data['id']]->delete();
+        } catch (ObjectNotFound) {
+            // The object is not in the index, so nothing to remove.
         }
-
-        $this->client->getCollection($name)->documents[$id]->delete();
     }
 
     /**
