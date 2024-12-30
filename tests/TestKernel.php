@@ -40,11 +40,11 @@ class TestKernel extends Kernel
             DoctrineFixturesBundle::class,
         ], $this->settings['bundles'] ?? []);
 
-        foreach ($bundles as $bundleClass) {
-            $instance = new $bundleClass();
+        foreach ($bundles as $bundle) {
+            $instance = new $bundle();
 
             if (!$instance instanceof BundleInterface) {
-                throw new \InvalidArgumentException(sprintf('Bundle %s must be an instance of %s', get_class($instance), BundleInterface::class));
+                throw new \InvalidArgumentException(sprintf('Bundle %s must be an instance of %s', $instance::class, BundleInterface::class));
             }
             yield $instance;
         }

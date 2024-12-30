@@ -28,10 +28,10 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
     public function testLocatorUnknownService(): void
     {
         self::bootKernel();
-        $locator = $this->get(MapperLocator::class);
+        $mapperLocator = $this->get(MapperLocator::class);
 
         $this->expectException(\InvalidArgumentException::class);
-        $locator->get('unknown');
+        $mapperLocator->get('unknown');
     }
 
     public function testLocatorInstanceOfIssue(): void
@@ -41,8 +41,8 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
             'configs' => [dirname(__DIR__, 2).'/config/services_with_wrong_mapper.yaml'],
         ]);
 
-        $locator = $this->get(MapperLocator::class);
-        $locator->get('myInvalidMapper');
+        $mapperLocator = $this->get(MapperLocator::class);
+        $mapperLocator->get('myInvalidMapper');
     }
 
     public function testLocatorGetMappersInstanceOfIssue(): void
@@ -52,16 +52,16 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
             'configs' => [dirname(__DIR__, 2).'/config/services_with_wrong_mapper.yaml'],
         ]);
 
-        $locator = $this->get(MapperLocator::class);
-        iterator_to_array($locator->getMappers());
+        $mapperLocator = $this->get(MapperLocator::class);
+        iterator_to_array($mapperLocator->getMappers());
     }
 
     public function testLocatorGetMappers(): void
     {
         self::bootKernel();
 
-        $locator = $this->get(MapperLocator::class);
-        $result = iterator_to_array($locator->getMappers());
+        $mapperLocator = $this->get(MapperLocator::class);
+        $result = iterator_to_array($mapperLocator->getMappers());
 
         $this->assertArrayHasKey('products', $result);
         $this->assertInstanceOf(ProductMapper::class, $result['products']);

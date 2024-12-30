@@ -17,19 +17,19 @@ class EntityIdentifierTest extends KernelTestCase
 
         $product = new Product();
         $product->name = self::PRODUCT_GET_IDENTIFIER;
-        $em = $this->get(EntityManagerInterface::class);
-        $em->persist($product);
-        $em->flush();
+        $entityManager = $this->get(EntityManagerInterface::class);
+        $entityManager->persist($product);
+        $entityManager->flush();
 
-        $identifier = $this->get(EntityIdentifier::class);
+        $entityIdentifier = $this->get(EntityIdentifier::class);
 
-        $this->assertSame(['id' => (string) $product->id], $identifier->getIdentifiersValue($product));
+        $this->assertSame(['id' => (string) $product->id], $entityIdentifier->getIdentifiersValue($product));
     }
 
     public function tearDown(): void
     {
-        $em = $this->get(EntityManagerInterface::class);
-        $em->getRepository(Product::class)->createQueryBuilder('p')
+        $entityManager = $this->get(EntityManagerInterface::class);
+        $entityManager->getRepository(Product::class)->createQueryBuilder('p')
             ->delete()
             ->where('p.name = :name')
             ->getQuery()

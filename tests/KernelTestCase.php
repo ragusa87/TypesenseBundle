@@ -48,7 +48,6 @@ class KernelTestCase extends BaseKernelTestCase
      */
     public function get(string $id): object
     {
-        assert(self::$kernel !== null);
         $service = static::getContainer()->get($id);
         if (!$service instanceof $id) {
             throw new \InvalidArgumentException(sprintf('The service "%s" should be in the container.', $id));
