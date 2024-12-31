@@ -1,5 +1,5 @@
 
-name: "Coding Standards"
+name: "coding-standards"
 permissions:
   checks: write
   pull-requests: write
@@ -10,7 +10,7 @@ on:
 
 jobs:
   coding-standards:
-    name: "Coding Standards"
+    name: "coding-standards"
     runs-on: ${{ matrix.operating-system }} 
     strategy:
       fail-fast: true
