@@ -10,3 +10,5 @@ tests/coverage
 tests/kernel
 !tests/kernel/.gitkeep
 docker-compose.override.yml
+doc/public
+!doc/public/.gitkeep
