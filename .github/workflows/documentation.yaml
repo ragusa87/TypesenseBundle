@@ -6,13 +6,59 @@ on:
     workflows: ["coding-standards"]
     types:
       - completed
+    branches:
+      - "*"
+
 jobs:
   documentation:
-    name: "documentation"
     runs-on: "ubuntu-24.04"
+    permissions:
+      contents: write
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v4"
-      - name: "Hello world"
+
+      - name: Download Coverage Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          run-id: ${{ github.event.workflow_run.id || '12554166271'}}"
+          github-token: ${{ secrets.TOKEN_ARTIFACT_DOWNLOAD }}
+          path: tests/coverage/
+      - name: List Coverage Artifact
+        run: ls -l tests/coverage/
+
+      - name: Make code coverage badge
+        if: "!contains(github.event.head_commit.message, 'ci(doc)')"
+        uses: timkrase/phpunit-coverage-badge@v1.2.1
+        with:
+          report: tests/coverage/clover.xml
+          coverage_badge_path: doc/badge/coverage.svg
+          push_badge: false
+      - name: List coverage badge
+        run: ls -l doc/badge/
+
+      - name: Generate doc
+        id: doc-changes
         run: |
-          echo "Hello world"
+          set -xv
+          
+          ./doc/generate.sh
+          
+          if git --no-pager diff --name-only HEAD | grep -E "README.md|doc/source|documentation.yaml"; then
+            echo "update_doc=true" >> $GITHUB_ENV
+          else
+            echo "update_doc=false" >> $GITHUB_ENV
+          fi
+
+      - name: Publish doc & badge
+        uses: peaceiris/actions-gh-pages@v3
+        if: "${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' && env.update_doc == 'true' }}"
+        with:
+          publish_dir: ./doc/public
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          force_orphan: true
+          commit_message: "ci(doc): Generated documentation"
