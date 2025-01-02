@@ -41,10 +41,14 @@ class ContainerMappingTest extends KernelTestCase
         $this->assertSame([
             [
                 'name' => 'id',
+                'optional' => false,
                 'type' => 'string',
             ],
             [
+                'facet' => true,
+                'locale' => 'en',
                 'name' => 'name',
+                'sort' => true,
                 'type' => 'string',
             ],
         ], $fields);

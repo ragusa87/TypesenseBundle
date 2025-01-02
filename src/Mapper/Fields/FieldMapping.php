@@ -52,22 +52,23 @@ class FieldMapping implements FieldMappingInterface
 
     public function toArray(): array
     {
+        // Make sure to "ksort" values to keep the order consistent
         return array_filter([
-            'name' => $this->name,
-            'type' => $this->type,
+            'drop' => $this->drop,
             'facet' => $this->facet,
-            'optional' => $this->optional,
             'index' => $this->index,
-            'store' => $this->store,
-            'sort' => $this->sort,
             'infix' => $this->infix,
             'locale' => $this->locale,
+            'name' => $this->name,
             'num_dim' => $this->numDim,
-            'vec_dist' => $this->vecDist,
-            'reference' => $this->reference,
+            'optional' => $this->optional,
             'range_index' => $this->rangeIndex,
-            'drop' => $this->drop,
+            'reference' => $this->reference,
+            'sort' => $this->sort,
             'stem' => $this->stem,
+            'store' => $this->store,
+            'type' => $this->type,
+            'vec_dist' => $this->vecDist,
         ], fn ($value) => $value !== null);
     }
 
