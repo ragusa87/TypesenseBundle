@@ -18,6 +18,12 @@ biblioteca_typesense:
         fields:
           - name: id
             type: string
+            optional: false
           - name: name
             type: string
+            entity_attribute: name
+            sort: true
+            locale: 'en'
+            facet: true
+
 
