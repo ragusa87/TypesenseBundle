@@ -10,6 +10,11 @@ biblioteca_typesense:
       entity: 'Biblioteca\TypesenseBundle\Tests\Entity\Product'
       name: 'products'
       mapping:
+        token_separators: [' ', '-']
+        symbols_to_index: ['&']
+        default_sorting_field: 'name'
+        metadata:
+          primary_key: 'id'
         fields:
           - name: id
             type: string

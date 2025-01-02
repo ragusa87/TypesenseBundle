@@ -15,6 +15,18 @@ class CollectionOptions implements CollectionOptionsInterface
     ) {
     }
 
+    /**
+     * @param array{'token_separators'?: list<string>|null, 'symbols_to_index'?: list<string>|null, 'default_sorting_field'?: string|null} $collectionOption
+     */
+    public static function fromArray(array $collectionOption): self
+    {
+        return new self(
+            tokenSeparators: $collectionOption['token_separators'] ?? null,
+            symbolsToIndex: $collectionOption['symbols_to_index'] ?? null,
+            defaultSortingField: $collectionOption['default_sorting_field'] ?? null,
+        );
+    }
+
     public function toArray(): array
     {
         return array_filter(
