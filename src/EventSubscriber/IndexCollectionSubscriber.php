@@ -2,6 +2,7 @@
 
 namespace Biblioteca\TypesenseBundle\EventSubscriber;
 
+use Biblioteca\TypesenseBundle\Indexer\IndexerInterface;
 use Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface;
 use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
 use Biblioteca\TypesenseBundle\Populate\PopulateService;
@@ -13,7 +14,7 @@ use Doctrine\ORM\Events;
 
 #[AsDoctrineListener(event: Events::onFlush, priority: 500)]
 #[AsDoctrineListener(event: Events::postFlush, priority: 500)]
-class IndexCollectionSubscriber implements EventSubscriber
+class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
 {
     /** @var array{'update': object[], 'delete': object[]} */
     private array $map = ['update' => [], 'delete' => []];
@@ -43,7 +44,6 @@ class IndexCollectionSubscriber implements EventSubscriber
 
     public function onFlush(OnFlushEventArgs $onFlushEventArgs): void
     {
-        // TODO Only supported entities should be handled
         $unitOfWork = $onFlushEventArgs->getObjectManager()->getUnitOfWork();
         foreach ($unitOfWork->getScheduledEntityDeletions() as $entity) {
             if (!$this->mapperLocator->hasEntityMappers($entity::class)) {
@@ -68,7 +68,7 @@ class IndexCollectionSubscriber implements EventSubscriber
         }
     }
 
-    private function indexEntity(object $entity): void
+    public function indexEntity(object $entity): self
     {
         foreach ($this->mapperLocator->getEntityMappers($entity::class) as $name => $entityMapper) {
             if (!$entityMapper->support($entity)) {
@@ -79,9 +79,11 @@ class IndexCollectionSubscriber implements EventSubscriber
             $data = $entityMapper->transform($entity);
             $this->populateService->fillData($name, $ids + $data);
         }
+
+        return $this;
     }
 
-    private function removeEntity(object $entity): void
+    public function removeEntity(object $entity): self
     {
         foreach ($this->mapperLocator->getEntityMappers($entity::class) as $name => $entityMapper) {
             if (!$entityMapper->support($entity)) {
@@ -92,6 +94,8 @@ class IndexCollectionSubscriber implements EventSubscriber
             $ids = $this->ids[spl_object_hash($entity)];
             $this->populateService->deleteData($name, $ids + $entityMapper->transform($entity));
         }
+
+        return $this;
     }
 
     /**
