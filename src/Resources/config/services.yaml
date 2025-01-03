@@ -48,6 +48,11 @@ services:
 
   Biblioteca\TypesenseBundle\Search\Search: ~
 
+  Biblioteca\TypesenseBundle\Indexer\Indexer:
+  Biblioteca\TypesenseBundle\Indexer\IndexerInterface:
+    alias: 'Biblioteca\TypesenseBundle\Indexer\Indexer'
+    public: true
+
   Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResult:
     autowire: true
 

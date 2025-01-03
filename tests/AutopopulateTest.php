@@ -1,9 +1,12 @@
 <?php
 
+use Biblioteca\TypesenseBundle\EventSubscriber\IndexCollectionSubscriber;
 use Biblioteca\TypesenseBundle\Populate\PopulateService;
 use Biblioteca\TypesenseBundle\Tests\DataFixtures\ProductFixtures;
 use Biblioteca\TypesenseBundle\Tests\Entity\Product;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(IndexCollectionSubscriber::class)]
 class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
 {
     private ?int $lastId = null;
