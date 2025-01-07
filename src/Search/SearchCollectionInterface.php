@@ -8,7 +8,7 @@ use Biblioteca\TypesenseBundle\Search\Results\SearchResults;
 use Biblioteca\TypesenseBundle\Search\Results\SearchResultsHydrated;
 
 /**
- * @template T
+ * @template T of object
  */
 interface SearchCollectionInterface
 {
