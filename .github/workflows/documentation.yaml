@@ -33,27 +33,20 @@ jobs:
         uses: timkrase/phpunit-coverage-badge@v1.2.1
         with:
           report: tests/coverage/clover.xml
-          coverage_badge_path: doc/badge/coverage.svg
+          coverage_badge_path: doc/public/badge/coverage.svg
           push_badge: false
       - name: List coverage badge
-        run: ls -l doc/badge/
+        run: ls -l doc/public/badge/
 
       - name: Generate doc
         id: doc-changes
         run: |
           set -xv
-          
           ./doc/generate.sh
-          
-          if git --no-pager diff --name-only HEAD | grep -E "README.md|doc/source|documentation.yaml"; then
-            echo "update_doc=true" >> $GITHUB_ENV
-          else
-            echo "update_doc=false" >> $GITHUB_ENV
-          fi
 
       - name: Publish doc & badge
         uses: peaceiris/actions-gh-pages@v3
-        if: "${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' && env.update_doc == 'true' }}"
+        if: "${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' }}"
         with:
           publish_dir: ./doc/public
           publish_branch: gh-pages
