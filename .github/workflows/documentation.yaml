@@ -42,18 +42,11 @@ jobs:
         id: doc-changes
         run: |
           set -xv
-          
           ./doc/generate.sh
-          
-          if git --no-pager diff --name-only HEAD | grep -E "README.md|doc/source|documentation.yaml"; then
-            echo "update_doc=true" >> $GITHUB_ENV
-          else
-            echo "update_doc=false" >> $GITHUB_ENV
-          fi
 
       - name: Publish doc & badge
         uses: peaceiris/actions-gh-pages@v3
-        if: "${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' && env.update_doc == 'true' }}"
+        if: "${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' }}"
         with:
           publish_dir: ./doc/public
           publish_branch: gh-pages
