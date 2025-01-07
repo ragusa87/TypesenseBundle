@@ -13,8 +13,6 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class HydrateSearchResult implements HydrateSearchResultInterface
 {
-    private ?string $primaryKeyOverride = null;
-
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
@@ -32,7 +30,7 @@ class HydrateSearchResult implements HydrateSearchResultInterface
         $classMetadata = $this->entityManager->getClassMetadata($class);
         // TODO Support of composed primary keys ?
         $primaryKey = $classMetadata->isIdentifierComposite ? null : $classMetadata->getSingleIdReflectionProperty();
-        $primaryKeyName = ($this->primaryKeyOverride ?? $primaryKey?->getName()) ?? 'id';
+        $primaryKeyName = $primaryKey?->getName() ?? 'id';
 
         $hits = $searchResults['hits'] ?? [];
         $ids = array_map(function (mixed $result) use ($primaryKeyName): ?int {
@@ -46,7 +44,7 @@ class HydrateSearchResult implements HydrateSearchResultInterface
 
         if ($ids === []) {
             /** @var SearchResultsHydrated<T> $result */
-            $result = new SearchResultsHydrated($searchResults, []);
+            $result = SearchResultsHydrated::fromPayload($searchResults->toArray());
 
             return $result;
         }
@@ -57,7 +55,7 @@ class HydrateSearchResult implements HydrateSearchResultInterface
             $collectionData = $entityRepository->findByIds($ids)->toArray();
 
             /** @var SearchResultsHydrated<T> $result */
-            $result = new SearchResultsHydrated($searchResults, $collectionData);
+            $result = SearchResultsHydrated::fromResultAndCollection($searchResults, $collectionData);
 
             return $result;
         }
@@ -72,18 +70,8 @@ class HydrateSearchResult implements HydrateSearchResultInterface
         $hydratedResults = (array) $query->getResult();
 
         /** @var SearchResultsHydrated<T> $result */
-        $result = new SearchResultsHydrated($searchResults, $hydratedResults);
+        $result = SearchResultsHydrated::fromResultAndCollection($searchResults, $hydratedResults);
 
         return $result;
-    }
-
-    /**
-     * @return HydrateSearchResult<T>
-     */
-    public function setPrimaryKeyOverride(?string $primaryKeyOverride): self
-    {
-        $this->primaryKeyOverride = $primaryKeyOverride;
-
-        return $this;
     }
 }

@@ -4,15 +4,16 @@ namespace Biblioteca\TypesenseBundle\Search\Results;
 
 use Biblioteca\TypesenseBundle\Search\Traits\FoundCountTrait;
 use Biblioteca\TypesenseBundle\Search\Traits\HighlightTrait;
+use Biblioteca\TypesenseBundle\Search\Traits\PageTrait;
 use Biblioteca\TypesenseBundle\Search\Traits\SearchCountTrait;
 use Biblioteca\TypesenseBundle\Search\Traits\SearchFacetTrait;
 use Biblioteca\TypesenseBundle\Utils\ArrayAccessTrait;
 
 /**
- * @template T
+ * @template T of object
  *
  * @implements \ArrayAccess<string, mixed>
- * @implements \IteratorAggregate<int, T>
+ * @implements \IteratorAggregate<string|int, T>
  */
 class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAccess
 {
@@ -24,44 +25,91 @@ class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAcc
     use SearchCountTrait;
     use SearchFacetTrait;
     use HighlightTrait;
+    use PageTrait;
 
     /**
-     * @param array<int, T>    $hydratedResults
-     * @param SearchResults<T> $searchResults
+     * @var \Iterator<string|int, T>
+     */
+    private \Iterator $iterator;
+
+    /**
+     * @param array<string|int, T> $hydratedResults
+     * @param array<string, mixed> $data
      *
      * @throws \Exception
      */
-    public function __construct(SearchResults $searchResults, array $hydratedResults = [])
+    private function __construct(array $data, array $hydratedResults = [])
     {
-        $this->data = $searchResults->toArray();
+        $this->data = $data;
         $this->setHydratedResults($hydratedResults);
     }
 
     /**
-     * @param array<int, T> $data
+     * @param array<string|int, T> $data
      *
      * @return SearchResultsHydrated<T>
      */
     public function setHydratedResults(array $data): self
     {
         $this->data['hydrated'] = $data;
+        $this->iterator = new \ArrayIterator($data);
 
         return $this;
     }
 
     /**
-     * @return \Traversable<int, T>
+     * @param array<string, mixed> $data
+     * @param array<string|int, T> $objects
+     *
+     * @return SearchResultsHydrated<T>
      */
-    public function getIterator(): \Traversable
+    public static function fromPayloadAndCollection(array $data, array $objects): self
     {
-        if (!$this->offsetExists('hydrated') || !is_array($this->data['hydrated'])) {
-            return new \ArrayIterator([]);
-        }
-        $ids = array_keys($this->data['hydrated']);
-        $ids = array_map('intval', $ids);
-        /** @var array<int,T> $values */
-        $values = array_values($this->data['hydrated']);
+        return new self($data, $objects);
+    }
 
-        return new \ArrayIterator(array_combine($ids, $values));
+    /**
+     * @param array<string|int, T> $objects
+     *
+     * @return SearchResultsHydrated<T>
+     */
+    public static function fromResultAndCollection(SearchResults $searchResults, array $objects): self
+    {
+        return new self($searchResults->toArray(), $objects);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return SearchResultsHydrated<T>
+     */
+    public static function fromPayload(array $data): self
+    {
+        /** @var array<int|string,T> $objects */
+        $objects = [];
+
+        return new self($data, $objects);
+    }
+
+    /**
+     * @return \Iterator<string|int, T>
+     */
+    public function getIterator(): \Iterator
+    {
+        $this->iterator->rewind();
+
+        return $this->iterator;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        $export = $this->data;
+        // Hide the hydrated data from the exported array
+        unset($export['hydrated']);
+
+        return $export;
     }
 }
