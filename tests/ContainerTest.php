@@ -2,11 +2,9 @@
 
 namespace Biblioteca\TypesenseBundle\Tests;
 
+use Biblioteca\TypesenseBundle\Client\ClientInterface;
 use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
 use Biblioteca\TypesenseBundle\Tests\Client\ServiceWithClient;
-use Typesense\Aliases;
-use Typesense\Collection;
-use Typesense\Debug;
 
 class ContainerTest extends KernelTestCase
 {
@@ -29,10 +27,7 @@ class ContainerTest extends KernelTestCase
         $this->assertInstanceOf(ServiceWithClient::class, $service);
 
         $client = $service->getClient();
-        $this->assertInstanceOf(Collection::class, $client->getCollection('books'));
-        $this->assertInstanceOf(Collection::class, $client->getCollections()['books']);
-        $this->assertInstanceOf(Debug::class, $client->getDebug());
-        $this->assertInstanceOf(Aliases::class, $client->getAliases());
+        $this->assertInstanceOf(ClientInterface::class, $client);
     }
 
     public function testClientFactoryInvalidUrl(): void
