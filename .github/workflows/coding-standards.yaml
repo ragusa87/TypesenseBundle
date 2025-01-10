@@ -3,6 +3,7 @@ name: "coding-standards"
 permissions:
   checks: write
   pull-requests: write
+  contents: write
 on:
   pull_request:
     branches:
