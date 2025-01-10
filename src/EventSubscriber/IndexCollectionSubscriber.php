@@ -46,7 +46,7 @@ class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
     {
         $unitOfWork = $onFlushEventArgs->getObjectManager()->getUnitOfWork();
         foreach ($unitOfWork->getScheduledEntityDeletions() as $entity) {
-            if (!$this->mapperLocator->hasEntityMappers($entity::class)) {
+            if (!$this->mapperLocator->hasEntityTransformer($entity::class)) {
                 continue;
             }
             $this->map['delete'][] = $entity;
@@ -55,13 +55,13 @@ class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
             $this->ids[spl_object_hash($entity)] = $ids;
         }
         foreach ($unitOfWork->getScheduledEntityInsertions() as $entity) {
-            if (!$this->mapperLocator->hasEntityMappers($entity::class)) {
+            if (!$this->mapperLocator->hasEntityTransformer($entity::class)) {
                 continue;
             }
             $this->map['update'][] = $entity;
         }
         foreach ($unitOfWork->getScheduledEntityUpdates() as $entity) {
-            if (!$this->mapperLocator->hasEntityMappers($entity::class)) {
+            if (!$this->mapperLocator->hasEntityTransformer($entity::class)) {
                 continue;
             }
             $this->map['update'][] = $entity;
@@ -70,13 +70,13 @@ class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
 
     public function indexEntity(object $entity): self
     {
-        foreach ($this->mapperLocator->getEntityMappers($entity::class) as $name => $entityMapper) {
-            if (!$entityMapper->support($entity)) {
+        foreach ($this->mapperLocator->getEntityTransformers($entity::class) as $name => $entityTransformer) {
+            if (!$entityTransformer->support($entity)) {
                 continue;
             }
 
             $ids = $this->entityIdentifier->getIdentifiersValue($entity);
-            $data = $entityMapper->transform($entity);
+            $data = $entityTransformer->transform($entity);
             $this->populateService->fillData($name, $ids + $data);
         }
 
@@ -85,14 +85,14 @@ class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
 
     public function removeEntity(object $entity): self
     {
-        foreach ($this->mapperLocator->getEntityMappers($entity::class) as $name => $entityMapper) {
-            if (!$entityMapper->support($entity)) {
+        foreach ($this->mapperLocator->getEntityTransformers($entity::class) as $name => $entityTransformer) {
+            if (!$entityTransformer->support($entity)) {
                 continue;
             }
             // We inject the entity identifiers to delete them
             /** @var array{'id': string} $ids */
             $ids = $this->ids[spl_object_hash($entity)];
-            $this->populateService->deleteData($name, $ids + $entityMapper->transform($entity));
+            $this->populateService->deleteData($name, $ids + $entityTransformer->transform($entity));
         }
 
         return $this;

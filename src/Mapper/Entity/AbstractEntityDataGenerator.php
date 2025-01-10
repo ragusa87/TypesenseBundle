@@ -2,28 +2,36 @@
 
 namespace Biblioteca\TypesenseBundle\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
+use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
 /**
  * @template T of Object
  *
- * @implements EntityMapperInterface<T>
+ * @implements EntityTransformerInterface<T>
  */
-abstract class AbstractEntityMapper implements EntityMapperInterface
+abstract class AbstractEntityDataGenerator implements DataGeneratorInterface, EntityTransformerInterface
 {
+    /**
+     * @param class-string<T> $className
+     */
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly string $className,
     ) {
     }
 
-    abstract public function getMapping(): Mapping;
-
+    /**
+     * @throws ValueExtractorException
+     * @throws ValueConversionException
+     */
     public function getData(): \Generator
     {
-        $identifiers = $this->entityManager->getClassMetadata($this->getClassName())->getIdentifier();
-        $queryBuilder = $this->entityManager->getRepository($this->getClassName())->createQueryBuilder('entity')
+        $identifiers = $this->entityManager->getClassMetadata($this->className)->getIdentifier();
+        $queryBuilder = $this->entityManager->getRepository($this->className)->createQueryBuilder('entity')
             ->select('entity');
         foreach ($identifiers as $identifier) {
             $queryBuilder->addOrderBy('entity.'.$identifier, 'ASC');
@@ -41,8 +49,8 @@ abstract class AbstractEntityMapper implements EntityMapperInterface
 
     public function getDataCount(): ?int
     {
-        $queryBuilder = $this->entityManager->getRepository($this->getClassName())->createQueryBuilder('entity');
-        $identifiers = $this->entityManager->getClassMetadata($this->getClassName())->getIdentifier();
+        $queryBuilder = $this->entityManager->getRepository($this->className)->createQueryBuilder('entity');
+        $identifiers = $this->entityManager->getClassMetadata($this->className)->getIdentifier();
 
         $countSelect = [];
         foreach ($identifiers as $identifier) {
@@ -55,25 +63,9 @@ abstract class AbstractEntityMapper implements EntityMapperInterface
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
-    /**
-     * @param object&T $entity
-     *
-     * @return array<string, mixed>
-     */
-    abstract public function transform(object $entity): array;
-
     protected function alterQueryBuilder(QueryBuilder $queryBuilder): void
     {
-        // Override this method to alter the query builder, for the fetch and count.
     }
 
-    public function support(object $entity): bool
-    {
-        return $entity::class === $this->getClassName();
-    }
-
-    /**
-     * @return class-string<T>
-     */
-    abstract public function getClassName(): string;
+    abstract public function transform(object $entity): array;
 }

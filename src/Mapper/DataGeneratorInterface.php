@@ -2,16 +2,18 @@
 
 namespace Biblioteca\TypesenseBundle\Mapper;
 
-use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
+use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
 
-interface MapperInterface
+interface DataGeneratorInterface
 {
-    public function getMapping(): MappingInterface;
-
     /**
      * Data to index, the key is the field name.
      *
      * @return \Generator<array<string, mixed>>
+     *
+     * @throws ValueConversionException
+     * @throws ValueExtractorException
      */
     public function getData(): \Generator;
 

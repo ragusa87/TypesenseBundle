@@ -21,11 +21,16 @@ services:
   Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractor: ~
   Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractorInterface: '@Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractor'
 
+
   Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator:
     public: true
     arguments:
-      $serviceLocator: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\Mapper\StandaloneMapperInterface::TAG_NAME, default_index_method: getName }
+      $collectionManagers: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface::TAG_NAME, default_index_method: getName, index_by: 'key' }
+      $dataGenerators: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\BibliotecaTypesenseBundle::DATA_GENERATOR_TAG_NAME, index_by: 'key' }
+      $mappingGenerators: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\BibliotecaTypesenseBundle::DATA_MAPPER_GENERATOR_TAG_NAME, index_by: 'key' }
+      $entityTransformers: !tagged_locator { tag: !php/const Biblioteca\TypesenseBundle\BibliotecaTypesenseBundle::ENTITY_TRANSFORMER_TAG_NAME, index_by: 'key' }
       $entityMapping: '%biblioteca_typesense.config.entity_mapping%'
+
   Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface: '@Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator'
 
   Biblioteca\TypesenseBundle\CollectionAlias\CollectionAlias: ~
@@ -39,8 +44,17 @@ services:
     class: Biblioteca\TypesenseBundle\Search\SearchCollection
     abstract: true
 
-  biblioteca_typesense.entity_mapper.abstract:
-    class: Biblioteca\TypesenseBundle\Mapper\Entity\EntityMapper
+
+  biblioteca_typesense.entity_transformer.abstract:
+    class: Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformer
+    abstract: true
+
+  biblioteca_typesense.entity_mapper_generator.abstract:
+    class: Biblioteca\TypesenseBundle\Mapper\Entity\EntityMapperGenerator
+    abstract: true
+
+  biblioteca_typesense.entity_data_generator.abstract:
+    class: Biblioteca\TypesenseBundle\Mapper\Entity\EntityDataGenerator
     abstract: true
 
   Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifier: ~
