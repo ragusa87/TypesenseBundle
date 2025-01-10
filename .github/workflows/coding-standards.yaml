@@ -14,18 +14,16 @@ on:
 jobs:
   coding-standards:
     name: "coding-standards"
-    runs-on: ${{ matrix.operating-system }} 
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: true
       matrix:
         php-version:
           - "8.1"
           - "8.2"
-        operating-system: [ubuntu-24.04]
         composer-versions:
           - lowest
-          - highest 
-
+          - highest
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v4"
@@ -63,16 +61,73 @@ jobs:
               exit 0 # Allow warnings on lowest level
           fi
           exit $EXIT_STATUS
-      - name: Coverage as artifact
-        uses: actions/upload-artifact@v4
-        if: matrix.composer-versions == 'highest' && matrix.php-version == '8.2' && matrix.operating-system == 'ubuntu-24.04'
-        with:
-          overwrite: true
-          name: coverage-report
-          path: tests/coverage/
 
       - name: Coverage Report as Comment (Clover)
         uses: lucassabreu/comment-coverage-clover@main
         if: github.event_name == 'pull_request' && matrix.composer-versions == 'highest' && matrix.php-version == '8.2'
         with:
           file: tests/coverage/clover.xml
+
+      - name: Coverage as artifact
+        if: matrix.composer-versions == 'highest' && matrix.php-version == '8.2'
+        uses: actions/upload-artifact@v4
+        with:
+          overwrite: true
+          name: coverage-report
+          path: tests/coverage/
+  documentation:
+    needs: "coding-standards"
+    runs-on: "ubuntu-24.04"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: Download Coverage Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          path: tests/coverage/
+
+      - id: get-user
+        run: |
+          echo uid=$(id -u) >> $GITHUB_OUTPUT
+          echo gid=$(id -g) >> $GITHUB_OUTPUT
+      - name: Generate doc
+        uses: addnab/docker-run-action@v3
+        with:
+          image: daux/daux.io
+          options: -w /build -v ${{ github.workspace }}:/build -e EXTERNAL_PERMISSION=${{ steps.get-user.outputs.uid }}:${{ steps.get-user.outputs.gid }}
+          run: |
+            cp README.md docs/index.md
+            daux generate --source=docs --destination=static
+            chown -R ${EXTERNAL_PERMISSION} static
+            rm -Rf docs/public && mkdir -p docs/public
+            mv static/* docs/public/
+            rm -Rf static
+            chown -R ${EXTERNAL_PERMISSION} docs/public
+
+      - name: Make code coverage badge (done as root)
+        uses: timkrase/phpunit-coverage-badge@v1.2.1
+        with:
+          report: tests/coverage/clover.xml
+          coverage_badge_path: docs/public/badge/coverage.svg
+          push_badge: false
+
+      - name: Docs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          overwrite: true
+          name: docs-public
+          path: docs/public/
+
+      - name: Publish doc & badge
+        uses: peaceiris/actions-gh-pages@v3
+        if: "${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}"
+        with:
+          publish_dir: ./docs/public
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          force_orphan: true
+          commit_message: "ci(doc): Generated documentation"
