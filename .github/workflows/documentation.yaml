@@ -33,22 +33,22 @@ jobs:
         uses: timkrase/phpunit-coverage-badge@v1.2.1
         with:
           report: tests/coverage/clover.xml
-          coverage_badge_path: doc/public/badge/coverage.svg
+          coverage_badge_path: docs/public/badge/coverage.svg
           push_badge: false
       - name: List coverage badge
-        run: ls -l doc/public/badge/
+        run: ls -l docs/public/badge/
 
       - name: Generate doc
         id: doc-changes
         run: |
           set -xv
-          ./doc/generate.sh
+          ./generate-doc.sh
 
       - name: Publish doc & badge
         uses: peaceiris/actions-gh-pages@v3
         if: "${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' }}"
         with:
-          publish_dir: ./doc/public
+          publish_dir: ./docs/public
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
           user_name: 'github-actions[bot]'

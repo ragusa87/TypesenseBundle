@@ -1,0 +1,8 @@
+{
+  "title": "TypesenseBundle",
+  "tagline": "A Typesense bundle for Symfony",
+  "html": {
+    "edit_on_github": "ragusa87/TypesenseBundle/blob/main/docs",
+    "search": true
+  }
+}
