@@ -3,14 +3,15 @@
 namespace Biblioteca\TypesenseBundle\Tests\CollectionAlias;
 
 use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\Client\ClientSingletonFactory;
 use Biblioteca\TypesenseBundle\CollectionAlias\CollectionAlias;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Typesense\Aliases;
 use Typesense\Collection;
+use Typesense\Exceptions\TypesenseClientError;
 
-#[CoversClass(ClientSingletonFactory::class)]
-class CollectionAliasTest extends \PHPUnit\Framework\TestCase
+#[CoversClass(CollectionAlias::class)]
+class CollectionAliasTest extends TestCase
 {
     public function testTemplate(): void
     {
@@ -47,5 +48,33 @@ class CollectionAliasTest extends \PHPUnit\Framework\TestCase
         $collectionAlias->switch('books', 'books_alias');
 
         $this->assertTrue(true); // @phpstan-ignore-line The mock will fail if the method is not called
+    }
+
+    public function testMissingAliasSwitch(): void
+    {
+        $collection = $this->createMock(Collection::class);
+        $collection->method('retrieve')->willThrowException(new TypesenseClientError('Collection books_alias not found'));
+        $aliases = $this->createMock(Aliases::class);
+
+        $client = $this->getMockBuilder(ClientInterface::class)
+            ->enableOriginalConstructor()
+            ->getMock();
+        $client->method('getCollection')->willReturn($collection);
+
+        $client->method('getAliases')
+            ->willReturn($aliases);
+
+        $aliases->expects($this->once())
+            ->method('upsert')
+            ->willThrowException(new TypesenseClientError('Collection books not found'));
+
+        $collectionAlias = new CollectionAlias($client);
+
+        try {
+            $collectionAlias->switch('books', 'books_alias');
+            $this->fail('Collection should be not found');
+        } catch (\Exception $e) {
+            $this->assertEquals('Collection books not found', $e->getMessage());
+        }
     }
 }
