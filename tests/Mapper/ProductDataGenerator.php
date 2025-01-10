@@ -4,6 +4,7 @@ namespace Biblioteca\TypesenseBundle\Tests\Mapper;
 
 use Biblioteca\TypesenseBundle\Mapper\Entity\AbstractEntityDataGenerator;
 use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
 use Biblioteca\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface;
 use Biblioteca\TypesenseBundle\Tests\Entity\Product;
 use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
@@ -12,7 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * @extends AbstractEntityDataGenerator<Product>
  */
-class ProductMapper extends AbstractEntityDataGenerator implements StandaloneCollectionManagerInterface
+class ProductDataGenerator extends AbstractEntityDataGenerator implements MappingGeneratorInterface, StandaloneCollectionManagerInterface
 {
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -31,16 +32,6 @@ class ProductMapper extends AbstractEntityDataGenerator implements StandaloneCol
             ->add(name: 'id', type: DataTypeEnum::STRING)
             ->add(name: 'name', type: DataTypeEnum::STRING)
         ;
-    }
-
-    public function getData(): \Generator
-    {
-        yield [];
-    }
-
-    public function getDataCount(): ?int
-    {
-        return 0;
     }
 
     public function transform(object $entity): array

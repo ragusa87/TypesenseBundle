@@ -3,8 +3,9 @@
 namespace Biblioteca\TypesenseBundle\Populate;
 
 use Biblioteca\TypesenseBundle\Client\ClientInterface;
+use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
+use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
 use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMappingInterface;
-use Biblioteca\TypesenseBundle\Mapper\MapperInterface;
 use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
 use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
 use Http\Client\Exception;
@@ -25,9 +26,9 @@ class PopulateService
         $this->client->getCollection($name)->delete();
     }
 
-    public function createCollection(string $collectionName, MapperInterface $mapper): Collection
+    public function createCollection(string $collectionName, CollectionManagerInterface $collectionManager): Collection
     {
-        $mapping = $mapper->getMapping();
+        $mapping = $collectionManager->getMapping();
         $this->throwIfIdIsNotSet($mapping, $collectionName);
 
         $payload = array_filter([
@@ -46,13 +47,18 @@ class PopulateService
         }
     }
 
-    public function fillCollection(string $name, MapperInterface $mapper): \Generator
+    /**
+     * @param ?callable(array<array<string, mixed>>):void $callable
+     */
+    public function fillCollection(string $name, DataGeneratorInterface $dataGenerator, ?callable $callable = null): void
     {
         $collection = $this->client->getCollection($name);
-        $generator = $mapper->getData();
+        $generator = $dataGenerator->getData();
         foreach ((new BatchGenerator($generator, $this->batchSize))->generate() as $items) {
             $collection->documents->import($items);
-            yield from $items;
+            if (is_callable($callable)) {
+                $callable($items);
+            }
         }
     }
 

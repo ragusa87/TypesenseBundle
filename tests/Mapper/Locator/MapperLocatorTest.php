@@ -3,26 +3,27 @@
 namespace Biblioteca\TypesenseBundle\Tests\Mapper\Locator;
 
 use Biblioteca;
-use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
+use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
 use Biblioteca\TypesenseBundle\Mapper\Locator\InvalidTypeMapperException;
 use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
-use Biblioteca\TypesenseBundle\Tests\Mapper\ProductMapper;
+use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversClass(FieldMapping::class)]
+#[CoversClass(MapperLocator::class)]
 class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
 {
     public function testLocatorMyMapper(): void
     {
+        static::ensureKernelShutdown();
         $kernel = self::bootKernel();
         $container = $kernel->getContainer();
 
         $locator = $container->get(MapperLocator::class);
         $this->assertInstanceOf(MapperLocator::class, $locator);
 
-        $this->assertSame(1, $locator->count(), 'The locator should have 1 service.');
-        $this->assertTrue($locator->has('products'), 'The locator should have the products service.');
-        $this->assertInstanceOf(ProductMapper::class, $locator->get('products'), 'The locator should return an instance of ProductMapper.');
+        $this->assertSame(1, $locator->countDataGenerator(), 'The locator should have exactly 1 data generator.');
+        $this->assertTrue($locator->hasDataGenerator('products'), 'The locator should have the products service.');
+        $this->assertInstanceOf(DataGeneratorInterface::class, $locator->getDataGenerator('products'), 'The locator should return an instance of DataGeneratorInterface.');
     }
 
     public function testLocatorUnknownService(): void
@@ -31,29 +32,39 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
         $mapperLocator = $this->get(MapperLocator::class);
 
         $this->expectException(\InvalidArgumentException::class);
-        $mapperLocator->get('unknown');
+        $mapperLocator->getDataGenerator('unknown');
     }
 
     public function testLocatorInstanceOfIssue(): void
     {
-        $this->expectException(InvalidTypeMapperException::class);
+        static::ensureKernelShutdown();
         self::bootKernel([
             'configs' => [dirname(__DIR__, 2).'/config/services_with_wrong_mapper.yaml'],
         ]);
 
         $mapperLocator = $this->get(MapperLocator::class);
-        $mapperLocator->get('myInvalidMapper');
+        try {
+            $mapperLocator->getDataGenerator('myInvalidMapper');
+            $this->fail('The locator should throw an exception.');
+        } catch (InvalidTypeMapperException $e) {
+            $this->assertStringContainsString('No data generator found', $e->getMessage());
+        }
     }
 
     public function testLocatorGetMappersInstanceOfIssue(): void
     {
-        $this->expectException(InvalidTypeMapperException::class);
         self::bootKernel([
             'configs' => [dirname(__DIR__, 2).'/config/services_with_wrong_mapper.yaml'],
         ]);
 
         $mapperLocator = $this->get(MapperLocator::class);
-        iterator_to_array($mapperLocator->getMappers());
+
+        try {
+            $this->assertGreaterThan(42, count($mapperLocator->getMappers()), 'The locator have thrown an exception.');
+            $this->fail('The locator should throw an exception.');
+        } catch (InvalidTypeMapperException $e) {
+            $this->assertStringContainsString('not found', $e->getMessage());
+        }
     }
 
     public function testLocatorGetMappers(): void
@@ -61,9 +72,9 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
         self::bootKernel();
 
         $mapperLocator = $this->get(MapperLocator::class);
-        $result = iterator_to_array($mapperLocator->getMappers());
+        $result = $mapperLocator->getMappers();
 
         $this->assertArrayHasKey('products', $result);
-        $this->assertInstanceOf(ProductMapper::class, $result['products']);
+        $this->assertInstanceOf(MappingGeneratorInterface::class, $result['products']);
     }
 }

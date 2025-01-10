@@ -2,35 +2,38 @@
 
 namespace Biblioteca\TypesenseBundle\Mapper\Locator;
 
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityMapperInterface;
-use Biblioteca\TypesenseBundle\Mapper\MapperInterface;
+use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
+use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
 
 interface MapperLocatorInterface
 {
-    public function has(string $name): bool;
-
-    public function get(string $name): MapperInterface;
+    public function hasDataGenerator(string $name): bool;
 
     /**
-     * @return \Generator<string, MapperInterface>
+     * TODO: Split this.
+     *
+     * @return array<string, CollectionManagerInterface>
      */
-    public function getMappers(): \Generator;
+    public function getMappers(): array;
 
-    public function count(): int;
+    public function countDataGenerator(): int;
 
     /**
      * @template T of object
      *
-     * @param class-string<T> $classString
+     * @param class-string<T> $entity
      *
-     * @return array<string, EntityMapperInterface<T>>
+     * @return array<string, EntityTransformerInterface<T>>
      */
-    public function getEntityMappers(string $classString): array;
+    public function getEntityTransformers(string $entity): array;
 
     /**
      * @template T of object
      *
      * @param class-string<T> $classString $classString
      */
-    public function hasEntityMappers(string $classString): bool;
+    public function hasEntityTransformer(string $classString): bool;
+
+    public function getDataGenerator(string $shortName): DataGeneratorInterface;
 }

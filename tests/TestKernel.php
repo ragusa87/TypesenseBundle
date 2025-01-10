@@ -28,6 +28,14 @@ class TestKernel extends Kernel
         parent::__construct($environment, $debug);
     }
 
+    public function boot(): void
+    {
+        if (!$this->booted) {
+            $this->clearCache();
+        }
+        parent::boot();
+    }
+
     /**
      * @ihneritDoc
      */
@@ -82,6 +90,11 @@ class TestKernel extends Kernel
     {
         parent::shutdown();
 
+        $this->clearCache();
+    }
+
+    private function clearCache(): void
+    {
         $cacheDirectory = $this->getCacheDir();
         $logDirectory = $this->getLogDir();
 

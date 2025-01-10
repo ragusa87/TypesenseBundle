@@ -2,70 +2,72 @@
 
 namespace Biblioteca\TypesenseBundle\Mapper\Locator;
 
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityMapperInterface;
-use Biblioteca\TypesenseBundle\Mapper\MapperInterface;
-use Biblioteca\TypesenseBundle\Mapper\StandaloneMapperInterface;
-use Psr\Container\ContainerExceptionInterface;
+use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
+use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
+use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
 class MapperLocator implements MapperLocatorInterface
 {
     /**
-     * @param ServiceLocator<mixed>   $serviceLocator
-     * @param array<string, string[]> $entityMapping  index is the entity class name, values are the mapper names for this entity
+     * @param ServiceLocator<CollectionManagerInterface|object>  $collectionManagers
+     * @param ServiceLocator<DataGeneratorInterface>             $dataGenerators
+     * @param ServiceLocator<MappingGeneratorInterface>          $mappingGenerators
+     * @param ServiceLocator<EntityTransformerInterface<object>> $entityTransformers
+     * @param array<class-string, string[]>                      $entityMapping      index is the entity class name, values are the mapper names for this entity
      */
     public function __construct(
-        private readonly ServiceLocator $serviceLocator,
+        private readonly ServiceLocator $collectionManagers,
+        private readonly ServiceLocator $dataGenerators,
+        private readonly ServiceLocator $mappingGenerators,
+        private readonly ServiceLocator $entityTransformers,
         private readonly array $entityMapping,
     ) {
     }
 
-    public function has(string $name): bool
+    public function hasDataGenerator(string $name): bool
     {
-        return $this->serviceLocator->has($name);
+        return $this->collectionManagers->has($name) || $this->dataGenerators->has($name);
     }
 
     /**
-     * @throws InvalidTypeMapperException
+     * @return array<string, MappingGeneratorInterface>
      */
-    public function get(string $name): MapperInterface
+    public function getMappers(): array
     {
         try {
-            $service = $this->serviceLocator->get($name);
-        } catch (ContainerExceptionInterface $e) {
-            throw new \InvalidArgumentException(sprintf('The mapping service "%s" is not found, do you implement "%s" ?', $name, StandaloneMapperInterface::class), 0, $e);
-        }
-
-        if (!$service instanceof MapperInterface) {
-            throw new InvalidTypeMapperException(sprintf('The mapper "%s" must implement "%s".', $name, MapperInterface::class));
-        }
-
-        return $service;
-    }
-
-    /**
-     * @return \Generator<string, MapperInterface>
-     */
-    public function getMappers(): \Generator
-    {
-        $mappers = [];
-        foreach (array_keys($this->serviceLocator->getProvidedServices()) as $name) {
-            try {
-                $service = $this->serviceLocator->get($name);
-                if (!$service instanceof MapperInterface) {
-                    throw new InvalidTypeMapperException(sprintf('The mapper "%s" must implement "%s".', $name, MapperInterface::class));
+            /** @var array<string, MappingGeneratorInterface> $mappers */
+            $mappers = [];
+            /** @var string $name */
+            foreach (array_keys($this->collectionManagers->getProvidedServices()) as $name) {
+                /** @var object|MappingGeneratorInterface $service */
+                $service = $this->collectionManagers->get($name);
+                if (!$service instanceof MappingGeneratorInterface) {
+                    throw new InvalidTypeMapperException(sprintf('Service %s not found. Class "%s" must implement "%s".', $name, $service::class, MappingGeneratorInterface::class));
                 }
                 $mappers[$name] = $service;
-            } catch (ContainerExceptionInterface) {
-                continue;
             }
+            /** @var string $name */
+            foreach (array_keys($this->mappingGenerators->getProvidedServices()) as $name) {
+                /** @var object|MappingGeneratorInterface $service */
+                $service = $this->mappingGenerators->get($name);
+                if (!$service instanceof MappingGeneratorInterface) {
+                    throw new InvalidTypeMapperException(sprintf('Service %s not found. Class "%s" must implement "%s".', $name, $service::class, MappingGeneratorInterface::class));
+                }
+                $mappers[$name] = $service;
+            }
+
+            return $mappers;
+        } catch (ServiceNotFoundException $e) {
+            throw new InvalidTypeMapperException(sprintf('Service "%s" not found, do you implement %s', $e->getId(), MappingGeneratorInterface::class), 0, $e);
         }
-        yield from $mappers;
     }
 
-    public function count(): int
+    public function countDataGenerator(): int
     {
-        return count($this->serviceLocator);
+        return count($this->dataGenerators->getProvidedServices()) + count($this->collectionManagers->getProvidedServices());
     }
 
     /**
@@ -73,17 +75,17 @@ class MapperLocator implements MapperLocatorInterface
      *
      * @param class-string<T> $classString
      *
-     * @return array<string, EntityMapperInterface<T>> indexed by the mapper name
+     * @return array<string, MappingGeneratorInterface> indexed by the mapper name
      */
     public function getEntityMappers(string $classString): array
     {
         $response = [];
         foreach (($this->entityMapping[$classString] ?? []) as $mapperName) {
-            $service = $this->get($mapperName);
-            if (!$service instanceof EntityMapperInterface) {
-                throw new InvalidTypeMapperException(sprintf('The mapper "%s" must implement "%s".', $mapperName, EntityMapperInterface::class));
+            $service = $this->mappingGenerators->has($mapperName) ? $this->mappingGenerators->get($mapperName) : null;
+            $service ??= $this->collectionManagers->has($mapperName) ? $this->collectionManagers->get($mapperName) : null;
+            if (!$service instanceof MappingGeneratorInterface) {
+                throw new InvalidTypeMapperException(sprintf('No entity mapper for entity "%s" did you implemented "%s".', $mapperName, MappingGeneratorInterface::class));
             }
-
             $response[$mapperName] = $service;
         }
 
@@ -95,8 +97,46 @@ class MapperLocator implements MapperLocatorInterface
      *
      * @param class-string<T> $classString $classString
      */
-    public function hasEntityMappers(string $classString): bool
+    public function hasEntityTransformer(string $classString): bool
     {
-        return isset($this->entityMapping[$classString]);
+        if (false === isset($this->entityMapping[$classString])) {
+            return false;
+        }
+        $collections = $this->entityMapping[$classString];
+        foreach ($collections as $collection) {
+            if ($this->entityTransformers->has($collection) || $this->collectionManagers->has($collection)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getDataGenerator(string $shortName): DataGeneratorInterface
+    {
+        $service = $this->dataGenerators->has($shortName) ? $this->dataGenerators->get($shortName) : null;
+        $service ??= $this->collectionManagers->has($shortName) ? $this->collectionManagers->get($shortName) : null;
+
+        if (!$service instanceof DataGeneratorInterface) {
+            throw new InvalidTypeMapperException(sprintf('No data generator found for "%s" do you implemented "%s".', $shortName, DataGeneratorInterface::class));
+        }
+
+        return $service;
+    }
+
+    public function getEntityTransformers(string $entity): array
+    {
+        $response = [];
+        foreach (($this->entityMapping[$entity] ?? []) as $mapperName) {
+            $service = $this->entityTransformers->has($mapperName) ? $this->entityTransformers->get($mapperName) : null;
+            $service = $service ?? $this->collectionManagers->has($mapperName) ? $this->collectionManagers->get($mapperName) : null;
+            if (!$service instanceof EntityTransformerInterface) {
+                throw new InvalidTypeMapperException(sprintf('No entity transformer found for entity "%s" do you implemented "%s".', $entity, EntityTransformerInterface::class));
+            }
+
+            $response[$mapperName] = $service;
+        }
+
+        return $response;
     }
 }

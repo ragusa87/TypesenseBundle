@@ -3,11 +3,9 @@
 namespace Biblioteca\TypesenseBundle\Tests\EventSubscriber;
 
 use Biblioteca\TypesenseBundle\EventSubscriber\IndexCollectionSubscriber;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityMapperInterface;
+use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
 use Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface;
 use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
 use Biblioteca\TypesenseBundle\Populate\PopulateService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -32,7 +30,7 @@ class IndexCollectionSubscriberTest extends TestCase
             $callable($populateService);
         }
         $mapperLocator = $this->createMock(MapperLocatorInterface::class);
-        $mapperLocator->method('getEntityMappers')->willReturn(['mapper' => new class implements EntityMapperInterface {
+        $mapperLocator->method('getEntityTransformers')->willReturn(['mapper' => new class implements EntityTransformerInterface {
             public function support($entity): bool
             {
                 return true;
@@ -42,24 +40,9 @@ class IndexCollectionSubscriberTest extends TestCase
             {
                 return ['data' => 'value'];
             }
-
-            public function getMapping(): MappingInterface
-            {
-                return new Mapping();
-            }
-
-            public function getData(): \Generator
-            {
-                yield from new \ArrayIterator([]);
-            }
-
-            public function getDataCount(): int
-            {
-                return 0;
-            }
         }]);
 
-        $mapperLocator->method('hasEntityMappers')->willReturn(true);
+        $mapperLocator->method('hasEntityTransformer')->willReturn(true);
 
         $entityIdentifier = $this->createMock(EntityIdentifierInterface::class);
         $entityIdentifier->method('getIdentifiersValue')->willReturn(['id' => '123']);

@@ -11,22 +11,29 @@ Example of a custom mapper, it uses `AbstractEntityMapper` that will fetch the e
 namespace App\Mapper;
 
 use App\Entity\Book;
-use Biblioteca\TypesenseBundle\Mapper\Entity\AbstractEntityMapper;
+use Biblioteca\TypesenseBundle\Mapper\Entity\AbstractEntityDataGenerator;
 use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\Options\CollectionOptions;
-use Biblioteca\TypesenseBundle\Mapper\StandaloneMapperInterface;
+use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioteca\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface;
 use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @extends AbstractEntityMapper<Book>
+ * @extends AbstractEntityDataGenerator<Book>
  */
-class BookMapper extends AbstractEntityMapper implements StandaloneMapperInterface
+class ProductDataGenerator extends AbstractEntityDataGenerator
 {
-    public static function getName(): string
-    {
-        return 'books'; // you collection name
+    public function __construct(
+        EntityManagerInterface $entityManager,
+    ) {
+        parent::__construct($entityManager, Book::class);
     }
 
+    public static function getName(): string
+    {
+        return 'book';
+    }
+    
     public function getMapping(): Mapping
     {
         $mapping = new Mapping(collectionOptions: new CollectionOptions(
@@ -98,9 +105,9 @@ class BookMapper extends AbstractEntityMapper implements StandaloneMapperInterfa
         ];
     }
 
-    public function getClassName(): string
+    public function support(object $entity): bool
     {
-        return Book::class;
+        return $entity::class === Book::class;
     }
 }
 ```

@@ -2,39 +2,26 @@
 
 namespace Biblioteca\TypesenseBundle\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverterInterface;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Fields;
 use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
 use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
 use Biblioteca\TypesenseBundle\Mapper\Metadata\MetadataMapping;
 use Biblioteca\TypesenseBundle\Mapper\Options\CollectionOptions;
 use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @template T of Object
+ * @phpstan-import-type FieldMappingArray from FieldMapping
  *
- * @extends AbstractEntityMapper<T>
- *
- * @phpstan-import-type FieldMappingArray from Fields\FieldMapping
+ * @phpstan-type MappingConfiguration array{metadata: array<string, mixed>, fields: array<string, FieldMappingArray>, token_separators: list<string>, symbols_to_index: list<string>, default_sorting_field: string|null }
  */
-final class EntityMapper extends AbstractEntityMapper
+final class EntityMapperGenerator implements MappingGeneratorInterface
 {
     /**
-     * @param array{metadata: array<string, mixed>, fields: array<string, FieldMappingArray>, token_separators: list<string>, symbols_to_index: list<string>, default_sorting_field: string|null } $mappingConfig
-     * @param class-string<T>                                                                                                                                                                      $className
+     * @param MappingConfiguration $mappingConfig
      */
     public function __construct(
-        readonly EntityManagerInterface $entityManager,
-        readonly ValueConverterInterface $valueConverter,
-        readonly ValueExtractorInterface $valueExtractor,
-        private readonly string $className,
         private readonly array $mappingConfig,
     ) {
-        parent::__construct($entityManager);
     }
 
     public function getMapping(): Mapping
@@ -50,29 +37,6 @@ final class EntityMapper extends AbstractEntityMapper
         }
 
         return $mapping;
-    }
-
-    /**
-     * @throws ValueConversionException
-     * @throws ValueExtractorException
-     */
-    public function transform(object $entity): array
-    {
-        $data = [];
-
-        foreach ($this->getMapping()->getFields() as $fieldMapping) {
-            $fieldName = $fieldMapping->getEntityAttribute() ?? $fieldMapping->getName();
-            $value = $this->valueExtractor->getValue($entity, $fieldName);
-
-            $data[$fieldMapping->getName()] = $this->valueConverter->convert($value, $fieldMapping->getType(), $fieldMapping->isOptional());
-        }
-
-        return $data;
-    }
-
-    public function getClassName(): string
-    {
-        return $this->className;
     }
 
     private function getCollectionOptions(): ?CollectionOptions

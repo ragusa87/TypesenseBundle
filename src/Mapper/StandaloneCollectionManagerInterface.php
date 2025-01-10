@@ -5,7 +5,7 @@ namespace Biblioteca\TypesenseBundle\Mapper;
 /**
  * Implement this interface if you want to create a mapper not attached to any entity.
  */
-interface StandaloneMapperInterface extends MapperInterface
+interface StandaloneCollectionManagerInterface extends CollectionManagerInterface
 {
     public const TAG_NAME = 'biblioteca_typesense.mapper';
 
