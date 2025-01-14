@@ -21,7 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * @extends AbstractEntityDataGenerator<Book>
  */
-class ProductDataGenerator extends AbstractEntityDataGenerator
+class BookDataGenerator extends AbstractEntityDataGenerator
 {
     public function __construct(
         EntityManagerInterface $entityManager,
