@@ -12,7 +12,7 @@ use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
 /**
  * @phpstan-import-type FieldMappingArray from FieldMapping
  *
- * @phpstan-type MappingConfiguration array{metadata: array<string, mixed>, fields: array<string, FieldMappingArray>, token_separators: list<string>, symbols_to_index: list<string>, default_sorting_field: string|null }
+ * @phpstan-type MappingConfiguration array{metadata: array<string, mixed>, fields: array<int, FieldMappingArray>, token_separators: list<string>, symbols_to_index: list<string>, default_sorting_field: string|null }
  */
 final class EntityMapperGenerator implements MappingGeneratorInterface
 {
