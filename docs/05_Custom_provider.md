@@ -3,7 +3,7 @@ You will need to convert the data on the fly, and also declare the mapping confi
 
 You will not be able to use the `hydrated` result out of the box.
 
-Example of a custom mapper, it uses `AbstractEntityMapper` that will fetch the entities from the database, but it's not mandatory.
+Example of a custom mapper, it uses `AbstractEntityDataGenerator` that will fetch the entities from the database, but it's not mandatory.
 
 ```php
 <?php
