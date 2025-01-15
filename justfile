@@ -1,4 +1,14 @@
 set shell := ["docker", "compose", "run", "--entrypoint", "/bin/sh", "-it", "--user=1000", "--rm", "php", "-c"]
+
+os_open := if os() == 'windows' {
+  "start"
+} else if os() == 'macos' {
+  "open"
+} else {
+  "xdg-open"
+}
+
+
 composer *args="":
     /usr/bin/composer {{args}}
 
@@ -40,3 +50,7 @@ init-db *args="":
 
 phpstan *args="":
     composer phpstan -- {{args}}
+
+phpunit-open-report:
+    #!/usr/bin/bash
+    {{ os_open }} {{invocation_directory()}}/tests/coverage/html-coverage/index.html
