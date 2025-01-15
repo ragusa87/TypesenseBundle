@@ -75,7 +75,7 @@ final class EntityMapperGenerator implements MappingGeneratorInterface
             }
         }
 
-        return true;
+        return false;
     }
 
     /**
