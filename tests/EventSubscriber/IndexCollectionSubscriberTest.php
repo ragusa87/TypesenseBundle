@@ -23,17 +23,21 @@ class IndexCollectionSubscriberTest extends TestCase
      *
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    protected function getIndexCollectionSubscriber(?object $entity, ?callable $callable): IndexCollectionSubscriber
+    protected function getIndexCollectionSubscriber(?object $entity, ?callable $callable, bool $hasEntityTransformer = true, bool $supportsEntity = true): IndexCollectionSubscriber
     {
         $populateService = $this->createMock(PopulateService::class);
         if (null !== $callable) {
             $callable($populateService);
         }
         $mapperLocator = $this->createMock(MapperLocatorInterface::class);
-        $mapperLocator->method('getEntityTransformers')->willReturn(['mapper' => new class implements EntityTransformerInterface {
+        $mapperLocator->method('getEntityTransformers')->willReturn(['mapper' => new class(supportsEntity: $supportsEntity) implements EntityTransformerInterface {
+            public function __construct(private readonly bool $supportsEntity = true)
+            {
+            }
+
             public function support($entity): bool
             {
-                return true;
+                return $this->supportsEntity;
             }
 
             public function transform($entity): array
@@ -42,7 +46,7 @@ class IndexCollectionSubscriberTest extends TestCase
             }
         }]);
 
-        $mapperLocator->method('hasEntityTransformer')->willReturn(true);
+        $mapperLocator->method('hasEntityTransformer')->willReturn($hasEntityTransformer);
 
         $entityIdentifier = $this->createMock(EntityIdentifierInterface::class);
         $entityIdentifier->method('getIdentifiersValue')->willReturn(['id' => '123']);
@@ -58,7 +62,7 @@ class IndexCollectionSubscriberTest extends TestCase
         );
     }
 
-    public function testOnFlush(): void
+    public function testOnFlushInsertion(): void
     {
         $entity = new \stdClass();
 
@@ -74,6 +78,92 @@ class IndexCollectionSubscriberTest extends TestCase
         $indexCollectionSubscriber = $this->getIndexCollectionSubscriber($entity, function (PopulateService&MockObject $populate) {
             $populate->expects($this->once())->method('fillData')->with('mapper', ['id' => '123', 'data' => 'value']);
         });
+        $indexCollectionSubscriber->onFlush($onFlushEventArgs);
+        $indexCollectionSubscriber->postFlush(new PostFlushEventArgs($objectManager));
+        $this->assertTrue(true); // @phpstan-ignore-line Assertion done via mock
+    }
+
+    public function testOnFlushUpdate(): void
+    {
+        $entity = new \stdClass();
+
+        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork->method('getScheduledEntityDeletions')->willReturn([]);
+        $unitOfWork->method('getScheduledEntityInsertions')->willReturn([]);
+        $unitOfWork->method('getScheduledEntityUpdates')->willReturn([$entity]);
+
+        $objectManager = $this->createMock(EntityManager::class);
+        $objectManager->method('getUnitOfWork')->willReturn($unitOfWork);
+        $onFlushEventArgs = new OnFlushEventArgs($objectManager);
+
+        $indexCollectionSubscriber = $this->getIndexCollectionSubscriber($entity, function (PopulateService&MockObject $populate) {
+            $populate->expects($this->once())->method('fillData')->with('mapper', ['id' => '123', 'data' => 'value']);
+        });
+        $indexCollectionSubscriber->onFlush($onFlushEventArgs);
+        $indexCollectionSubscriber->postFlush(new PostFlushEventArgs($objectManager));
+        $this->assertTrue(true); // @phpstan-ignore-line Assertion done via mock
+    }
+
+    public function testOnFlushDeletion(): void
+    {
+        $entity = new \stdClass();
+
+        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork->method('getScheduledEntityDeletions')->willReturn([$entity]);
+        $unitOfWork->method('getScheduledEntityInsertions')->willReturn([]);
+        $unitOfWork->method('getScheduledEntityUpdates')->willReturn([]);
+
+        $objectManager = $this->createMock(EntityManager::class);
+        $objectManager->method('getUnitOfWork')->willReturn($unitOfWork);
+        $onFlushEventArgs = new OnFlushEventArgs($objectManager);
+
+        $indexCollectionSubscriber = $this->getIndexCollectionSubscriber($entity, function (PopulateService&MockObject $populate) {
+            $populate->expects($this->once())->method('deleteData')->with('mapper', ['id' => '123', 'data' => 'value']);
+        });
+        $indexCollectionSubscriber->onFlush($onFlushEventArgs);
+        $indexCollectionSubscriber->postFlush(new PostFlushEventArgs($objectManager));
+        $this->assertTrue(true); // @phpstan-ignore-line Assertion done via mock
+    }
+
+    public function testNothingWithoutEntityTransformerOnFlush(): void
+    {
+        $entity = new \stdClass();
+
+        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork->method('getScheduledEntityDeletions')->willReturn([$entity]);
+        $unitOfWork->method('getScheduledEntityInsertions')->willReturn([$entity]);
+        $unitOfWork->method('getScheduledEntityUpdates')->willReturn([$entity]);
+
+        $objectManager = $this->createMock(EntityManager::class);
+        $objectManager->method('getUnitOfWork')->willReturn($unitOfWork);
+        $onFlushEventArgs = new OnFlushEventArgs($objectManager);
+
+        $indexCollectionSubscriber = $this->getIndexCollectionSubscriber($entity, function (PopulateService&MockObject $populate) {
+            $populate->expects($this->never())->method('fillData');
+            $populate->expects($this->never())->method('deleteData');
+        }, false);
+        $indexCollectionSubscriber->onFlush($onFlushEventArgs);
+        $indexCollectionSubscriber->postFlush(new PostFlushEventArgs($objectManager));
+        $this->assertTrue(true); // @phpstan-ignore-line Assertion done via mock
+    }
+
+    public function testNothingWithoutSupportOnFlush(): void
+    {
+        $entity = new \stdClass();
+
+        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork->method('getScheduledEntityDeletions')->willReturn([$entity]);
+        $unitOfWork->method('getScheduledEntityInsertions')->willReturn([$entity]);
+        $unitOfWork->method('getScheduledEntityUpdates')->willReturn([$entity]);
+
+        $objectManager = $this->createMock(EntityManager::class);
+        $objectManager->method('getUnitOfWork')->willReturn($unitOfWork);
+        $onFlushEventArgs = new OnFlushEventArgs($objectManager);
+
+        $indexCollectionSubscriber = $this->getIndexCollectionSubscriber($entity, function (PopulateService&MockObject $populate) {
+            $populate->expects($this->never())->method('fillData');
+            $populate->expects($this->never())->method('deleteData');
+        }, true, false);
         $indexCollectionSubscriber->onFlush($onFlushEventArgs);
         $indexCollectionSubscriber->postFlush(new PostFlushEventArgs($objectManager));
         $this->assertTrue(true); // @phpstan-ignore-line Assertion done via mock
