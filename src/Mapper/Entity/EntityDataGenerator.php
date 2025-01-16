@@ -5,7 +5,7 @@ namespace Biblioteca\TypesenseBundle\Mapper\Entity;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @template T of Object
+ * @template T of object
  *
  * @extends AbstractEntityDataGenerator<T>
  */

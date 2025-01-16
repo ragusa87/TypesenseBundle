@@ -5,7 +5,6 @@ namespace Biblioteca\TypesenseBundle\Tests\Mapper\Entity;
 use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
 use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
 use Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverterInterface;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractor;
 use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformer;
 use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
 use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
@@ -59,7 +58,7 @@ class EntityTransformerTest extends TestCase
      */
     private function getTransformer(): EntityTransformer
     {
-        $entityManagerInterface = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
+        $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
         $mappingGenerator = new class implements MappingGeneratorInterface {
             public function getMapping(): MappingInterface
             {
@@ -92,6 +91,6 @@ class EntityTransformerTest extends TestCase
             }
         };
 
-        return new EntityTransformer($entityManagerInterface, $valueConverter, new ValueExtractor(), $mappingGenerator);
+        return new EntityTransformer($mappingGenerator, $valueConverter);
     }
 }
