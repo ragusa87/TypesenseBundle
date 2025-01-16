@@ -2,10 +2,11 @@
 
 namespace Biblioteca\TypesenseBundle\Mapper\Entity;
 
+use Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverter;
 use Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverterInterface;
+use Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractor;
 use Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractorInterface;
 use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @template T of Object
@@ -14,12 +15,8 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 final class EntityTransformer implements EntityTransformerInterface
 {
-    public function __construct(
-        readonly EntityManagerInterface $entityManager,
-        readonly ValueConverterInterface $valueConverter,
-        readonly ValueExtractorInterface $valueExtractor,
-        readonly MappingGeneratorInterface $mappingGenerator,
-    ) {
+    public function __construct(private readonly MappingGeneratorInterface $mappingGenerator, private readonly ValueConverterInterface $valueConverter = new ValueConverter(), private readonly ValueExtractorInterface $valueExtractor = new ValueExtractor())
+    {
     }
 
     public function transform(object $entity): array
