@@ -32,6 +32,10 @@ abstract class AbstractBibliotecaTypesenseBundle extends AbstractBundle
                     ->end()
                 ->end()
             ->end()
+            ->booleanNode('auto_update')
+                ->info('Automatically update/remove entities from the index on flush')
+                ->defaultTrue()
+            ->end()
         ->end();
 
         $this->addCollectionsConfig($definitionConfigurator->rootNode());

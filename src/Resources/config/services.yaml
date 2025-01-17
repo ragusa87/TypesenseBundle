@@ -73,5 +73,8 @@ services:
   Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResultInterface: '@Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResult'
 
   Biblioteca\TypesenseBundle\EventSubscriber\IndexCollectionSubscriber:
+    autowire: true
+    arguments:
+      $enabled: '%biblioteca_typesense.config.auto_update%'
     tags:
       - { name: doctrine.event_subscriber, connection: default }

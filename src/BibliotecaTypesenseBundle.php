@@ -22,7 +22,7 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
     public const ENTITY_TRANSFORMER_TAG_NAME = 'biblioteca_typesense.entity_transformer';
 
     /**
-     * @param array{typesense: array{uri: string, key: string, connection_timeout_seconds: int}, collections: array<string, array{entity: string, name?: string}>} $config
+     * @param array{auto_update: bool, typesense: array{uri: string, key: string, connection_timeout_seconds: int}, collections: array<string, array{entity: string, name?: string}>} $config
      */
     public function loadExtension(array $config, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
@@ -36,6 +36,8 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
         }
 
         $containerConfigurator->import(__DIR__.'/Resources/config/services.yaml');
+
+        $containerConfigurator->parameters()->set('biblioteca_typesense.config.auto_update', $config['auto_update']);
 
         $this->loadCollection($config['collections'], $containerConfigurator);
     }

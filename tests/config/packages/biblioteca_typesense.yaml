@@ -14,3 +14,7 @@ services:
     autowire: true
     public: true
     tags: [ 'biblioteca_typesense.mapper' ]
+
+when@test:
+  biblioteca_typesense:
+    auto_update: false

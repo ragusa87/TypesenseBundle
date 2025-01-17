@@ -25,6 +25,7 @@ class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
         private readonly PopulateService $populateService,
         private readonly MapperLocatorInterface $mapperLocator,
         private readonly EntityIdentifierInterface $entityIdentifier,
+        private bool $enabled = true,
     ) {
     }
 
@@ -71,7 +72,7 @@ class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
     public function indexEntity(object $entity): self
     {
         foreach ($this->mapperLocator->getEntityTransformers($entity::class) as $name => $entityTransformer) {
-            if (!$entityTransformer->support($entity)) {
+            if (!$this->enabled || !$entityTransformer->support($entity)) {
                 continue;
             }
 
@@ -86,7 +87,7 @@ class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
     public function removeEntity(object $entity): self
     {
         foreach ($this->mapperLocator->getEntityTransformers($entity::class) as $name => $entityTransformer) {
-            if (!$entityTransformer->support($entity)) {
+            if (!$this->enabled || !$entityTransformer->support($entity)) {
                 continue;
             }
             // We inject the entity identifiers to delete them
@@ -107,5 +108,12 @@ class IndexCollectionSubscriber implements EventSubscriber, IndexerInterface
             Events::onFlush,
             Events::postFlush,
         ];
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
     }
 }
