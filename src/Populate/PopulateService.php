@@ -3,10 +3,10 @@
 namespace Biblioteca\TypesenseBundle\Populate;
 
 use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
 use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
 use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMappingInterface;
 use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
+use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
 use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
 use Http\Client\Exception;
 use Typesense\Collection;
@@ -26,9 +26,9 @@ class PopulateService
         $this->client->getCollection($name)->delete();
     }
 
-    public function createCollection(string $collectionName, CollectionManagerInterface $collectionManager): Collection
+    public function createCollection(string $collectionName, MappingGeneratorInterface $mappingGenerator): Collection
     {
-        $mapping = $collectionManager->getMapping();
+        $mapping = $mappingGenerator->getMapping();
         $this->throwIfIdIsNotSet($mapping, $collectionName);
 
         $payload = array_filter([
