@@ -62,14 +62,11 @@ class PopulateService
 
     /**
      * @param array<string,mixed> $data
-     *
-     * @return \Generator<array<string,mixed>>
      */
-    public function fillData(string $name, array $data): \Generator
+    public function fillData(string $name, array $data): void
     {
         $collection = $this->client->getCollection($name);
         $collection->documents->upsert($data);
-        yield $data;
     }
 
     /**
