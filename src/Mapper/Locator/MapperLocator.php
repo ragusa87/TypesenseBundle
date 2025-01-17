@@ -128,10 +128,21 @@ class MapperLocator implements MapperLocatorInterface
     {
         $response = [];
         foreach (($this->entityMapping[$entity] ?? []) as $mapperName) {
-            $service = $this->entityTransformers->has($mapperName) ? $this->entityTransformers->get($mapperName) : null;
-            $service = $service ?? $this->collectionManagers->has($mapperName) ? $this->collectionManagers->get($mapperName) : null;
-            if (!$service instanceof EntityTransformerInterface) {
-                throw new InvalidTypeMapperException(sprintf('No entity transformer found for entity "%s" do you implemented "%s".', $entity, EntityTransformerInterface::class));
+            try {
+                $service = null;
+                if ($this->entityTransformers->has($mapperName)) {
+                    $service = $this->entityTransformers->get($mapperName);
+                }
+
+                if ($service === null && $this->collectionManagers->has($mapperName)) {
+                    $service = $this->collectionManagers->get($mapperName);
+                }
+
+                if (!$service instanceof EntityTransformerInterface) {
+                    throw new InvalidTypeMapperException(sprintf('No valid entity transformer found for entity "%s" do you implemented "%s".', $entity, EntityTransformerInterface::class));
+                }
+            } catch (ServiceNotFoundException $e) {
+                throw new InvalidTypeMapperException(sprintf('No entity transformer found for entity "%s" do you implemented "%s".', $entity, EntityTransformerInterface::class), 0, $e);
             }
 
             $response[$mapperName] = $service;
