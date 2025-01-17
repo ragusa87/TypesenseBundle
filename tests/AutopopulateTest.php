@@ -1,5 +1,6 @@
 <?php
 
+use Biblioteca\TypesenseBundle\Client\ClientInterface;
 use Biblioteca\TypesenseBundle\EventSubscriber\IndexCollectionSubscriber;
 use Biblioteca\TypesenseBundle\Populate\PopulateService;
 use Biblioteca\TypesenseBundle\Tests\DataFixtures\ProductFixtures;
@@ -52,7 +53,10 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
         self::bootKernel();
 
         // Mock the PopulateService to assert 'fillData' is called once
-        $populateMock = $this->createMock(PopulateService::class);
+        $populateMock = $this->getMockBuilder(PopulateService::class)
+            ->setConstructorArgs([$this->createMock(ClientInterface::class)])
+            ->getMock();
+
         $populateMock->expects($this->once())
         ->method('fillData')
             ->with('products', ['id' => $this->lastId + 1, 'name' => 'test'])
@@ -61,6 +65,7 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
             });
 
         static::getContainer()->set(PopulateService::class, $populateMock);
+        $this->get(IndexCollectionSubscriber::class)->setEnabled(true);
 
         $product = new Product();
         $product->name = 'test';
@@ -75,9 +80,12 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
     public function testUpdateEntity(): void
     {
         self::bootKernel();
+
         $name = 'Product 1 +test'.uniqid();
         // Mock the PopulateService to assert 'fillData' is called once
-        $populateMock = $this->createMock(PopulateService::class);
+        $populateMock = $this->getMockBuilder(PopulateService::class)
+            ->setConstructorArgs([$this->createMock(ClientInterface::class)])
+            ->getMock();
         $populateMock->expects($this->once())
             ->method('fillData')
             ->with('products', ['id' => 1, 'name' => $name])
@@ -86,6 +94,7 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
             });
 
         static::getContainer()->set(PopulateService::class, $populateMock);
+        $this->get(IndexCollectionSubscriber::class)->setEnabled(true);
 
         $entityManager = $this->get(Doctrine\ORM\EntityManagerInterface::class);
         $product = $entityManager->getRepository(Product::class)->findOneBy(['id' => 1]);
@@ -100,6 +109,7 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
     public function testDeleteEntity(): void
     {
         self::bootKernel();
+
         $newProduct = new Product();
         $newProduct->name = 'deleteMe';
 
@@ -111,7 +121,9 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
         self::bootKernel();
 
         // Mock the PopulateService to assert 'fillData' is called once
-        $populateMock = $this->createMock(PopulateService::class);
+        $populateMock = $this->getMockBuilder(PopulateService::class)
+            ->setConstructorArgs([$this->createMock(ClientInterface::class)])
+            ->getMock();
         $populateMock->expects($this->once())
             ->method('deleteData')
             ->with('products', ['id' => $newProduct->id, 'name' => $newProduct->name])
@@ -120,6 +132,7 @@ class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
             });
 
         static::getContainer()->set(PopulateService::class, $populateMock);
+        $this->get(IndexCollectionSubscriber::class)->setEnabled(true);
 
         $em = $this->get(Doctrine\ORM\EntityManagerInterface::class);
         $product = $em->getRepository(Product::class)->findOneBy(['name' => 'deleteMe']);

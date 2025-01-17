@@ -25,6 +25,12 @@ biblioteca_typesense:
   typesense:
     uri: '%env(TYPESENSE_URL)%'
     key: '%env(TYPESENSE_KEY)%'
+
+when@test:
+  biblioteca_typesense:
+    auto_update: false
 ```
 
 This is the minimum configuration needed to use the bundle.
+
+By setting `auto_update` to `false` on `test` environment, you make sure that typesense will not update your typesense document when you flush an entity.

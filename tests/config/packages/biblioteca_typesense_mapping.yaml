@@ -25,5 +25,7 @@ biblioteca_typesense:
             sort: true
             locale: 'en'
             facet: true
-
+when@test:
+  biblioteca_typesense:
+    auto_update: false
 

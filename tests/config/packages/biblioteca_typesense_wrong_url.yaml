@@ -6,3 +6,6 @@ biblioteca_typesense:
     books:
       entity: 'Biblioteca\TypesenseBundle\Tests\Entity\Product'
       name: 'products'
+when@test:
+  biblioteca_typesense:
+    auto_update: false
