@@ -39,7 +39,7 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
     {
         static::ensureKernelShutdown();
         self::bootKernel([
-            'configs' => [dirname(__DIR__, 2).'/config/services_with_wrong_mapper.yaml'],
+            'configs' => ['config/services_with_wrong_mapper.yaml'],
         ]);
 
         $mapperLocator = $this->get(MapperLocator::class);
@@ -54,7 +54,7 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
     public function testLocatorGetMappersInstanceOfIssue(): void
     {
         self::bootKernel([
-            'configs' => [dirname(__DIR__, 2).'/config/services_with_wrong_mapper.yaml'],
+            'configs' => ['config/services_with_wrong_mapper.yaml'],
         ]);
 
         $mapperLocator = $this->get(MapperLocator::class);

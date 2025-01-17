@@ -60,14 +60,14 @@ class TestKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $this->settings['configs'][] = __DIR__.'/config/packages/doctrine.yaml';
-        $this->settings['configs'][] = __DIR__.'/config/packages/framework.yaml';
-        $this->settings['configs'][] = __DIR__.'/config/services.yaml';
+        $this->settings['configs'][] = 'config/packages/doctrine.yaml';
+        $this->settings['configs'][] = 'config/packages/framework.yaml';
+        $this->settings['configs'][] = 'config/services.yaml';
         if (false === in_array(self::CONFIG_KEY, array_keys($this->settings['configs']))) {
-            $this->settings['configs'][self::CONFIG_KEY] = __DIR__.'/config/packages/biblioteca_typesense.yaml';
+            $this->settings['configs'][self::CONFIG_KEY] = 'config/packages/biblioteca_typesense.yaml';
         }
         foreach ($this->settings['configs'] as $config) {
-            $loader->load($config);
+            $loader->load(__DIR__.'/'.$config);
         }
     }
 

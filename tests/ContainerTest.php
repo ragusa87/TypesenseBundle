@@ -33,7 +33,7 @@ class ContainerTest extends KernelTestCase
     public function testClientFactoryInvalidUrl(): void
     {
         self::bootKernel([
-            'configs' => [TestKernel::CONFIG_KEY => __DIR__.'/config/packages/biblioteca_typesense_wrong_url.yaml'],
+            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioteca_typesense_wrong_url.yaml'],
         ]);
         $container = self::getContainer();
 
