@@ -7,6 +7,8 @@ use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
 use Biblioteca\TypesenseBundle\Mapper\Locator\InvalidTypeMapperException;
 use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
 use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioteca\TypesenseBundle\Tests\Entity\Product;
+use Biblioteca\TypesenseBundle\Tests\TestKernel;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(MapperLocator::class)]
@@ -76,5 +78,36 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
 
         $this->assertArrayHasKey('products', $result);
         $this->assertInstanceOf(MappingGeneratorInterface::class, $result['products']);
+    }
+
+    public function testLocatorGetMappingGenerator(): void
+    {
+        self::bootKernel([
+            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioteca_typesense_mapping.yaml'],
+        ]);
+
+        $mapperLocator = $this->get(MapperLocator::class);
+        $result = $mapperLocator->getMappers();
+
+        $this->assertArrayHasKey('products', $result);
+        $this->assertInstanceOf(MappingGeneratorInterface::class, $result['products']);
+        $this->assertSame(1, $mapperLocator->countDataGenerator());
+        $this->assertInstanceOf(DataGeneratorInterface::class, $mapperLocator->getDataGenerator('products'));
+
+        $entityMappers = $mapperLocator->getEntityMappers(Product::class);
+        $this->assertCount(1, $entityMappers);
+        $this->assertArrayHasKey('products', $entityMappers);
+        $this->assertInstanceOf(MappingGeneratorInterface::class, $entityMappers['products']);
+    }
+
+    public function testNoEntityTransformer(): void
+    {
+        self::bootKernel([
+            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioteca_typesense_mapping.yaml'],
+        ]);
+
+        $mapperLocator = $this->get(MapperLocator::class);
+
+        $this->assertFalse($mapperLocator->hasEntityTransformer(\stdClass::class));
     }
 }
