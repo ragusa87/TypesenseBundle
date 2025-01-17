@@ -55,7 +55,7 @@ class TypesensePopulateCommand extends Command
             $longName = $this->collectionAlias->getName($shortName);
 
             $symfonyStyle->writeln('Creating collection '.$longName);
-            $this->populateService->createCollection($longName, $collectionManager);
+            $this->populateService->createCollection($longName, $collectionManager->getMapping());
 
             if (false === $input->getOption('no-data')) {
                 $dataProvider = $this->mapperLocator->getDataGenerator($shortName);
