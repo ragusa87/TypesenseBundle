@@ -127,4 +127,14 @@ class SearchQuery implements SearchQueryInterface
             'voice_query' => $this->voiceQuery instanceof VoiceQueryInterface ? (string) $this->voiceQuery : null,
         ], fn (mixed $value): bool => !is_null($value));
     }
+
+    public function getQ(): string
+    {
+        return $this->q;
+    }
+
+    public function getQueryBy(): string
+    {
+        return $this->queryBy;
+    }
 }
