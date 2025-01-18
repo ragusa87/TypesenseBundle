@@ -2,6 +2,7 @@
 
 namespace Biblioteca\TypesenseBundle\Query;
 
+use Biblioteca\TypesenseBundle\Type\FacetStrategyEnum;
 use Biblioteca\TypesenseBundle\Type\InfixEnum;
 
 class SearchQuery implements SearchQueryInterface
@@ -10,6 +11,7 @@ class SearchQuery implements SearchQueryInterface
     private readonly ?string $prefix;
 
     private readonly ?string $stopwords;
+    private readonly ?string $facetStrategy;
 
     /**
      * @param string|InfixEnum[]|null  $infix
@@ -30,6 +32,7 @@ class SearchQuery implements SearchQueryInterface
         ?array $stopwords = null,
         private readonly ?string $facetBy = null,
         private readonly ?string $facetQuery = null,
+        string|FacetStrategyEnum|null $facetStrategy = null,
         private readonly ?int $remoteEmbeddingTimeoutMs = null,
         private readonly ?int $remoteEmbeddingBatchSize = null,
         private readonly ?int $remoteEmbeddingNumTries = null,
@@ -64,6 +67,8 @@ class SearchQuery implements SearchQueryInterface
         if ($this->vectorQuery instanceof VectorQueryInterface && $this->infix !== null) {
             throw new \InvalidArgumentException('Cannot set both infix and vectorQuery');
         }
+
+        $this->facetStrategy = $facetStrategy instanceof FacetStrategyEnum ? $facetStrategy->value : $facetStrategy;
     }
 
     private function convertArray(mixed $values, callable $convert, ?string $className = null): ?string
@@ -101,6 +106,7 @@ class SearchQuery implements SearchQueryInterface
             'drop_tokens_threshold' => $this->dropTokensThreshold,
             'facet_by' => $this->facetBy,
             'facet_query' => $this->facetQuery,
+            'facet_strategy' => $this->facetStrategy,
             'group_by' => $this->groupBy,
             'group_limit' => $this->groupLimit,
             'hidden_hits' => $this->hiddenHits,
