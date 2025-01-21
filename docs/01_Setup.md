@@ -1,7 +1,20 @@
 To use the Bundle, you can use the following command:
 
 ```bash
-composer require "Biblioteca/TypesenseBundle"
+composer require "biblioverse/typesense-bundle"
+```
+
+Note that as long as the repo is not ready, you will need to include the repository in your `composer.json`:
+
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/biblioverse/TypesenseBundle"
+    }
+  ]
+}
 ```
 Then you will need to add the bundle to your `config/bundles.php`:
 
