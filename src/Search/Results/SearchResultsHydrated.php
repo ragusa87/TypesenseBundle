@@ -2,61 +2,22 @@
 
 namespace Biblioteca\TypesenseBundle\Search\Results;
 
-use Biblioteca\TypesenseBundle\Search\Traits\FoundCountTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\HighlightTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\PageTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\RequestParametersTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\SearchCountTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\SearchFacetTrait;
-use Biblioteca\TypesenseBundle\Utils\ArrayAccessTrait;
-
 /**
  * @template T of object
  *
- * @implements \ArrayAccess<string, mixed>
- * @implements \IteratorAggregate<string|int, T>
+ * @extends AbstractSearchResults<T>
  */
-class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAccess
+class SearchResultsHydrated extends AbstractSearchResults
 {
-    /**
-     * @use ArrayAccessTrait<string, mixed>
-     */
-    use ArrayAccessTrait;
-    use FoundCountTrait;
-    use SearchCountTrait;
-    use SearchFacetTrait;
-    use HighlightTrait;
-    use PageTrait;
-    use RequestParametersTrait;
-
-    /**
-     * @var \Iterator<string|int, T>
-     */
-    private \Iterator $iterator;
-
     /**
      * @param array<string|int, T> $hydratedResults
      * @param array<string, mixed> $data
      *
      * @throws \Exception
      */
-    private function __construct(array $data, array $hydratedResults = [])
+    private function __construct(array $data, private readonly array $hydratedResults = [])
     {
-        $this->data = $data;
-        $this->setHydratedResults($hydratedResults);
-    }
-
-    /**
-     * @param array<string|int, T> $data
-     *
-     * @return SearchResultsHydrated<T>
-     */
-    public function setHydratedResults(array $data): self
-    {
-        $this->data['hydrated'] = $data;
-        $this->iterator = new \ArrayIterator($data);
-
-        return $this;
+        parent::__construct($data);
     }
 
     /**
@@ -93,25 +54,13 @@ class SearchResultsHydrated implements \IteratorAggregate, \Countable, \ArrayAcc
         return new self($data, $objects);
     }
 
-    /**
-     * @return \Iterator<string|int, T>
-     */
     public function getIterator(): \Iterator
     {
-        $this->iterator->rewind();
-
-        return $this->iterator;
+        return new \ArrayIterator($this->hydratedResults);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function toArray(): array
+    public function getResults(): array
     {
-        $export = $this->data;
-        // Hide the hydrated data from the exported array
-        unset($export['hydrated']);
-
-        return $export;
+        return $this->hydratedResults;
     }
 }

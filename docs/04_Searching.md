@@ -67,6 +67,8 @@ foreach ($searchResults as $result) {
 To build the search query, you can use the `Biblioteca\TypesenseBundle\Query\SearchQuery` class.
 There is a constructor with named parameters to help you build the query, it matches the Typesense API.
 
+> Please always use named parameters. The order will likely change in the future.
+
 ```php
 <?php
 use Biblioteca\TypesenseBundle\Query\SearchQuery;
