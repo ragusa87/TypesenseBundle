@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Search;
+namespace Biblioverse\TypesenseBundle\Tests\Search;
 
-use Biblioteca\TypesenseBundle\Search\Results\SearchResults;
+use Biblioverse\TypesenseBundle\Search\Results\SearchResults;
 
 class SearchResultTest extends \PHPUnit\Framework\TestCase
 {

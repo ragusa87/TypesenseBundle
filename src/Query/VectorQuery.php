@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Query;
+namespace Biblioverse\TypesenseBundle\Query;
 
 class VectorQuery implements VectorQueryInterface
 {

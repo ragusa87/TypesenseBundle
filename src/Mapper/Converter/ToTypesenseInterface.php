@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Converter;
+namespace Biblioverse\TypesenseBundle\Mapper\Converter;
 
 interface ToTypesenseInterface
 {

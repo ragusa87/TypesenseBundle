@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Fields;
+namespace Biblioverse\TypesenseBundle\Mapper\Fields;
 
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 
 interface FieldMappingInterface
 {

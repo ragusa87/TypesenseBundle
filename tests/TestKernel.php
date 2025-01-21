@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests;
+namespace Biblioverse\TypesenseBundle\Tests;
 
-use Biblioteca\TypesenseBundle\BibliotecaTypesenseBundle;
+use Biblioverse\TypesenseBundle\BiblioverseTypesenseBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -15,10 +15,10 @@ use Symfony\Component\HttpKernel\Kernel;
 class TestKernel extends Kernel
 {
     use MicroKernelTrait;
-    public const CONFIG_KEY = 'biblioteca_typesense';
+    public const CONFIG_KEY = 'biblioverse_typesense';
 
     /**
-     * @param array{'configs'?: array{'biblioteca_typesense'?:string}, 'bundles'?:string[]} $settings
+     * @param array{'configs'?: array{'biblioverse_typesense'?:string}, 'bundles'?:string[]} $settings
      */
     public function __construct(
         string $environment,
@@ -43,7 +43,7 @@ class TestKernel extends Kernel
     {
         $bundles = array_merge([
             DoctrineBundle::class,
-            BibliotecaTypesenseBundle::class,
+            BiblioverseTypesenseBundle::class,
             FrameworkBundle::class,
             DoctrineFixturesBundle::class,
         ], $this->settings['bundles'] ?? []);
@@ -64,7 +64,7 @@ class TestKernel extends Kernel
         $this->settings['configs'][] = 'config/packages/framework.yaml';
         $this->settings['configs'][] = 'config/services.yaml';
         if (false === in_array(self::CONFIG_KEY, array_keys($this->settings['configs']))) {
-            $this->settings['configs'][self::CONFIG_KEY] = 'config/packages/biblioteca_typesense.yaml';
+            $this->settings['configs'][self::CONFIG_KEY] = 'config/packages/biblioverse_typesense.yaml';
         }
         foreach ($this->settings['configs'] as $config) {
             $loader->load(__DIR__.'/'.$config);

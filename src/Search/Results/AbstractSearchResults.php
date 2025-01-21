@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Search\Results;
+namespace Biblioverse\TypesenseBundle\Search\Results;
 
-use Biblioteca\TypesenseBundle\Utils\ArrayAccessTrait;
+use Biblioverse\TypesenseBundle\Utils\ArrayAccessTrait;
 
 /**
  * @template T of mixed|object

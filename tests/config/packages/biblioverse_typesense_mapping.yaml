@@ -1,13 +1,13 @@
 parameters:
   env(TYPESENSE_URL): 'http://typesense:8108'
   env(TYPESENSE_KEY): 'mykey'
-biblioteca_typesense:
+biblioverse_typesense:
   typesense:
     uri: '%env(TYPESENSE_URL)%'
     key: '%env(TYPESENSE_KEY)%'
   collections:
     books:
-      entity: 'Biblioteca\TypesenseBundle\Tests\Entity\Product'
+      entity: 'Biblioverse\TypesenseBundle\Tests\Entity\Product'
       name: 'products'
       mapping:
         token_separators: [' ', '-']
@@ -26,6 +26,6 @@ biblioteca_typesense:
             locale: 'en'
             facet: true
 when@test:
-  biblioteca_typesense:
+  biblioverse_typesense:
     auto_update: false
 

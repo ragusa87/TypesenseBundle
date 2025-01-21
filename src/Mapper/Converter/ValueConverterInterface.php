@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Converter;
+namespace Biblioverse\TypesenseBundle\Mapper\Converter;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
 
 interface ValueConverterInterface
 {

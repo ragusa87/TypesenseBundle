@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Client;
+namespace Biblioverse\TypesenseBundle\Tests\Client;
 
-use Biblioteca\TypesenseBundle\Client\ClientInterface;
+use Biblioverse\TypesenseBundle\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 
 class ServiceWithClient

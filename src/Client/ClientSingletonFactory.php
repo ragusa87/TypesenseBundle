@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Client;
+namespace Biblioverse\TypesenseBundle\Client;
 
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface as HttpClient;

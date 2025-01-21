@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Entity;
+namespace Biblioverse\TypesenseBundle\Tests\Entity;
 
-use Biblioteca\TypesenseBundle\Tests\Repository\ProductRepository;
+use Biblioverse\TypesenseBundle\Tests\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]

@@ -1,14 +1,14 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Command;
+namespace Biblioverse\TypesenseBundle\Tests\Command;
 
-use Biblioteca\TypesenseBundle\CollectionAlias\CollectionAliasInterface;
-use Biblioteca\TypesenseBundle\Command\TypesensePopulateCommand;
-use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
-use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
-use Biblioteca\TypesenseBundle\Populate\PopulateService;
+use Biblioverse\TypesenseBundle\CollectionAlias\CollectionAliasInterface;
+use Biblioverse\TypesenseBundle\Command\TypesensePopulateCommand;
+use Biblioverse\TypesenseBundle\Mapper\CollectionManagerInterface;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
+use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
+use Biblioverse\TypesenseBundle\Populate\PopulateService;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class TypesensePopulateCommandTest extends \PHPUnit\Framework\TestCase

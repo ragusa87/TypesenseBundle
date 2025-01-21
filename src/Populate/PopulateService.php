@@ -1,12 +1,12 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Populate;
+namespace Biblioverse\TypesenseBundle\Populate;
 
-use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMappingInterface;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Client\ClientInterface;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Fields\FieldMappingInterface;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\MappingInterface;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 use Http\Client\Exception;
 use Typesense\Collection;
 use Typesense\Exceptions\ObjectNotFound;

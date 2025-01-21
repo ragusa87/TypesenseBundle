@@ -11,11 +11,11 @@ Example of a custom mapper, it uses `AbstractEntityDataGenerator` that will fetc
 namespace App\Mapper;
 
 use App\Entity\Book;
-use Biblioteca\TypesenseBundle\Mapper\Entity\AbstractEntityDataGenerator;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface;
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Mapper\Entity\AbstractEntityDataGenerator;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioverse\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**

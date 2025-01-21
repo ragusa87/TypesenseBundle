@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Metadata;
+namespace Biblioverse\TypesenseBundle\Mapper\Metadata;
 
 interface MetadataMappingInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Indexer;
+namespace Biblioverse\TypesenseBundle\Indexer;
 
 interface IndexerInterface
 {

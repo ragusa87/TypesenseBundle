@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper;
 
 class MyInvalidMapper
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Locator;
+namespace Biblioverse\TypesenseBundle\Mapper\Locator;
 
 class InvalidTypeMapperException extends \InvalidArgumentException
 {

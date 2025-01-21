@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper;
+namespace Biblioverse\TypesenseBundle\Mapper;
 
-use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\MappingInterface;
 
 interface MappingGeneratorInterface
 {

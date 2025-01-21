@@ -1,12 +1,12 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper\Entity;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityDataGenerator;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformer;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
-use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityDataGenerator;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityTransformer;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\MappingInterface;
+use Biblioverse\TypesenseBundle\Mapper\MappingGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;

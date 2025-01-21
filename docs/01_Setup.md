@@ -9,11 +9,11 @@ Then you will need to add the bundle to your `config/bundles.php`:
 <?php
 $bundles = [
     // ...
-    Biblioteca\TypesenseBundle::class => ['all' => true],
+    Biblioverse\TypesenseBundle::class => ['all' => true],
 ];
 ```
 
-And finally, you will need to add the configuration to your `config/packages/biblioteca_typesense.yaml`:
+And finally, you will need to add the configuration to your `config/packages/biblioverse_typesense.yaml`:
 
 
 
@@ -21,13 +21,13 @@ And finally, you will need to add the configuration to your `config/packages/bib
 parameters:
   env(TYPESENSE_URL): 'http://typesense:8108'
   env(TYPESENSE_KEY): 'mykey'
-biblioteca_typesense:
+biblioverse_typesense:
   typesense:
     uri: '%env(TYPESENSE_URL)%'
     key: '%env(TYPESENSE_KEY)%'
 
 when@test:
-  biblioteca_typesense:
+  biblioverse_typesense:
     auto_update: false
 ```
 

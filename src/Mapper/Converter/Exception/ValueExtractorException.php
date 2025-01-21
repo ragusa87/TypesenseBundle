@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Converter\Exception;
+namespace Biblioverse\TypesenseBundle\Mapper\Converter\Exception;
 
 class ValueExtractorException extends \Exception
 {

@@ -1,11 +1,11 @@
-biblioteca_typesense:
+biblioverse_typesense:
   typesense:
     uri: '/s?a=12&b=12.3.3.4:1233'
     key: 'mykey'
   collections:
     books:
-      entity: 'Biblioteca\TypesenseBundle\Tests\Entity\Product'
+      entity: 'Biblioverse\TypesenseBundle\Tests\Entity\Product'
       name: 'products'
 when@test:
-  biblioteca_typesense:
+  biblioverse_typesense:
     auto_update: false

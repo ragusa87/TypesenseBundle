@@ -1,9 +1,9 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Query;
+namespace Biblioverse\TypesenseBundle\Query;
 
-use Biblioteca\TypesenseBundle\Type\FacetStrategyEnum;
-use Biblioteca\TypesenseBundle\Type\InfixEnum;
+use Biblioverse\TypesenseBundle\Type\FacetStrategyEnum;
+use Biblioverse\TypesenseBundle\Type\InfixEnum;
 
 class SearchQuery implements SearchQueryInterface
 {

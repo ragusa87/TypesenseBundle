@@ -1,11 +1,11 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Locator;
+namespace Biblioverse\TypesenseBundle\Mapper\Locator;
 
-use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
-use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\CollectionManagerInterface;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
+use Biblioverse\TypesenseBundle\Mapper\MappingGeneratorInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 

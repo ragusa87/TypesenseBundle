@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Populate;
+namespace Biblioverse\TypesenseBundle\Populate;
 
 /**
  * @template T

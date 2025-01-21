@@ -1,12 +1,12 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle;
+namespace Biblioverse\TypesenseBundle;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-abstract class AbstractBibliotecaTypesenseBundle extends AbstractBundle
+abstract class AbstractBiblioverseTypesenseBundle extends AbstractBundle
 {
     public function configure(DefinitionConfigurator $definitionConfigurator): void
     {

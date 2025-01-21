@@ -1,10 +1,10 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Search;
+namespace Biblioverse\TypesenseBundle\Search;
 
-use Biblioteca\TypesenseBundle\Exception\SearchException;
-use Biblioteca\TypesenseBundle\Query\SearchQuery;
-use Biblioteca\TypesenseBundle\Search\Results\SearchResults;
+use Biblioverse\TypesenseBundle\Exception\SearchException;
+use Biblioverse\TypesenseBundle\Query\SearchQuery;
+use Biblioverse\TypesenseBundle\Search\Results\SearchResults;
 
 interface SearchInterface
 {

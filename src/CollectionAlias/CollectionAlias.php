@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\CollectionAlias;
+namespace Biblioverse\TypesenseBundle\CollectionAlias;
 
-use Biblioteca\TypesenseBundle\Client\ClientInterface;
+use Biblioverse\TypesenseBundle\Client\ClientInterface;
 use Http\Client\Exception;
 use Typesense\Exceptions\TypesenseClientError;
 

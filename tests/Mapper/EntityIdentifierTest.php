@@ -1,10 +1,10 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper;
 
-use Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifier;
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
-use Biblioteca\TypesenseBundle\Tests\KernelTestCase;
+use Biblioverse\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifier;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Tests\KernelTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EntityIdentifierTest extends KernelTestCase

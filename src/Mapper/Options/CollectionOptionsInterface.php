@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Options;
+namespace Biblioverse\TypesenseBundle\Mapper\Options;
 
 interface CollectionOptionsInterface
 {

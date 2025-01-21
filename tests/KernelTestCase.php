@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests;
+namespace Biblioverse\TypesenseBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase as BaseKernelTestCase;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;

@@ -3,7 +3,7 @@
 
 ini_set('memory_limit',-1);
 
-use Biblioteca\TypesenseBundle\Tests\TestKernel;
+use Biblioverse\TypesenseBundle\Tests\TestKernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 if (!is_file(dirname(__DIR__).'/vendor/autoload_runtime.php')) {

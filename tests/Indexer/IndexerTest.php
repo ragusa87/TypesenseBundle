@@ -1,16 +1,16 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Indexer;
+namespace Biblioverse\TypesenseBundle\Tests\Indexer;
 
-use Biblioteca\TypesenseBundle\Indexer\Indexer;
-use Biblioteca\TypesenseBundle\Indexer\IndexerInterface;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
-use Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface;
-use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
-use Biblioteca\TypesenseBundle\Populate\PopulateService;
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
-use Biblioteca\TypesenseBundle\Tests\KernelTestCase;
+use Biblioverse\TypesenseBundle\Indexer\Indexer;
+use Biblioverse\TypesenseBundle\Indexer\IndexerInterface;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface;
+use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
+use Biblioverse\TypesenseBundle\Populate\PopulateService;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Tests\KernelTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Indexer::class)]

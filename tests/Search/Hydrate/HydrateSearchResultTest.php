@@ -1,12 +1,12 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Search\Hydrate;
+namespace Biblioverse\TypesenseBundle\Tests\Search\Hydrate;
 
-use Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResult;
-use Biblioteca\TypesenseBundle\Search\Results\SearchResults;
-use Biblioteca\TypesenseBundle\Search\Results\SearchResultsHydrated;
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
-use Biblioteca\TypesenseBundle\Tests\KernelTestCase;
+use Biblioverse\TypesenseBundle\Search\Hydrate\HydrateSearchResult;
+use Biblioverse\TypesenseBundle\Search\Results\SearchResults;
+use Biblioverse\TypesenseBundle\Search\Results\SearchResultsHydrated;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Tests\KernelTestCase;
 
 class HydrateSearchResultTest extends KernelTestCase
 {

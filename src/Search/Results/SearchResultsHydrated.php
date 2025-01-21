@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Search\Results;
+namespace Biblioverse\TypesenseBundle\Search\Results;
 
 /**
  * @template T of object

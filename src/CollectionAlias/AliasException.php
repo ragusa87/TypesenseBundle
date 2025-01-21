@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\CollectionAlias;
+namespace Biblioverse\TypesenseBundle\CollectionAlias;
 
-use Biblioteca\TypesenseBundle\Exception\SearchException;
+use Biblioverse\TypesenseBundle\Exception\SearchException;
 
 class AliasException extends SearchException
 {

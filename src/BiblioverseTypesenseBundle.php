@@ -1,13 +1,13 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle;
+namespace Biblioverse\TypesenseBundle;
 
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityMapperGenerator;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
-use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface;
-use Biblioteca\TypesenseBundle\Search\SearchCollectionInterface;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityMapperGenerator;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
+use Biblioverse\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface;
+use Biblioverse\TypesenseBundle\Search\SearchCollectionInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -15,11 +15,11 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * @phpstan-import-type MappingConfiguration from EntityMapperGenerator
  */
-class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
+class BiblioverseTypesenseBundle extends AbstractBiblioverseTypesenseBundle
 {
-    public const DATA_GENERATOR_TAG_NAME = 'biblioteca_typesense.entity_data_generator';
-    public const DATA_MAPPER_GENERATOR_TAG_NAME = 'biblioteca_typesense.entity_mapper_generator';
-    public const ENTITY_TRANSFORMER_TAG_NAME = 'biblioteca_typesense.entity_transformer';
+    public const DATA_GENERATOR_TAG_NAME = 'biblioverse_typesense.entity_data_generator';
+    public const DATA_MAPPER_GENERATOR_TAG_NAME = 'biblioverse_typesense.entity_mapper_generator';
+    public const ENTITY_TRANSFORMER_TAG_NAME = 'biblioverse_typesense.entity_transformer';
 
     /**
      * @param array{auto_update: bool, typesense: array{uri: string, key: string, connection_timeout_seconds: int}, collections: array<string, array{entity: string, name?: string}>} $config
@@ -32,12 +32,12 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
         /** @var iterable<string,mixed> $typesenseConfig */
         $typesenseConfig = $config['typesense'];
         foreach ($typesenseConfig as $key => $value) {
-            $containerConfigurator->parameters()->set('biblioteca_typesense.config.'.$key, $value);
+            $containerConfigurator->parameters()->set('biblioverse_typesense.config.'.$key, $value);
         }
 
         $containerConfigurator->import(__DIR__.'/Resources/config/services.yaml');
 
-        $containerConfigurator->parameters()->set('biblioteca_typesense.config.auto_update', $config['auto_update']);
+        $containerConfigurator->parameters()->set('biblioverse_typesense.config.auto_update', $config['auto_update']);
 
         $this->loadCollection($config['collections'], $containerConfigurator);
     }
@@ -77,7 +77,7 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
         }
 
         // Declare the configured mapping as parameters
-        $containerConfigurator->parameters()->set('biblioteca_typesense.config.entity_mapping', $entityMapping);
+        $containerConfigurator->parameters()->set('biblioverse_typesense.config.entity_mapping', $entityMapping);
     }
 
     private function toCamelCase(string $input): string
@@ -95,10 +95,10 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
     private function createSearchService(ContainerConfigurator $containerConfigurator, string $entity, string $name): void
     {
         // Create a service that will be used to search the specific collection
-        $id = 'biblioteca_typesense.collection.'.$name;
+        $id = 'biblioverse_typesense.collection.'.$name;
         $containerConfigurator->services()
             ->set($id)
-            ->parent('biblioteca_typesense.collection.abstract')
+            ->parent('biblioverse_typesense.collection.abstract')
             ->bind('$collectionName', $name)
             ->bind('$entityClass', $entity)
             ->public()
@@ -117,10 +117,10 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
     private function createMapperGenerator(ContainerConfigurator $containerConfigurator, string $name, array $mapping): string
     {
         // If the configuration has a mapping, create a service to do the mapping automatically
-        $id = 'biblioteca_typesense.entity_mapper_generator.'.$name;
+        $id = 'biblioverse_typesense.entity_mapper_generator.'.$name;
         $containerConfigurator->services()
             ->set($id)
-            ->parent('biblioteca_typesense.entity_mapper_generator.abstract')
+            ->parent('biblioverse_typesense.entity_mapper_generator.abstract')
             ->bind('$mappingConfig', $mapping)
             // The mapper attribute is used as index and reference the collection.
             ->tag(self::DATA_MAPPER_GENERATOR_TAG_NAME, ['key' => $name])
@@ -135,10 +135,10 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
 
     private function createDataGenerator(ContainerConfigurator $containerConfigurator, string $entity, string $name, string $entityTransformerId): string
     {
-        $id = 'biblioteca_typesense.entity_data_generator.'.$name;
+        $id = 'biblioverse_typesense.entity_data_generator.'.$name;
         $containerConfigurator->services()
             ->set($id)
-            ->parent('biblioteca_typesense.entity_data_generator.abstract')
+            ->parent('biblioverse_typesense.entity_data_generator.abstract')
             ->bind('$className', $entity)
             ->bind('$entityTransformer', new Reference($entityTransformerId))
             ->tag(self::DATA_GENERATOR_TAG_NAME, ['key' => $name])
@@ -152,10 +152,10 @@ class BibliotecaTypesenseBundle extends AbstractBibliotecaTypesenseBundle
 
     private function createEntityTransformer(ContainerConfigurator $containerConfigurator, string $name, string $mappingGeneratorId): string
     {
-        $id = 'biblioteca_typesense.entity_transformer.'.$name;
+        $id = 'biblioverse_typesense.entity_transformer.'.$name;
         $containerConfigurator->services()
             ->set($id)
-            ->parent('biblioteca_typesense.entity_transformer.abstract')
+            ->parent('biblioverse_typesense.entity_transformer.abstract')
             ->bind('$mappingGenerator', new Reference($mappingGeneratorId))
             ->tag(self::ENTITY_TRANSFORMER_TAG_NAME, ['key' => $name])
             ->private()
