@@ -1,17 +1,17 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper\Entity;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverterInterface;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformer;
-use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
-use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Options\CollectionOptions;
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\ValueConverterInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityTransformer;
+use Biblioverse\TypesenseBundle\Mapper\Fields\FieldMapping;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\MappingInterface;
+use Biblioverse\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Options\CollectionOptions;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 

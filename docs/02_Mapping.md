@@ -3,7 +3,7 @@ To use Entities mapping, you will need to configure the mapping between your ent
 You can do that in the configuration. See the example below.
 
 ```yaml
-biblioteca_typesense:
+biblioverse_typesense:
   typesense:
     uri: '%env(TYPESENSE_URL)%'
     key: '%env(TYPESENSE_KEY)%'
@@ -33,7 +33,7 @@ Limitation:
 
 The type such as `string` or `string[]` are the same as the Typesense types. You can see the full list of types in the [Typesense documentation](https://typesense.org/docs/0.21.0/api/collections.html#schema-fields).
 
-You can also use the following enum: `Biblioteca\TypesenseBundle\Type\DataTypeEnum`.
+You can also use the following enum: `Biblioverse\TypesenseBundle\Type\DataTypeEnum`.
 
 # Entity attribute
 If the field name in the entity is not matching the one on the Typesense collection, you can use the `entity_attribute` configuration to map the entity field to the collection field.

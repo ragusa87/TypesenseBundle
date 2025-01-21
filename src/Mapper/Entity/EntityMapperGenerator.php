@@ -1,13 +1,13 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Entity;
+namespace Biblioverse\TypesenseBundle\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Metadata\MetadataMapping;
-use Biblioteca\TypesenseBundle\Mapper\Options\CollectionOptions;
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Mapper\Fields\FieldMapping;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioverse\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Metadata\MetadataMapping;
+use Biblioverse\TypesenseBundle\Mapper\Options\CollectionOptions;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 
 /**
  * @phpstan-import-type FieldMappingArray from FieldMapping

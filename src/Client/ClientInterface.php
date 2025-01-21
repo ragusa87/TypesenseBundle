@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Client;
+namespace Biblioverse\TypesenseBundle\Client;
 
 use Typesense\Aliases;
 use Typesense\Analytics;

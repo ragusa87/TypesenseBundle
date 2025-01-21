@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Populate;
+namespace Biblioverse\TypesenseBundle\Tests\Populate;
 
-use Biblioteca\TypesenseBundle\Populate\BatchGenerator;
+use Biblioverse\TypesenseBundle\Populate\BatchGenerator;
 use PHPUnit\Framework\TestCase;
 
 class BatchGeneratorTest extends TestCase

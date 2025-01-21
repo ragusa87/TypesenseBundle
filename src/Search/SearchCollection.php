@@ -1,11 +1,11 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Search;
+namespace Biblioverse\TypesenseBundle\Search;
 
-use Biblioteca\TypesenseBundle\Query\SearchQuery;
-use Biblioteca\TypesenseBundle\Search\Hydrate\HydrateSearchResultInterface;
-use Biblioteca\TypesenseBundle\Search\Results\SearchResults;
-use Biblioteca\TypesenseBundle\Search\Results\SearchResultsHydrated;
+use Biblioverse\TypesenseBundle\Query\SearchQuery;
+use Biblioverse\TypesenseBundle\Search\Hydrate\HydrateSearchResultInterface;
+use Biblioverse\TypesenseBundle\Search\Results\SearchResults;
+use Biblioverse\TypesenseBundle\Search\Results\SearchResultsHydrated;
 
 /**
  * @template T of object

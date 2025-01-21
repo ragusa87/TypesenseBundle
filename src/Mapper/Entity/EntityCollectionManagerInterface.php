@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Entity;
+namespace Biblioverse\TypesenseBundle\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
+use Biblioverse\TypesenseBundle\Mapper\CollectionManagerInterface;
 
 /**
  * @template T of object

@@ -1,11 +1,11 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper\Converter;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper\Converter;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ToTypesenseInterface;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverter;
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\ToTypesenseInterface;
+use Biblioverse\TypesenseBundle\Mapper\Converter\ValueConverter;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ValueConverter::class)]

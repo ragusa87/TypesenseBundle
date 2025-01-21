@@ -3,15 +3,15 @@ services:
   Psr\Log\LoggerInterface:
     class: Psr\Log\NullLogger
 
-  Biblioteca\TypesenseBundle\Tests\Client\ServiceWithClient:
+  Biblioverse\TypesenseBundle\Tests\Client\ServiceWithClient:
     autowire: true
     public: true
 
-  Biblioteca\TypesenseBundle\Tests\DataFixtures\:
+  Biblioverse\TypesenseBundle\Tests\DataFixtures\:
     resource: '../DataFixtures'
     tags: ['doctrine.fixture.orm']
 
-  Biblioteca\TypesenseBundle\Tests\Repository\:
+  Biblioverse\TypesenseBundle\Tests\Repository\:
     resource: '../Repository'
     autowire: true
     autoconfigure: true

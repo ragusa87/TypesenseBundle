@@ -1,14 +1,14 @@
 <?php
 
-use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\EventSubscriber\IndexCollectionSubscriber;
-use Biblioteca\TypesenseBundle\Populate\PopulateService;
-use Biblioteca\TypesenseBundle\Tests\DataFixtures\ProductFixtures;
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Client\ClientInterface;
+use Biblioverse\TypesenseBundle\EventSubscriber\IndexCollectionSubscriber;
+use Biblioverse\TypesenseBundle\Populate\PopulateService;
+use Biblioverse\TypesenseBundle\Tests\DataFixtures\ProductFixtures;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(IndexCollectionSubscriber::class)]
-class AutopopulateTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
+class AutopopulateTest extends Biblioverse\TypesenseBundle\Tests\KernelTestCase
 {
     private ?int $lastId = null;
 

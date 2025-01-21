@@ -1,9 +1,9 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Search\Hydrate;
+namespace Biblioverse\TypesenseBundle\Search\Hydrate;
 
-use Biblioteca\TypesenseBundle\Search\Results\SearchResults;
-use Biblioteca\TypesenseBundle\Search\Results\SearchResultsHydrated;
+use Biblioverse\TypesenseBundle\Search\Results\SearchResults;
+use Biblioverse\TypesenseBundle\Search\Results\SearchResultsHydrated;
 
 /**
  * @template T of object

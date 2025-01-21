@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Utils;
+namespace Biblioverse\TypesenseBundle\Utils;
 
 /**
  * @template TKey

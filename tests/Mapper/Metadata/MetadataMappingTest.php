@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper\Metadata;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper\Metadata;
 
-use Biblioteca\TypesenseBundle\Mapper\Metadata\MetadataMapping;
+use Biblioverse\TypesenseBundle\Mapper\Metadata\MetadataMapping;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(MetadataMapping::class)]

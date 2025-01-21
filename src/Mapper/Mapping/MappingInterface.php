@@ -1,10 +1,10 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Mapping;
+namespace Biblioverse\TypesenseBundle\Mapper\Mapping;
 
-use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMappingInterface;
-use Biblioteca\TypesenseBundle\Mapper\Metadata\MetadataMappingInterface;
-use Biblioteca\TypesenseBundle\Mapper\Options\CollectionOptionsInterface;
+use Biblioverse\TypesenseBundle\Mapper\Fields\FieldMappingInterface;
+use Biblioverse\TypesenseBundle\Mapper\Metadata\MetadataMappingInterface;
+use Biblioverse\TypesenseBundle\Mapper\Options\CollectionOptionsInterface;
 
 interface MappingInterface
 {

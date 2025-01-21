@@ -1,9 +1,9 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper\Converter;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper\Converter;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractor;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\ValueExtractor;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ValueExtractor::class)]

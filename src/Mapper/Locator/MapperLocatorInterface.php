@@ -1,10 +1,10 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Locator;
+namespace Biblioverse\TypesenseBundle\Mapper\Locator;
 
-use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
+use Biblioverse\TypesenseBundle\Mapper\CollectionManagerInterface;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityTransformerInterface;
 
 interface MapperLocatorInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\DataFixtures;
+namespace Biblioverse\TypesenseBundle\Tests\DataFixtures;
 
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

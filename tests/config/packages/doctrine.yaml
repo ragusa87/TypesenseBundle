@@ -13,5 +13,5 @@ doctrine:
     mappings:
       TypesenseBundleEntity:
         is_bundle: false
-        prefix: 'Biblioteca\TypesenseBundle\Tests\Entity'
+        prefix: 'Biblioverse\TypesenseBundle\Tests\Entity'
         dir: '%kernel.project_dir%/../Entity'

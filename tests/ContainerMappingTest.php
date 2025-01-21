@@ -1,17 +1,17 @@
 <?php
 
-use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMappingInterface;
-use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
-use Biblioteca\TypesenseBundle\Tests\KernelTestCase;
-use Biblioteca\TypesenseBundle\Tests\TestKernel;
+use Biblioverse\TypesenseBundle\Mapper\Fields\FieldMappingInterface;
+use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocator;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Tests\KernelTestCase;
+use Biblioverse\TypesenseBundle\Tests\TestKernel;
 
 class ContainerMappingTest extends KernelTestCase
 {
     public function testWithMapping(): void
     {
         self::bootKernel([
-            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioteca_typesense_mapping.yaml'],
+            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioverse_typesense_mapping.yaml'],
         ]);
 
         $mapperLocator = $this->get(MapperLocator::class);

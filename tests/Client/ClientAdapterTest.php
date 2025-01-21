@@ -1,9 +1,9 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Client;
+namespace Biblioverse\TypesenseBundle\Tests\Client;
 
-use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\Tests\KernelTestCase;
+use Biblioverse\TypesenseBundle\Client\ClientInterface;
+use Biblioverse\TypesenseBundle\Tests\KernelTestCase;
 use Typesense\Aliases;
 use Typesense\Analytics;
 use Typesense\Collection;

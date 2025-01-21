@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper\Converter\Exception;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper\Converter\Exception;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
 
 class ValueConversionExceptionTest extends \PHPUnit\Framework\TestCase
 {

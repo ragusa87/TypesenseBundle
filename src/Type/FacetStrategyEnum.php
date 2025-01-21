@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Type;
+namespace Biblioverse\TypesenseBundle\Type;
 
 enum FacetStrategyEnum: string
 {

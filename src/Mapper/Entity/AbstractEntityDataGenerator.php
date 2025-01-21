@@ -1,10 +1,10 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Entity;
+namespace Biblioverse\TypesenseBundle\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 

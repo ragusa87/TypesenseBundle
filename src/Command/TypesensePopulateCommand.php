@@ -1,12 +1,12 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Command;
+namespace Biblioverse\TypesenseBundle\Command;
 
-use Biblioteca\TypesenseBundle\CollectionAlias\CollectionAliasInterface;
-use Biblioteca\TypesenseBundle\Mapper\CollectionManagerInterface;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
-use Biblioteca\TypesenseBundle\Populate\PopulateService;
+use Biblioverse\TypesenseBundle\CollectionAlias\CollectionAliasInterface;
+use Biblioverse\TypesenseBundle\Mapper\CollectionManagerInterface;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
+use Biblioverse\TypesenseBundle\Populate\PopulateService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'biblioteca:typesense:populate',
+    name: 'biblioverse:typesense:populate',
     description: 'Populate Typesense collections',
 )]
 class TypesensePopulateCommand extends Command

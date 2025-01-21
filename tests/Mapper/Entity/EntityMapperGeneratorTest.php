@@ -1,9 +1,9 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper\Entity;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\Entity\EntityMapperGenerator;
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Mapper\Entity\EntityMapperGenerator;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 

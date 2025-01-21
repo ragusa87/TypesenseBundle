@@ -1,12 +1,12 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper;
 
-use Biblioteca\TypesenseBundle\Mapper\Entity\AbstractEntityDataGenerator;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface;
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Mapper\Entity\AbstractEntityDataGenerator;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioverse\TypesenseBundle\Mapper\StandaloneCollectionManagerInterface;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**

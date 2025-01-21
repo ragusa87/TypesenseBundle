@@ -1,9 +1,9 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Converter;
+namespace Biblioverse\TypesenseBundle\Mapper\Converter;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
-use Biblioteca\TypesenseBundle\Type\DataTypeEnum;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 
 class ValueConverter implements ValueConverterInterface
 {

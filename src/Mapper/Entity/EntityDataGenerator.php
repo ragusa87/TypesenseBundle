@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Entity;
+namespace Biblioverse\TypesenseBundle\Mapper\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
 

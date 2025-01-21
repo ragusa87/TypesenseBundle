@@ -1,11 +1,11 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\EventSubscriber;
+namespace Biblioverse\TypesenseBundle\EventSubscriber;
 
-use Biblioteca\TypesenseBundle\Indexer\IndexerInterface;
-use Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface;
-use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
-use Biblioteca\TypesenseBundle\Populate\PopulateService;
+use Biblioverse\TypesenseBundle\Indexer\IndexerInterface;
+use Biblioverse\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface;
+use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
+use Biblioverse\TypesenseBundle\Populate\PopulateService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;

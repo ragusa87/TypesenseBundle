@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Search\Hydrate;
+namespace Biblioverse\TypesenseBundle\Search\Hydrate;
 
 use Doctrine\Common\Collections\Collection;
 

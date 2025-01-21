@@ -1,18 +1,18 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapper\Locator;
+namespace Biblioverse\TypesenseBundle\Tests\Mapper\Locator;
 
-use Biblioteca;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Locator\InvalidTypeMapperException;
-use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
-use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
-use Biblioteca\TypesenseBundle\Tests\TestKernel;
+use Biblioverse;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Locator\InvalidTypeMapperException;
+use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocator;
+use Biblioverse\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Tests\TestKernel;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(MapperLocator::class)]
-class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
+class MapperLocatorTest extends Biblioverse\TypesenseBundle\Tests\KernelTestCase
 {
     public function testLocatorMyMapper(): void
     {
@@ -83,7 +83,7 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
     public function testLocatorGetMappingGenerator(): void
     {
         self::bootKernel([
-            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioteca_typesense_mapping.yaml'],
+            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioverse_typesense_mapping.yaml'],
         ]);
 
         $mapperLocator = $this->get(MapperLocator::class);
@@ -103,7 +103,7 @@ class MapperLocatorTest extends Biblioteca\TypesenseBundle\Tests\KernelTestCase
     public function testNoEntityTransformer(): void
     {
         self::bootKernel([
-            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioteca_typesense_mapping.yaml'],
+            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioverse_typesense_mapping.yaml'],
         ]);
 
         $mapperLocator = $this->get(MapperLocator::class);

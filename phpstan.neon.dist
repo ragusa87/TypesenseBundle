@@ -9,6 +9,6 @@ parameters:
     ignoreErrors:
         -
            message: '#(.*)#'
-           path: src/AbstractBibliotecaTypesenseBundle.php
+           path: src/AbstractBiblioverseTypesenseBundle.php
 includes:
 	- phpstan-baseline.neon

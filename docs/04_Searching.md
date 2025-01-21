@@ -15,7 +15,7 @@ The name is composed of the collection name with the `Search` suffix.
 Example: Given you have declared a collection named `books`, you can inject the service implementing the `SearchCollectionInterface` with the name `searchBooks`.
 
 ```php
-use Biblioteca\TypesenseBundle\Search\SearchCollectionInterface;
+use Biblioverse\TypesenseBundle\Search\SearchCollectionInterface;
 
 class SearchHelper
 {
@@ -25,7 +25,7 @@ class SearchHelper
 }
 ```
 
-As an alternative, you can use the service id: `biblioteca_typesense.collection.<name>` where `<name>` is the collection name.
+As an alternative, you can use the service id: `biblioverse_typesense.collection.<name>` where `<name>` is the collection name.
 
 
 ## Iterate over the hydrated results
@@ -44,7 +44,7 @@ You can use `searchRaw` to skip the hydration and get the raw Typesense result.
 
 Use the service `SearchInterface`:
 ```php
-use Biblioteca\TypesenseBundle\Search\SearchInterface;
+use Biblioverse\TypesenseBundle\Search\SearchInterface;
 class SearchHelper
 {
     public function construct(private SearchInterface $search)
@@ -64,14 +64,14 @@ foreach ($searchResults as $result) {
 
 # Build the search query
 
-To build the search query, you can use the `Biblioteca\TypesenseBundle\Query\SearchQuery` class.
+To build the search query, you can use the `Biblioverse\TypesenseBundle\Query\SearchQuery` class.
 There is a constructor with named parameters to help you build the query, it matches the Typesense API.
 
 > Please always use named parameters. The order will likely change in the future.
 
 ```php
 <?php
-use Biblioteca\TypesenseBundle\Query\SearchQuery;
+use Biblioverse\TypesenseBundle\Query\SearchQuery;
 
 $query = new SearchQuery(q: 'my search', queryBy: 'name', filterBy: 'owner', sortBy: 'name:desc');
 ```
@@ -86,7 +86,7 @@ Pagination is automatically provided by the Typesense API if you use the `page` 
 ```php
 
 <?php
-use Biblioteca\TypesenseBundle\Query\SearchQuery;
+use Biblioverse\TypesenseBundle\Query\SearchQuery;
 
 $query = new SearchQuery(q: 'my search', queryBy: 'name', perPage: 10);
 

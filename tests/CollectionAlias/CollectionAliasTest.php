@@ -1,9 +1,9 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\CollectionAlias;
+namespace Biblioverse\TypesenseBundle\Tests\CollectionAlias;
 
-use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\CollectionAlias\CollectionAlias;
+use Biblioverse\TypesenseBundle\Client\ClientInterface;
+use Biblioverse\TypesenseBundle\CollectionAlias\CollectionAlias;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Typesense\Aliases;

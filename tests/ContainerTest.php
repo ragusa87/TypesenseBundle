@@ -1,10 +1,10 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests;
+namespace Biblioverse\TypesenseBundle\Tests;
 
-use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocator;
-use Biblioteca\TypesenseBundle\Tests\Client\ServiceWithClient;
+use Biblioverse\TypesenseBundle\Client\ClientInterface;
+use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocator;
+use Biblioverse\TypesenseBundle\Tests\Client\ServiceWithClient;
 
 class ContainerTest extends KernelTestCase
 {
@@ -33,7 +33,7 @@ class ContainerTest extends KernelTestCase
     public function testClientFactoryInvalidUrl(): void
     {
         self::bootKernel([
-            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioteca_typesense_wrong_url.yaml'],
+            'configs' => [TestKernel::CONFIG_KEY => 'config/packages/biblioverse_typesense_wrong_url.yaml'],
         ]);
         $container = self::getContainer();
 

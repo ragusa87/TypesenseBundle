@@ -1,12 +1,12 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper\Entity;
+namespace Biblioverse\TypesenseBundle\Mapper\Entity;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverter;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueConverterInterface;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractor;
-use Biblioteca\TypesenseBundle\Mapper\Converter\ValueExtractorInterface;
-use Biblioteca\TypesenseBundle\Mapper\MappingGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Converter\ValueConverter;
+use Biblioverse\TypesenseBundle\Mapper\Converter\ValueConverterInterface;
+use Biblioverse\TypesenseBundle\Mapper\Converter\ValueExtractor;
+use Biblioverse\TypesenseBundle\Mapper\Converter\ValueExtractorInterface;
+use Biblioverse\TypesenseBundle\Mapper\MappingGeneratorInterface;
 
 /**
  * @template T of Object

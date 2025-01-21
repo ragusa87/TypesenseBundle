@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Exception;
+namespace Biblioverse\TypesenseBundle\Exception;
 
 class SearchException extends \RuntimeException
 {

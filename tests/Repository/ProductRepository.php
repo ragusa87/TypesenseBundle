@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Repository;
+namespace Biblioverse\TypesenseBundle\Tests\Repository;
 
-use Biblioteca\TypesenseBundle\Tests\Entity\Product;
+use Biblioverse\TypesenseBundle\Tests\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

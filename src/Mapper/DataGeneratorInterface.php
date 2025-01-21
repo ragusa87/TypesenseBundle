@@ -1,9 +1,9 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Mapper;
+namespace Biblioverse\TypesenseBundle\Mapper;
 
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
-use Biblioteca\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueConversionException;
+use Biblioverse\TypesenseBundle\Mapper\Converter\Exception\ValueExtractorException;
 
 interface DataGeneratorInterface
 {

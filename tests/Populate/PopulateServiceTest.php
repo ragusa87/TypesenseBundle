@@ -1,13 +1,13 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Populate;
+namespace Biblioverse\TypesenseBundle\Tests\Populate;
 
-use Biblioteca\TypesenseBundle\Client\ClientInterface;
-use Biblioteca\TypesenseBundle\Mapper\DataGeneratorInterface;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\MappingInterface;
-use Biblioteca\TypesenseBundle\Mapper\Metadata\MetadataMapping;
-use Biblioteca\TypesenseBundle\Populate\PopulateService;
+use Biblioverse\TypesenseBundle\Client\ClientInterface;
+use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\MappingInterface;
+use Biblioverse\TypesenseBundle\Mapper\Metadata\MetadataMapping;
+use Biblioverse\TypesenseBundle\Populate\PopulateService;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

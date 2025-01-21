@@ -1,11 +1,11 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Tests\Mapping;
+namespace Biblioverse\TypesenseBundle\Tests\Mapping;
 
-use Biblioteca\TypesenseBundle\Mapper\Fields\FieldMapping;
-use Biblioteca\TypesenseBundle\Mapper\Mapping\Mapping;
-use Biblioteca\TypesenseBundle\Mapper\Metadata\MetadataMapping;
-use Biblioteca\TypesenseBundle\Mapper\Options\CollectionOptions;
+use Biblioverse\TypesenseBundle\Mapper\Fields\FieldMapping;
+use Biblioverse\TypesenseBundle\Mapper\Mapping\Mapping;
+use Biblioverse\TypesenseBundle\Mapper\Metadata\MetadataMapping;
+use Biblioverse\TypesenseBundle\Mapper\Options\CollectionOptions;
 use PHPUnit\Framework\TestCase;
 
 class MappingTest extends TestCase

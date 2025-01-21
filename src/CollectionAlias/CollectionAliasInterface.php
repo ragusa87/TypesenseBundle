@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\CollectionAlias;
+namespace Biblioverse\TypesenseBundle\CollectionAlias;
 
 interface CollectionAliasInterface
 {

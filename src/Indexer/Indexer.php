@@ -1,10 +1,10 @@
 <?php
 
-namespace Biblioteca\TypesenseBundle\Indexer;
+namespace Biblioverse\TypesenseBundle\Indexer;
 
-use Biblioteca\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface;
-use Biblioteca\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
-use Biblioteca\TypesenseBundle\Populate\PopulateService;
+use Biblioverse\TypesenseBundle\Mapper\Entity\Identifier\EntityIdentifierInterface;
+use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
+use Biblioverse\TypesenseBundle\Populate\PopulateService;
 
 class Indexer implements IndexerInterface
 {
