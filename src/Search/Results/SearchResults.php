@@ -2,42 +2,13 @@
 
 namespace Biblioteca\TypesenseBundle\Search\Results;
 
-use Biblioteca\TypesenseBundle\Search\Traits\FoundCountTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\HighlightTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\PageTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\RequestParametersTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\SearchCountTrait;
-use Biblioteca\TypesenseBundle\Search\Traits\SearchFacetTrait;
-use Biblioteca\TypesenseBundle\Utils\ArrayAccessTrait;
-
 /**
- * @implements \ArrayAccess<string, mixed>
- * @implements \IteratorAggregate<int, array<string,mixed>>
+ * @extends AbstractSearchResults<array<string,mixed>>
+ *
+ * @phpstan-import-type Document from AbstractSearchResults
  */
-class SearchResults implements \ArrayAccess, \IteratorAggregate, \Countable
+class SearchResults extends AbstractSearchResults
 {
-    /**
-     * @use ArrayAccessTrait<string, mixed>
-     */
-    use ArrayAccessTrait;
-    use SearchFacetTrait;
-    use SearchCountTrait;
-    use FoundCountTrait;
-    use HighlightTrait;
-    use PageTrait;
-    use RequestParametersTrait;
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function toArray(): array
-    {
-        return $this->data;
-    }
-
-    /**
-     * @return \Traversable<int, array<string,mixed>>
-     */
     public function getIterator(): \Traversable
     {
         $data = [];
@@ -54,5 +25,13 @@ class SearchResults implements \ArrayAccess, \IteratorAggregate, \Countable
         }, $data), fn ($a): bool => $a !== null);
 
         return new \ArrayIterator($data);
+    }
+
+    /**
+     * @return array<int|string, Document>
+     */
+    public function getResults(): array
+    {
+        return array_map(fn ($value) => $value['document'], $this->getHits());
     }
 }

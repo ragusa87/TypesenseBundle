@@ -8,9 +8,33 @@ use Biblioteca\TypesenseBundle\Search\Results\SearchResultsHydrated;
 class SearchResultHydratedTest extends \PHPUnit\Framework\TestCase
 {
     public const DATA = [
-        'facet_counts' => [],
+        'facet_counts' => [
+            0 => [
+                'counts' => [
+                    0 => [
+                        'count' => 10,
+                        'highlighted' => 'Robert',
+                        'value' => 'Robert C. Martin',
+                    ],
+                    1 => [
+                        'count' => 10,
+                        'highlighted' => 'Gene Kim',
+                        'value' => 'Gene Kim',
+                    ],
+                    2 => [
+                        'count' => 10,
+                        'highlighted' => 'Matthias Noback And Tomas Votruba',
+                        'value' => 'Matthias Noback And Tomas Votruba',
+                    ],
+                ],
+                'field_name' => 'authors',
+                'sampled' => false,
+                'stats' => [
+                    'total_values' => 7,
+                ],
+            ],
+        ],
         'found' => 120,
-        'search_time_ms' => 15,
         'page' => 2,
         'out_of' => 120,
         'hits' => [
@@ -47,32 +71,90 @@ class SearchResultHydratedTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ],
-        'per_page' => 10,
-        'total_pages' => 12,
+        'request_params' => [
+            'collection_name' => 'books',
+            'first_q' => 'code',
+            'per_page' => 16,
+            'q' => 'code',
+        ],
+        'search_cutoff' => false,
+        'search_time_ms' => 3,
     ];
 
     public function testFound(): void
     {
         $searchResultsHydrated = $this->getResult();
-        $this->assertEquals(120, $searchResultsHydrated->found());
+        $this->assertEquals(120, $searchResultsHydrated->getFound());
+    }
+
+    public function testTotalPages(): void
+    {
+        $searchResultsHydrated = $this->getResult([
+            'hits' => [],
+            'found' => 17,
+            'request_params' => [
+                'per_page' => 3,
+            ] + self::DATA,
+        ]);
+
+        $this->assertEquals(6, $searchResultsHydrated->getTotalPage());
     }
 
     public function testFacetCounts(): void
     {
         $searchResultsHydrated = $this->getResult();
-        $this->assertEquals([], $searchResultsHydrated->getFacetCounts());
+        $this->assertEquals([0 => [
+            'counts' => [
+                0 => [
+                    'count' => 10,
+                    'highlighted' => 'Robert',
+                    'value' => 'Robert C. Martin',
+                ],
+                1 => [
+                    'count' => 10,
+                    'highlighted' => 'Gene Kim',
+                    'value' => 'Gene Kim',
+                ],
+                2 => [
+                    'count' => 10,
+                    'highlighted' => 'Matthias Noback And Tomas Votruba',
+                    'value' => 'Matthias Noback And Tomas Votruba',
+                ],
+            ],
+            'field_name' => 'authors',
+            'sampled' => false,
+            'stats' => [
+                'total_values' => 7,
+            ]]], $searchResultsHydrated->getFacetCounts());
     }
 
     public function testTotalPage(): void
     {
         $searchResultsHydrated = $this->getResult();
-        $this->assertEquals(12, $searchResultsHydrated->getTotalPage());
+        $this->assertEquals(8, $searchResultsHydrated->getTotalPage());
+    }
+
+    public function testTotalPageEmpty(): void
+    {
+        $data = self::DATA;
+        unset($data['found']);
+        unset($data['request_params']);
+
+        $searchResultsHydrated = $this->getResult($data);
+        $this->assertNull($searchResultsHydrated->getTotalPage());
     }
 
     public function testHits(): void
     {
         $searchResultsHydrated = $this->getResult();
         $this->assertCount(2, $searchResultsHydrated->getIterator());
+    }
+
+    public function testResults(): void
+    {
+        $searchResultsHydrated = $this->getResult();
+        $this->assertCount(2, $searchResultsHydrated->getResults());
+        $this->assertInstanceOf(\stdClass::class, $searchResultsHydrated->getResults()['_1']);
     }
 
     public function testIterator(): void
@@ -90,13 +172,16 @@ class SearchResultHydratedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param ?array<string,mixed> $data
+     *
      * @return SearchResultsHydrated<object>
      */
-    private function getResult(): SearchResultsHydrated
+    private function getResult(?array $data = null): SearchResultsHydrated
     {
         $objects = $this->getObjects();
+        $data ??= self::DATA;
 
-        return SearchResultsHydrated::fromPayloadAndCollection(self::DATA, $objects);
+        return SearchResultsHydrated::fromPayloadAndCollection($data, $objects);
     }
 
     /**
