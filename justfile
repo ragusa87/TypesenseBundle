@@ -54,3 +54,9 @@ phpstan *args="":
 phpunit-open-report:
     #!/usr/bin/bash
     {{ os_open }} {{invocation_directory()}}/tests/coverage/html-coverage/index.html
+changelog:
+    #!/usr/bin/bash
+    rm -f changelog.yml
+    chglog config
+    chglog init
+    chglog format --template repo -c .chlog.yml > CHANGELOG.md
