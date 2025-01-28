@@ -13,3 +13,4 @@ docker-compose.override.yml
 docs/public
 !docs/public/.gitkeep
 docs/index.md
+/changelog.yml

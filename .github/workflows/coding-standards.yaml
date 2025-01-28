@@ -87,7 +87,9 @@ jobs:
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v4"
-
+        with:
+          fetch-depth: 0
+          fetch-tags: 'true'
       - name: Download Coverage Artifact
         uses: actions/download-artifact@v4
         with:
@@ -112,6 +114,37 @@ jobs:
             rm -Rf static
             chown -R ${EXTERNAL_PERMISSION} docs/public
 
+
+      - uses: actions/setup-go@v5
+      - name: Generate Changelog
+        run: |
+          set -xve
+          git --no-pager log --oneline
+          go install github.com/goreleaser/chglog/cmd/chglog@latest || { echo "chglog installation failed. Please check the error above."; exit 1; }
+          rm -f CHANGELOG.md
+          rm -f changelog.yml
+          chglog config
+          chglog init
+          chglog format --template repo > CHANGELOG.md
+          cat CHANGELOG.md
+      - name: Changelog as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          overwrite: true
+          name: CHANGELOG.md
+          path: CHANGELOG.md
+      - name: Push Changelog Action
+        if: "github.actor != 'GitHub Action Bot' && contains(github.ref, 'main')"
+        run: |
+          if [[ "$(git status --porcelain --untracked-files=no)" != "" ]]; then
+            git config user.name "GitHub Action Bot"
+            git config user.email "action@github.com"
+            git add CHANGELOG.md
+            git commit -m "ci(changelog): Update changelog"
+            git push
+          else
+            echo "No changes to commit"
+          fi
       - name: Make code coverage badge (done as root)
         uses: timkrase/phpunit-coverage-badge@v1.2.1
         with:
