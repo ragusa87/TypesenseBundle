@@ -1,0 +1,42 @@
+name: Generate changelog when a MR is merged on main
+permissions:
+  checks: write
+  pull-requests: write
+  contents: write
+on:
+  pull_request:
+    branches:
+      - "main"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          fetch-depth: 0
+          fetch-tags: 'true'
+      - uses: actions/setup-go@v5
+      - name: Generate Changelog
+        run: |
+          set -xve
+          git --no-pager log --oneline
+          go install github.com/goreleaser/chglog/cmd/chglog@latest || { echo "chglog installation failed. Please check the error above."; exit 1; }
+          chglog config
+          chglog init
+          chglog format --template repo > CHANGELOG.md
+          cat CHANGELOG.md
+      - name: Changelog as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          overwrite: true
+          name: CHANGELOG.md
+          path: CHANGELOG.md
+      - name: Push Changelog Action
+        if: github.actor != 'GitHub Action Bot' && github.event.pull_request.merged == true
+        run: |
+          git config user.name "GitHub Action Bot"
+          git config user.email "action@github.com"
+          git add CHANGELOG.md
+          git commit -m "ci(changelog): Update changelog"
+          git push
