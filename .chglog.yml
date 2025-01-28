@@ -1,0 +1,8 @@
+conventional-commits: true
+deb:
+    distribution: []
+    urgency: ""
+debug: false
+exclude-merge-commits: false
+owner: ""
+package-name: ""
