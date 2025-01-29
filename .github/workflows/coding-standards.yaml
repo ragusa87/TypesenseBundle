@@ -13,6 +13,12 @@ on:
       - "main"
 
 jobs:
+  conventional-commits:
+    name: "conventional-commits"
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: webiny/action-conventional-commits@v1.3.0
   coding-standards:
     name: "coding-standards"
     runs-on: ubuntu-24.04
