@@ -70,12 +70,12 @@ jobs:
 
       - name: Coverage Report as Comment (Clover)
         uses: lucassabreu/comment-coverage-clover@main
-        if: github.event_name == 'pull_request' && matrix.composer-versions == 'highest' && matrix.php-version == '8.2'
+        if: github.event_name == 'pull_request' && matrix.composer-versions == 'highest' && matrix.php-version == '8.4'
         with:
           file: tests/coverage/clover.xml
 
       - name: Coverage as artifact
-        if: matrix.composer-versions == 'highest' && matrix.php-version == '8.2'
+        if: matrix.composer-versions == 'highest' && matrix.php-version == '8.4'
         uses: actions/upload-artifact@v4
         with:
           overwrite: true
