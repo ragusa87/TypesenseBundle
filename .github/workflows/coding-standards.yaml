@@ -40,13 +40,13 @@ jobs:
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v3"
         with:
-          dependency-versions: "${{ matrix.composer-versions}}"
+          dependency-versions: "${{ matrix.composer-versions }}"
       - name: "Run init-db"
         run: |
           composer run init-db
       - name: "Run PHPCS"
         run: |
-          if [ "${{ matrix.php-version}}" = "8.4" ]; then
+          if [ "${{ matrix.php-version }}" = "8.4" ]; then
               export PHP_CS_FIXER_IGNORE_ENV=1
           fi
           composer run test-phpcs
@@ -63,7 +63,7 @@ jobs:
         run: |
           EXIT_STATUS=0
           composer run phpunit || EXIT_STATUS=$?
-          if [ $EXIT_STATUS -eq 1 ] && [ "${{ matrix.composer-versions}}" = "lowest" ]; then
+          if [ $EXIT_STATUS -eq 1 ] && [ "${{ matrix.composer-versions }}" = "lowest" ]; then
               exit 0 # Allow warnings on lowest level
           fi
           exit $EXIT_STATUS
