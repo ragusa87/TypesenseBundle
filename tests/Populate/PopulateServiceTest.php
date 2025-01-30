@@ -8,6 +8,7 @@ use Biblioverse\TypesenseBundle\Mapper\Mapping\Mapping;
 use Biblioverse\TypesenseBundle\Mapper\Mapping\MappingInterface;
 use Biblioverse\TypesenseBundle\Mapper\Metadata\MetadataMapping;
 use Biblioverse\TypesenseBundle\Populate\PopulateService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -95,9 +96,8 @@ class PopulateServiceTest extends TestCase
      * @param array<string, mixed> $expectedPayload
      *
      * @throws Exception
-     *
-     * @dataProvider provideCreateCollection
      */
+    #[DataProvider('provideCreateCollection')]
     public function testCreateCollection(string $collectionName, MappingInterface $mapping, array $expectedPayload): void
     {
         $collections = $this->createMock(Collections::class);
