@@ -1,4 +1,26 @@
 
+0.0.2
+=============
+2025-01-30
+
+* feat(ci): Build docker image (5cddfa35)
+* feat(coverage): Coverage comment based on previous coverage (1325ab04)
+* feat(converter): Support for enums (4319d080)
+* chore(deprecation): Fix PHPUnit deprecations (3f31456a)
+* chore(deprecation): Move PHP_CS_FIXER_IGNORE_ENV in composer (d161167c)
+* chore(deps): update actions/checkout action to v4 (a3fb9327)
+* feat(ci): Force conventional commits (32263d6f)
+* feat(ci): move changelog (0386d694)
+* fix(ci): spacing issues (7e8c8d78)
+* chore: changelog (10901035)
+* chore(dep): Use php 8.4 for latest actions (873b1fd8)
+* chore: Add license (f80864c2)
+* chore(deps): Support for php 8.4 (ffc8d16d)
+* chore(deps): update peaceiris/actions-gh-pages action to v4 (29041dee)
+* renovate: Ignore virtual dependency (9c7591e5)
+* Add renovate.json (bfe36d45)
+* Fix psr/http-client-implementation version (7bcfe191)
+
 0.0.1
 =============
 2025-01-21
