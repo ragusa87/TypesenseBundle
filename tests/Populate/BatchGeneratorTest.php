@@ -3,6 +3,7 @@
 namespace Biblioverse\TypesenseBundle\Tests\Populate;
 
 use Biblioverse\TypesenseBundle\Populate\BatchGenerator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class BatchGeneratorTest extends TestCase
@@ -10,9 +11,8 @@ class BatchGeneratorTest extends TestCase
     /**
      * @param int[]   $source
      * @param int[][] $result
-     *
-     * @dataProvider batchDataProvider
      */
+    #[DataProvider('batchDataProvider')]
     public function testGenerate(array $source, int $batchSize, array $result): void
     {
         /** @var BatchGenerator<int> $batchGenerator */
