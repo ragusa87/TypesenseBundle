@@ -88,6 +88,17 @@ class ValueConverter implements ValueConverterInterface
             return $this->toBase64($value);
         }
 
+        if ($value instanceof \BackedEnum) {
+            $value = $value->value;
+        }
+
+        if ($value instanceof \UnitEnum) {
+            if ($type !== DataTypeEnum::STRING->value) {
+                throw new ValueConversionException($value, $type);
+            }
+            $value = $value->name;
+        }
+
         if (is_resource($value)) {
             throw new ValueConversionException($value, $type);
         }

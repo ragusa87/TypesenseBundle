@@ -68,6 +68,26 @@ class ValueConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('QmFzZTY0IEVuY29kZSBtZS4=', $valueConverter->convert($file, DataTypeEnum::IMAGE->value));
     }
 
+    public function testEnum(): void
+    {
+        $valueConverter = new ValueConverter();
+
+        $this->assertSame(TestBackedEnum::TEST->value, $valueConverter->convert(TestBackedEnum::TEST, DataTypeEnum::STRING->value));
+        $this->assertSame('TEST', $valueConverter->convert(TestUnitEnum::TEST, DataTypeEnum::STRING->value));
+    }
+
+    public function testBadUnitEnum(): void
+    {
+        $valueConverter = new ValueConverter();
+
+        try {
+            $this->assertSame('TEST', $valueConverter->convert(TestUnitEnum::TEST, DataTypeEnum::BOOL->value));
+            $this->fail('Exception ValueConversionException not thrown');
+        } catch (ValueConversionException $e) {
+            $this->assertStringContainsString(TestUnitEnum::class, $e->getMessage());
+        }
+    }
+
     /**
      * @throws ValueConversionException
      */
