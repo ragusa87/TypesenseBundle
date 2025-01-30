@@ -52,9 +52,6 @@ jobs:
           composer run init-db
       - name: "Run PHPCS"
         run: |
-          if [ "${{ matrix.php-version }}" = "8.4" ]; then
-              export PHP_CS_FIXER_IGNORE_ENV=1
-          fi
           composer run test-phpcs
 
       - name: "Run rector"

@@ -61,11 +61,11 @@
     ],
     "test-phpcs": [
       "Composer\\Config::disableProcessTimeout",
-      "./vendor/bin/php-cs-fixer fix --dry-run --verbose -vv"
+      "PHP_CS_FIXER_IGNORE_ENV=1 ./vendor/bin/php-cs-fixer fix --dry-run --verbose -vv"
     ],
     "phpcs": [
       "Composer\\Config::disableProcessTimeout",
-      "./vendor/bin/php-cs-fixer fi --verbose -vv"
+      "PHP_CS_FIXER_IGNORE_ENV=1 ./vendor/bin/php-cs-fixer fi --verbose -vv"
     ],
     "test-rector": [
       "Composer\\Config::disableProcessTimeout",
