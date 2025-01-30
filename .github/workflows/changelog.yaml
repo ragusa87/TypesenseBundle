@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - "main"
+  push:
+    branches:
+      - "main"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,10 +36,13 @@ jobs:
           name: CHANGELOG.md
           path: CHANGELOG.md
       - name: Push Changelog Action
-        if: github.actor != 'GitHub Action Bot' && github.event.pull_request.merged == true
+        # Only push when it's a push event to main (i.e., after merge)
+        if: github.actor != 'GitHub Action Bot' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          git config user.name "GitHub Action Bot"
-          git config user.email "action@github.com"
-          git add CHANGELOG.md
-          git commit -m "ci(changelog): Update changelog"
-          git push
+          if [[ -n "$(git status --porcelain CHANGELOG.md)" ]]; then
+            git config user.name "GitHub Action Bot"
+            git config user.email "action@github.com"
+            git add CHANGELOG.md
+            git commit -m "ci(changelog): Update changelog"
+            git push
+          fi
