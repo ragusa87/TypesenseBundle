@@ -2,6 +2,7 @@
 
 namespace Biblioverse\TypesenseBundle\Mapper\Fields;
 
+use Biblioverse\TypesenseBundle\Mapper\Converter\Field\FieldConverterInterface;
 use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
 
 /**
@@ -37,9 +38,11 @@ use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
  */
 class FieldMapping implements FieldMappingInterface
 {
-    public string $type;
+    private readonly string $type;
 
-    public ?string $entityAttribute = null;
+    private ?string $entityAttribute = null;
+
+    private ?FieldConverterInterface $fieldConverter = null;
 
     /**
      * @param FieldMappingEmbedArray $embed
@@ -142,5 +145,22 @@ class FieldMapping implements FieldMappingInterface
     public function isOptional(): bool
     {
         return $this->optional ?? true;
+    }
+
+    public function getFieldConverter(): ?FieldConverterInterface
+    {
+        return $this->fieldConverter;
+    }
+
+    public function setFieldConverter(?FieldConverterInterface $fieldConverter): void
+    {
+        $this->fieldConverter = $fieldConverter;
+    }
+
+    public function setEntityAttribute(?string $entityAttribute): self
+    {
+        $this->entityAttribute = $entityAttribute;
+
+        return $this;
     }
 }
