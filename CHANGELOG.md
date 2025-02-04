@@ -1,4 +1,13 @@
 
+0.0.3
+=============
+2025-02-04
+
+* chore: changelog (52185109)
+* feat(populate): Wait for readiness before populating (e46bd985)
+* fix(populate): Do not alias on failure (c3541b94)
+* fix(ci): Docker build on MR only (9695c02d)
+
 0.0.2
 =============
 2025-01-30
