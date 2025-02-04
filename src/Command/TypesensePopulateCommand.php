@@ -7,6 +7,7 @@ use Biblioverse\TypesenseBundle\Mapper\CollectionManagerInterface;
 use Biblioverse\TypesenseBundle\Mapper\DataGeneratorInterface;
 use Biblioverse\TypesenseBundle\Mapper\Locator\MapperLocatorInterface;
 use Biblioverse\TypesenseBundle\Populate\PopulateService;
+use Biblioverse\TypesenseBundle\Populate\WaitFor\WaitForInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -14,17 +15,23 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 #[AsCommand(
     name: 'biblioverse:typesense:populate',
     description: 'Populate Typesense collections',
 )]
-class TypesensePopulateCommand extends Command
+final class TypesensePopulateCommand extends Command
 {
+    private const NB_RETRY = 10;
+
     public function __construct(
         private readonly PopulateService $populateService,
         private readonly MapperLocatorInterface $mapperLocator,
         private readonly CollectionAliasInterface $collectionAlias,
+        /** @var WaitForInterface[] */
+        #[AutowireIterator(tag: WaitForInterface::TAG_NAME)]
+        private readonly iterable $waitForServices = [],
     ) {
         parent::__construct();
     }
@@ -37,6 +44,13 @@ class TypesensePopulateCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'If set, the command will only create indexes without populating data'
+            )
+            ->addOption(
+                'nb-retry',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'If set, the command will retry connecting multiple times',
+                self::NB_RETRY
             );
     }
 
@@ -49,6 +63,15 @@ class TypesensePopulateCommand extends Command
             $symfonyStyle->warning('No data generator found. Declare at least one service implementing '.CollectionManagerInterface::class);
 
             return Command::SUCCESS;
+        }
+
+        $nbRetry = $input->getOption('nb-retry');
+        $nbRetry = is_numeric($nbRetry) ? intval($nbRetry) : self::NB_RETRY;
+        foreach ($this->waitForServices as $waitForService) {
+            $waitForService->wait($nbRetry, function (int $step, int $total, \Throwable $throwable) use ($symfonyStyle, $waitForService) {
+                $symfonyStyle->writeln(sprintf('Waiting for %s to be available (step %d/%d)', $waitForService->getName(), $step, $total));
+                $symfonyStyle->comment($throwable->getMessage());
+            });
         }
 
         foreach ($this->mapperLocator->getMappers() as $shortName => $collectionManager) {
