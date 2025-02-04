@@ -2,10 +2,6 @@
 
 namespace Biblioverse\TypesenseBundle\Query;
 
-interface VectorQueryInterface
+interface VectorQueryInterface extends \Stringable
 {
-    /**
-     * @return array<string,mixed>
-     */
-    public function toArray(): array;
 }

@@ -28,7 +28,7 @@ class SearchQuery implements SearchQueryInterface
         // After this line, we use alphabetical order for the parameters
         ?array $stopwords = null,
         bool|array|null $prefix = null,
-        private readonly ?VectorQueryInterface $vectorQuery = null,
+        private readonly string|VectorQueryInterface|null $vectorQuery = null,
         private readonly ?VoiceQueryInterface $voiceQuery = null,
         private readonly ?bool $enableHighlightV1 = null,
         private readonly ?bool $enableLazyFilter = null,
@@ -197,7 +197,7 @@ class SearchQuery implements SearchQueryInterface
             'synonym_prefix' => $this->synonymPrefix,
             'text_match_type' => $this->textMatchType,
             'typo_tokens_threshold' => $this->typoTokensThreshold,
-            'vector_query' => $this->vectorQuery?->toArray(),
+            'vector_query' => $this->vectorQuery instanceof VectorQueryInterface ? (string) $this->vectorQuery : $this->vectorQuery,
             'voice_query' => $this->voiceQuery instanceof VoiceQueryInterface ? (string) $this->voiceQuery : null,
         ], fn (mixed $value): bool => !is_null($value));
     }

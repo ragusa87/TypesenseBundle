@@ -30,4 +30,6 @@ interface FieldMappingInterface
     public function getEntityAttribute(): ?string;
 
     public function isOptional(): bool;
+
+    public function isMapped(): bool;
 }
