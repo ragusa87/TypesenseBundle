@@ -24,6 +24,10 @@ final class EntityTransformer implements EntityTransformerInterface
         $data = [];
 
         foreach ($this->mappingGenerator->getMapping()->getFields() as $fieldMapping) {
+            if ($fieldMapping->isMapped() === false) {
+                continue;
+            }
+
             $fieldName = $fieldMapping->getEntityAttribute() ?? $fieldMapping->getName();
             $value = $this->valueExtractor->getValue($entity, $fieldName);
 

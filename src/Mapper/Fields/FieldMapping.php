@@ -21,7 +21,18 @@ use Biblioverse\TypesenseBundle\Type\DataTypeEnum;
  *  'locale'?:string|null,
  *  'reference'?:string|null,
  *  'entity_attribute'?:string|null,
- *  'vecDist'?:string|null
+ *  'vecDist'?:string|null,
+ *  'embed'?:null|FieldMappingEmbedArray,
+ *  'mapped'?:bool
+ * }
+ * @phpstan-type FieldMappingEmbedArray array{
+ *   'from':string,
+ *   'model_config'?:FieldMappingEmbedModelValueArray,
+ * }
+ * @phpstan-type FieldMappingEmbedModelValueArray array{
+ *   'model_name':string,
+ *   'api_key'?:string,
+ *   'url'?:string
  * }
  */
 class FieldMapping implements FieldMappingInterface
@@ -30,6 +41,9 @@ class FieldMapping implements FieldMappingInterface
 
     public ?string $entityAttribute = null;
 
+    /**
+     * @param FieldMappingEmbedArray $embed
+     */
     public function __construct(
         public string $name,
         DataTypeEnum|string $type,
@@ -46,6 +60,8 @@ class FieldMapping implements FieldMappingInterface
         public ?string $locale = null,
         public ?string $reference = null,
         public ?string $vecDist = null,
+        public ?array $embed = null,
+        public bool $mapped = true,
     ) {
         $this->type = $type instanceof DataTypeEnum ? $type->value : $type;
     }
@@ -60,7 +76,7 @@ class FieldMapping implements FieldMappingInterface
             'infix' => $this->infix,
             'locale' => $this->locale,
             'name' => $this->name,
-            'num_dim' => $this->numDim,
+            'num_dims' => $this->numDim,
             'optional' => $this->optional,
             'range_index' => $this->rangeIndex,
             'reference' => $this->reference,
@@ -69,6 +85,7 @@ class FieldMapping implements FieldMappingInterface
             'store' => $this->store,
             'type' => $this->type,
             'vec_dist' => $this->vecDist,
+            'embed' => $this->embed,
         ], fn ($value) => $value !== null);
     }
 
@@ -80,6 +97,11 @@ class FieldMapping implements FieldMappingInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function isMapped(): bool
+    {
+        return $this->mapped;
     }
 
     public function getEntityAttribute(): ?string
@@ -108,6 +130,8 @@ class FieldMapping implements FieldMappingInterface
             $config['locale'] ?? null,
             $config['reference'] ?? null,
             $config['vecDist'] ?? null,
+            $config['embed'] ?? null,
+            $config['mapped'] ?? true,
         );
 
         $result->entityAttribute = $config['entity_attribute'] ?? null;
