@@ -22,7 +22,7 @@ biblioverse_typesense:
 
 Configuring the mapping involves the following functionalities:
 * Your entity class is indexed on every insertion/update/deletion.
-* You can automatically populate your entites into typesense.
+* You can automatically populate your entities into typesense.
 * A service is automatically available to interact with the Typesense API and hydrate the result with your entities.
 
 Limitation:
