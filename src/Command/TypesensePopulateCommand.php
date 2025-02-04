@@ -71,6 +71,9 @@ class TypesensePopulateCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @throws \RuntimeException
+     */
     private function fillCollection(SymfonyStyle $symfonyStyle, string $longName, DataGeneratorInterface $dataGenerator, OutputInterface $output): void
     {
         $progressBar = new ProgressBar($output, 0);
@@ -86,6 +89,7 @@ class TypesensePopulateCommand extends Command
         } catch (\Exception $e) {
             $symfonyStyle->error($e->getMessage());
             $this->populateService->deleteCollection($longName);
+            throw new \RuntimeException('Error while populating collection '.$longName, 0, $e);
         } finally {
             $progressBar->clear();
         }
