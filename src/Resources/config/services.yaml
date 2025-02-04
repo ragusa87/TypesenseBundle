@@ -40,6 +40,10 @@ services:
     resource: '../../Command/'
     tags: ['console.command']
 
+  Biblioverse\TypesenseBundle\Populate\WaitFor\:
+    resource: '../../Populate/WaitFor/'
+    tags: [!php/const Biblioverse\TypesenseBundle\Populate\WaitFor\WaitForInterface::TAG_NAME]
+
   biblioverse_typesense.collection.abstract:
     class: Biblioverse\TypesenseBundle\Search\SearchCollection
     abstract: true
