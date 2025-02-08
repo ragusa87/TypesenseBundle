@@ -57,6 +57,5 @@ phpunit-open-report:
 changelog:
     #!/usr/bin/bash
     rm -f changelog.yml
-    chglog config
-    chglog init
-    chglog format --template repo -c .chlog.yml > CHANGELOG.md
+    [ "$(command -v git-chglog)" != '' ] || go install github.com/git-chglog/git-chglog/cmd/git-chglog@latestsh
+    git-chglog > CHANGELOG.md

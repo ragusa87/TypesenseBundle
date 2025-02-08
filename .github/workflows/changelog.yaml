@@ -24,10 +24,8 @@ jobs:
         run: |
           set -xve
           git --no-pager log --oneline
-          go install github.com/goreleaser/chglog/cmd/chglog@latest || { echo "chglog installation failed. Please check the error above."; exit 1; }
-          chglog config
-          chglog init
-          chglog format --template repo > CHANGELOG.md
+          go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest || { echo "chglog installation failed. Please check the error above."; exit 1; }
+          git-chglog > CHANGELOG.md
           cat CHANGELOG.md
       - name: Changelog as artifact
         uses: actions/upload-artifact@v4
