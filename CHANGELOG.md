@@ -1,10 +1,25 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+
+<a name="v0.0.4"></a>
+## [v0.0.4](https://github.com/biblioverse/TypesenseBundle/compare/v0.0.3...v0.0.4)
+
 ### Feat
-- **cicd:** Reduce matrix tests
-- **mapping:** Add field_converter option to use an external service
-- **populate:** allow auto embedding fields
+
+* **mapping:** Add field_converter option to use an external service
+* **populate:** allow auto embedding fields
+
+### BREAKING CHANGE
+
+
+use ValueConversionException::fromType instead of
+default constructor
+
+EntityTransformer needs an extra argument
+
+isMapped added to FieldMappingInterface, Changes on VectorQueryInterface
+
 
 <a name="v0.0.3"></a>
 ## [v0.0.3](https://github.com/biblioverse/TypesenseBundle/compare/v0.0.2...v0.0.3)
